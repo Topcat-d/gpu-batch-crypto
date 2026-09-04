@@ -1,0 +1,13 @@
+GPU Batch Crypto
+
+This project includes selected CUDA cryptographic implementations from the
+Smoke project, originally maintained at https://github.com/Topcat-d/Smoke.
+Source paths and original SHA-256 hashes are recorded in EXTRACTION.json.
+The parent Smoke suite supplies the Apache License, Version 2.0.
+
+Standalone library API, streamed GCM integration, Python bindings, examples,
+tests, and packaging were added for this independent extraction in 2026.
+Modified imported files are identified by notices in their headers.
+
+Cloudflare and NVIDIA names identify discussion context or tested hardware.
+No affiliation, sponsorship, or endorsement is implied.
