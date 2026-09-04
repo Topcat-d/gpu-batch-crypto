@@ -4,6 +4,7 @@ CPU is a single-thread cryptography/OpenSSL + hashlib baseline with cached keys.
 """
 
 import argparse
+from contextlib import ExitStack
 import hashlib
 import json
 import os
@@ -102,9 +103,19 @@ def main():
 
     rows = []
     nonce_counter = 0
-    with Runtime(a.library, a.device) as rt:
-        rt.load_key(0, aes_key)
-        rt.load_key(1, sk, "p256")
+    with ExitStack() as stack:
+        rt = None
+        stats = {
+            k: 0
+            for k in (
+                "calls",
+                "submitted",
+                "completed",
+                "item_errors",
+                "call_errors",
+                "peak_reserved_device_bytes",
+            )
+        }
         cells = [
             (op, size, n)
             for op in ("aes256gcm_seal", "aes256gcm_open", "sha256")
@@ -124,6 +135,13 @@ def main():
                     }
                 )
                 continue
+            # Isolate each cell's high-water buffer capacity. Otherwise large
+            # preceding records add unrelated clearing cost to later cells.
+            if rt is not None:
+                rt.close()
+            rt = stack.enter_context(Runtime(a.library, a.device))
+            rt.load_key(0, aes_key)
+            rt.load_key(1, sk, "p256")
             timings = {"cpu": [], "cuda": []}
             checked = 0
             for trial in range(a.iterations + 1):
@@ -196,7 +214,18 @@ def main():
                 }
                 rows.append(row)
             print(f"{op} bytes={size} batch={n} checked={checked}", flush=True)
-        stats = rt.stats()
+            cell_stats = rt.stats()
+            for key in (
+                "calls",
+                "submitted",
+                "completed",
+                "item_errors",
+                "call_errors",
+            ):
+                stats[key] += cell_stats[key]
+            stats["peak_reserved_device_bytes"] = max(
+                stats["peak_reserved_device_bytes"], cell_stats["reserved_device_bytes"]
+            )
     metadata = {
         "commit": commit,
         "tracked_source_clean": True,
@@ -225,6 +254,7 @@ def main():
         "timing_scope": "synchronous API calls; CUDA includes Python packing, host/device transfers, stream synchronization, output copies and temporary-buffer clearing; excludes key import, data generation and oracle comparisons; buffers reused after warmup",
         "cpu_scope": "single Python thread; cached cryptography/OpenSSL AES and P-256 keys, hashlib SHA-256; not a tuned multi-core native CPU engine",
         "warmup_calls_per_cell": 1,
+        "context_policy": "fresh runtime and key import before each cell; buffers reused within its warmup and measured iterations",
         "latency_note": "batch completion times under saturation; not request p99 or an arrival-process experiment",
         "runtime_stats": stats,
     }
