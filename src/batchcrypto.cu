@@ -34,6 +34,9 @@ void subtract_order(const uint8_t *a, uint8_t *out) {
 struct DeviceGuard {
     int previous = -1;
     bool select(int device) {
+        int count = 0;
+        if (cudaGetDeviceCount(&count) != cudaSuccess || device < 0 || device >= count)
+            return false;
         if (cudaGetDevice(&previous) != cudaSuccess)
             return false;
         return cudaSetDevice(device) == cudaSuccess;
