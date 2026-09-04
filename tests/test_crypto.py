@@ -115,5 +115,18 @@ class CryptoTests(unittest.TestCase):
         self.assertEqual(lib.bc_aes256gcm_seal(0,None,None,1,None),1)
         self.assertEqual(lib.bc_aes256gcm_open(0,None,None,0,None),0)
         self.assertEqual(lib.bc_p256_sign(0,None,None,4097,None,None),1)
+    def test_native_auth_failure_zeroes_output(self):
+        if not isinstance(self.backend,Cuda):self.skipTest('CUDA native ABI only')
+        from batchcrypto import _Item
+        key=os.urandom(32);nonce=os.urandom(12);message=b'sensitive content'
+        ciphertext=self.cpu.seal(key,[Record(nonce,message)])[0]
+        bad=C.create_string_buffer(ciphertext[:-1]+bytes([ciphertext[-1]^1]))
+        output=C.create_string_buffer(b'X'*len(message));status=C.c_ubyte(255)
+        item=_Item(C.addressof(bad),len(ciphertext),None,0,(C.c_ubyte*12).from_buffer_copy(nonce),C.addressof(output),len(message))
+        rc=self.backend.lib.bc_aes256gcm_open(self.backend.device,key,C.byref(item),1,C.byref(status))
+        self.assertEqual(rc,0);self.assertEqual(status.value,3);self.assertEqual(output.raw[:len(message)],bytes(len(message)))
+        item.output_capacity=len(message)-1
+        self.assertEqual(self.backend.lib.bc_aes256gcm_open(self.backend.device,key,C.byref(item),1,C.byref(status)),1)
+        with self.assertRaises(RuntimeError):Runtime(os.environ['BC_LIBRARY'],9999)
 
 if __name__=='__main__':unittest.main()
