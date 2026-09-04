@@ -4,7 +4,7 @@ An independent Apache-2.0 GPU cryptography engine for batch content hashing, aut
 
 **Technical preview.** This is a new source repository, not a public copy of Smoke. It has no Smoke runtime dependency, submodule, daemon, account system, or inherited Git history.
 
-[Measured GPU/CPU results](docs/RESULTS.md) · [Cloudflare engineering note](docs/CLOUDFLARE.md) · [Validation record](docs/VALIDATION.md)
+[Measured GPU/CPU results](docs/RESULTS.md) · [Engineering note](docs/CLOUDFLARE.md) · [Validation record](docs/VALIDATION.md)
 
 Fresh local measurements show a P-256 signing benefit at large batches: about 160,455 signatures/s on RTX 4070 Ti and 153,452 on RTX 3060 at batch 4,096, respectively 3.96× and 3.93× the single-thread CPU reference measured in each run. Small signing batches, AES-GCM and SHA-256 favor that CPU reference in this implementation. These are synchronous Python API measurements with warmed buffers, not server latency or optimized multi-core CPU comparisons.
 

@@ -1,6 +1,6 @@
 # GPU batch cryptography for machine-authorized content
 
-## Engineering note for Cloudflare
+## Engineering note
 
 Publishers need ways to earn from machine access to their work even when that access never produces an advertising click. Our contribution is a small, independent Apache-2.0 cryptography engine that lets others experiment with the cryptographic costs of that model: hash content, encrypt it with authenticated metadata, and sign grants or records in batches.
 
