@@ -6,6 +6,8 @@ Default AES seal/open and SHA-256 payloads: 16 B, 512 B, 1 KiB, 4 KiB, 16 KiB, 6
 
 Each cell has one untimed warmup and three measured iterations by default. CPU/GPU order alternates. Keys are imported before timing and runtime buffers are reused. Timings include the synchronous Python public call, record packing, host/device copies, CUDA execution, synchronization, result materialization and temporary-buffer clearing. Input generation and output comparison are outside timing. Every output is compared, and GPU batch accounting must be clean.
 
+The current harness creates a separate runtime for each workload cell and reuses its buffers across warmup and measured iterations. This prevents a preceding large workload's retained buffer capacity from affecting a later small workload's clearing cost. Runtime creation, key import and initial warmup allocation are outside timing. The first shared-runtime matrices are retained as prior measurements, explicitly distinguished from the primary isolated-cell matrices in [results](RESULTS.md).
+
 The CPU baseline is one Python thread calling cryptography/OpenSSL with cached AES/P-256 key objects and hashlib for SHA-256. It is a useful API-level baseline, not an optimized native multi-core engine or a complete server. AES/curve hardware acceleration depends on that library build and CPU. Results should not be generalized into a fleet comparison.
 
 Rates use total operations divided by total elapsed measured time. AES reports both operations/s and useful plaintext bytes/s. SHA reports input bytes/s. Samples are batch completion latency under available work, not request p99 or a realistic arrival process. Three samples characterize a first local measurement, not confidence intervals or long-run reliability.
