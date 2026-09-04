@@ -1,0 +1,17 @@
+gpu,operation,payload_bytes,profile,batch,ops_per_second,input_MB_per_second,mean_batch_ms,min_batch_ms,max_batch_ms,gpu_cpu_ratio
+RTX 4070 Ti,p256_sign,32,first_sampled_cpu_crossover,1024,110956.203,3.551,9.229,9.110,9.357,2.6231
+RTX 4070 Ti,p256_sign,32,highest_sampled_rate,4096,160455.040,5.135,25.527,25.253,25.836,3.9577
+RTX 4070 Ti,aes256gcm_seal,1024,highest_sampled_rate,256,69562.067,71.232,3.680,3.634,3.710,0.0552
+RTX 4070 Ti,aes256gcm_seal,65536,highest_sampled_rate,256,1607.449,105.346,159.259,156.876,160.806,0.0401
+RTX 4070 Ti,aes256gcm_seal,1048576,highest_sampled_rate,8,8.858,9.288,903.162,899.082,907.028,0.0021
+RTX 4070 Ti,sha256,1024,highest_sampled_rate,256,342474.916,350.694,0.747,0.623,0.896,0.3640
+RTX 4070 Ti,sha256,65536,highest_sampled_rate,256,17111.918,1121.447,14.960,14.502,15.757,0.4702
+RTX 4070 Ti,sha256,1048576,highest_sampled_rate,8,283.585,297.360,28.210,28.082,28.335,0.1243
+RTX 3060,p256_sign,32,first_sampled_cpu_crossover,1024,100740.799,3.224,10.165,10.142,10.187,2.4063
+RTX 3060,p256_sign,32,highest_sampled_rate,4096,153452.111,4.910,26.692,26.147,27.756,3.9267
+RTX 3060,aes256gcm_seal,1024,highest_sampled_rate,256,56983.439,58.351,4.493,4.458,4.537,0.0443
+RTX 3060,aes256gcm_seal,65536,highest_sampled_rate,256,1194.405,78.277,214.333,211.142,217.536,0.0307
+RTX 3060,aes256gcm_seal,1048576,highest_sampled_rate,8,6.534,6.851,1224.361,1223.216,1225.562,0.0015
+RTX 3060,sha256,1024,highest_sampled_rate,256,329331.046,337.235,0.777,0.712,0.866,0.3246
+RTX 3060,sha256,65536,highest_sampled_rate,256,12908.257,845.956,19.832,18.485,20.817,0.3600
+RTX 3060,sha256,1048576,highest_sampled_rate,8,196.599,206.150,40.692,40.618,40.831,0.0847

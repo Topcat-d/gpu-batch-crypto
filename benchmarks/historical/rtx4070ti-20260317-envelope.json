@@ -1,0 +1,73 @@
+{
+  "recorded_date": "2026-03-17T22_54_11",
+  "gpu": "NVIDIA GeForce RTX 4070 Ti",
+  "scope": "historical Python submit/poll, 60 CTAs / 60 shards; larger logical batches chunked at 4096",
+  "correctness": "status/count checks only; no independent signature oracle in this artifact",
+  "source_artifact": "smoke-suite/engine/results/batch_envelope_2026-03-17T22_54_11.json",
+  "source_sha256": "fdeb3b7ade1d0a518a95b8a09a18e58d525c80babd25f224a5cfc9340da97d8a",
+  "summaries": [
+    {
+      "batch_size": 64,
+      "iterations": 3,
+      "avg_sig_per_sec": 16764.3,
+      "avg_ms_per_sig": 0.0598,
+      "avg_wall_ms": 3.827,
+      "total_ok": 192,
+      "total_errors": 0
+    },
+    {
+      "batch_size": 256,
+      "iterations": 3,
+      "avg_sig_per_sec": 32469.3,
+      "avg_ms_per_sig": 0.0309,
+      "avg_wall_ms": 7.918,
+      "total_ok": 768,
+      "total_errors": 0
+    },
+    {
+      "batch_size": 1024,
+      "iterations": 3,
+      "avg_sig_per_sec": 50469.5,
+      "avg_ms_per_sig": 0.0205,
+      "avg_wall_ms": 20.971,
+      "total_ok": 3072,
+      "total_errors": 0
+    },
+    {
+      "batch_size": 4096,
+      "iterations": 3,
+      "avg_sig_per_sec": 73001.2,
+      "avg_ms_per_sig": 0.0142,
+      "avg_wall_ms": 58.294,
+      "total_ok": 12288,
+      "total_errors": 0
+    },
+    {
+      "batch_size": 16384,
+      "iterations": 3,
+      "avg_sig_per_sec": 64427.3,
+      "avg_ms_per_sig": 0.0156,
+      "avg_wall_ms": 255.869,
+      "total_ok": 49152,
+      "total_errors": 0
+    },
+    {
+      "batch_size": 65536,
+      "iterations": 3,
+      "avg_sig_per_sec": 65060.8,
+      "avg_ms_per_sig": 0.0154,
+      "avg_wall_ms": 1009.74,
+      "total_ok": 196608,
+      "total_errors": 0
+    },
+    {
+      "batch_size": 131072,
+      "iterations": 3,
+      "avg_sig_per_sec": 65469.0,
+      "avg_ms_per_sig": 0.0153,
+      "avg_wall_ms": 2002.364,
+      "total_ok": 393216,
+      "total_errors": 0
+    }
+  ]
+}

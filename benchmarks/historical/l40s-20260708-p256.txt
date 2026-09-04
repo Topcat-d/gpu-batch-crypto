@@ -1,0 +1,18 @@
+# Historical benchmark excerpt; selected original lines, in order.
+# Debug addresses, local paths and unrelated product telemetry omitted.
+# bench-cgo-pipeline — duration=15.0s batch=1500 ctas=60 shards=60 primitive=p256-sign payload=16
+# high_water=20 low_water=10 poll_burst=8 poll_max=1024 yield_us=0 oracle_samples=256
+  primitive:          p256-sign (opcode 0x0000)
+  duration:           15.06 s
+  submitted:          1521000
+  completed:          1521000
+  throughput:         101024 ops/s
+  submit calls:       1014  (avg 14847.9 us between calls)
+  poll calls:         1497  (avg 10057.3 us between calls)
+  empty polls:        11  (0.7% of polls)
+  accounting_ok:      true
+  oracle_status:      ok
+  oracle_passed:      256
+  oracle_failed:      0
+  oracle_skipped:     0
+  oracle_total:       256

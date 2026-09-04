@@ -1,5 +1,7 @@
 # Measured results — September 4, 2026
 
+This page covers the new standalone library. See [historical A100, L40S and RTX benchmarks](HISTORICAL_BENCHMARKS.md) for the earlier engine work, and [batch sizes and latency](BATCHING.md) for practical interpretation across cards and payloads.
+
 Large P-256 signing batches outperform this single-thread CPU reference. AES-GCM, SHA-256 and small signing batches do not. These results describe the current standalone public implementation, not historical Smoke binaries or a complete machine-access service.
 
 ## Primary measurements

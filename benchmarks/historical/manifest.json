@@ -1,0 +1,481 @@
+{
+  "schema_version": 1,
+  "scope": "Historical generic crypto benchmark data. Not measurements or reproduction instructions for the new public library.",
+  "transformation": "Selected source lines/JSON fields; source paths and hashes are provenance, not public build dependencies. Original sources remain private.",
+  "records": [
+    {
+      "id": "a100-20260716-p256",
+      "gpu": "NVIDIA A100-SXM4-40GB",
+      "recorded_date": "2026-07-16",
+      "scope": "persistent engine, direct cgo",
+      "source_artifact": "smoke-suite/results/a100-2026-07-16/bench-p256-sign.txt",
+      "source_sha256": "810fb63e94d3084209bf3077ccd08e2af162cfb50bd95c41ec25735aff3cdb95",
+      "source_line_numbers": [
+        1,
+        2,
+        3,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        69,
+        70,
+        71,
+        72,
+        73
+      ],
+      "excerpt": "a100-20260716-p256.txt",
+      "excerpt_sha256": "7ab2e73cd7e51908a091bd3a3e52e545637c5adde9316d75d23ebcd658d3585c",
+      "notes": [
+        "Engine revision recorded as 9b33b18; CUDA 12.8, Ubuntu 22.04.5, Go 1.26.5. Historical build is not included. P-256 signs a 32-byte digest; payload=16 is an irrelevant harness default for this operation."
+      ]
+    },
+    {
+      "id": "a100-20260716-aes",
+      "gpu": "NVIDIA A100-SXM4-40GB",
+      "recorded_date": "2026-07-16",
+      "scope": "persistent engine, direct cgo",
+      "source_artifact": "smoke-suite/results/a100-2026-07-16/bench-aes-seal.txt",
+      "source_sha256": "fa8883da2bef244b8722ec5cd3259442bf9a6b1c9aa79b57dfa7272469efb11a",
+      "source_line_numbers": [
+        1,
+        2,
+        3,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        69,
+        70,
+        71,
+        72,
+        73
+      ],
+      "excerpt": "a100-20260716-aes.txt",
+      "excerpt_sha256": "6698a93816dd6ef4b554700e71a0511805828374cee960534bc2d01b3dd85ae0",
+      "notes": [
+        "16-byte plaintext. Historical experiment record attributes this run to a host submit/poll bottleneck."
+      ]
+    },
+    {
+      "id": "l40s-20260707-aes-r1",
+      "gpu": "NVIDIA L40S",
+      "recorded_date": "2026-07-07",
+      "scope": "persistent engine, direct cgo",
+      "source_artifact": "smoke-suite/evidence/l40s-gpu-run-2026-07-07/aes-cgo-60x60-r1.log",
+      "source_sha256": "cb5a5c08b7786645f72d48b61f66489a6b3ebc2e8ea90aab499377d8392360a9",
+      "source_line_numbers": [
+        1,
+        2,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        67,
+        68,
+        69,
+        70,
+        71
+      ],
+      "excerpt": "l40s-20260707-aes-r1.txt",
+      "excerpt_sha256": "a00196d66978323dfbfb4b4494b207c63d9d8fdeb86255a771ec7409ac59f53c",
+      "notes": [
+        "16-byte plaintext. Run-specific record: driver 580.159.04, CUDA 12.8, Ubuntu 24.04.3, AMD EPYC 7702."
+      ]
+    },
+    {
+      "id": "l40s-20260707-aes-r2",
+      "gpu": "NVIDIA L40S",
+      "recorded_date": "2026-07-07",
+      "scope": "persistent engine, direct cgo",
+      "source_artifact": "smoke-suite/evidence/l40s-gpu-run-2026-07-07/aes-cgo-60x60-r2.log",
+      "source_sha256": "5c4df197d66022f9ce30bea1014138826ca20d9bf6446c5200014cc7f8758269",
+      "source_line_numbers": [
+        1,
+        2,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        67,
+        68,
+        69,
+        70,
+        71
+      ],
+      "excerpt": "l40s-20260707-aes-r2.txt",
+      "excerpt_sha256": "2ac33d0edeb35217b8d71d780358f5c8b88e2614392228c545c535089c631187",
+      "notes": [
+        "16-byte plaintext. Run-specific record: driver 580.159.04, CUDA 12.8, Ubuntu 24.04.3, AMD EPYC 7702."
+      ]
+    },
+    {
+      "id": "l40s-20260708-p256",
+      "gpu": "NVIDIA L40S",
+      "recorded_date": "2026-07-07/08",
+      "scope": "persistent engine, direct cgo",
+      "source_artifact": "smoke-suite/.smoke/rrp-01/gpu-results/p256-clean-l40s.txt",
+      "source_sha256": "27fde128665ac0d73aa1042b501a2082797a0727f9908df1185c3125b2123062",
+      "source_line_numbers": [
+        1,
+        2,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        67,
+        68,
+        69,
+        70,
+        71
+      ],
+      "excerpt": "l40s-20260708-p256.txt",
+      "excerpt_sha256": "6ae25b5044fdc33e239c7e06dd1fc5f934f9f8a1bd7bd21f88f51f10f739c2fb",
+      "notes": [
+        "Run-family record: engine 6aac45c3d82a983d6e2c32c247a13b72354c845f, driver 550.127.05, CUDA 12.8, Ubuntu 24.04.3, AMD EPYC 9354. Different host/driver from July 7 diagnostic runs. Rounded duration in raw log; preserve reported rate."
+      ]
+    },
+    {
+      "id": "l40s-20260707-p256-latency",
+      "gpu": "NVIDIA L40S",
+      "recorded_date": "2026-07-07",
+      "scope": "in-process scheduler, pack 64",
+      "source_artifact": "smoke-suite/evidence/l40s-gpu-run-2026-07-07/p256-inproc-latency.log",
+      "source_sha256": "23589cb45d8012b87cdb4ecdc747df4efe593f759f8447f86eb2a1ede59099f7",
+      "source_line_numbers": [
+        42,
+        43,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        55,
+        56,
+        57,
+        58,
+        59,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66
+      ],
+      "excerpt": "l40s-20260707-p256-latency.txt",
+      "excerpt_sha256": "0168c3e109ba6385ac10f6da0e1d72e7460610e8701e43e8880cc755471adda6",
+      "notes": [
+        "Frame completion latency including scheduler queueing; excludes network and batch formation. Hardware matches July 7 diagnostics."
+      ]
+    },
+    {
+      "id": "l40s-20260707-aes-latency",
+      "gpu": "NVIDIA L40S",
+      "recorded_date": "2026-07-07",
+      "scope": "in-process scheduler, pack 64",
+      "source_artifact": "smoke-suite/evidence/l40s-gpu-run-2026-07-07/aes-inproc-latency.log",
+      "source_sha256": "f19a24257492d5142d2a316f9348caaed9196bc0fca216aad81393a3968e5486",
+      "source_line_numbers": [
+        42,
+        43,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        55,
+        56,
+        57,
+        58,
+        59,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66
+      ],
+      "excerpt": "l40s-20260707-aes-latency.txt",
+      "excerpt_sha256": "75cb46de9b8e939ca633f3556faed5e6481055cb99e77127f29272eaebb0db6d",
+      "notes": [
+        "Frame completion latency including scheduler queueing; excludes network and batch formation. Hardware matches July 7 diagnostics."
+      ]
+    },
+    {
+      "id": "l40s-20260708-p256-scheduler",
+      "gpu": "NVIDIA L40S",
+      "recorded_date": "2026-07-07/08",
+      "scope": "in-process scheduler, pack 1500",
+      "source_artifact": "smoke-suite/.smoke/rrp-01/gpu-results/inproc-p256-scheduler.txt",
+      "source_sha256": "395d783256f171c5088a0bb0db111e8e0dcc516d244f6e2e167dd781a769dd53",
+      "source_line_numbers": [
+        42,
+        43,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        55,
+        56,
+        57,
+        58,
+        59,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66
+      ],
+      "excerpt": "l40s-20260708-p256-scheduler.txt",
+      "excerpt_sha256": "73c0e7cf62511f8d281734a7e2106960673edddee27f4b8b7d43e0758b000f2a",
+      "notes": [
+        "Raw log latency takes precedence over later summary tables which combined this throughput with another run."
+      ]
+    },
+    {
+      "id": "rtx4070ti-fullwindow",
+      "gpu": "NVIDIA GeForce RTX 4070 Ti",
+      "recorded_date": null,
+      "scope": "experimental full-window signer, direct cgo",
+      "source_artifact": "smoke-suite/.smoke/speed-01/phaseD-fullwindow-4070ti.txt",
+      "source_sha256": "efaf597406e057e4c1eb5b2eea2c7fcabd3d93f32f44c68ff1766477e3f9bdb8",
+      "source_line_numbers": [
+        1,
+        2,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        70,
+        71,
+        72,
+        73,
+        74
+      ],
+      "excerpt": "rtx4070ti-fullwindow.txt",
+      "excerpt_sha256": "417106cf97fc762983f740485ce6dc8d85724cb2334cbbc30df84a65d93526b4",
+      "notes": [
+        "Experimental variant, not the default or this public library. Raw log has no timestamp, immutable build hash or full compiler manifest; archive campaign is July 2026. Hardware attribution follows named capture and campaign hardware pin. 4096 sampled signatures verified; clean submitted/completed counts."
+      ]
+    },
+    {
+      "id": "rtx3060-fullwindow",
+      "gpu": "NVIDIA GeForce RTX 3060",
+      "recorded_date": null,
+      "scope": "experimental full-window signer, direct cgo",
+      "source_artifact": "smoke-suite/.smoke/speed-01/phaseC-fullwindow-3060.txt",
+      "source_sha256": "41603519f2a3b8a0e783e97986547541165ecedcee9fa4c9bc681573d89fea09",
+      "source_line_numbers": [
+        1,
+        2,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        70,
+        71,
+        72,
+        73,
+        74
+      ],
+      "excerpt": "rtx3060-fullwindow.txt",
+      "excerpt_sha256": "7df9bd9db00bdb11fa5062f4444f1ec95935448072be006b5a950a72d4da5b05",
+      "notes": [
+        "Experimental variant, not the default or this public library. Raw log has no timestamp, immutable build hash or full compiler manifest; archive campaign is July 2026. Hardware attribution follows named capture and campaign hardware pin. 4096 sampled signatures verified; clean submitted/completed counts."
+      ]
+    },
+    {
+      "id": "a100-20260709-shapes",
+      "gpu": "NVIDIA A100-SXM4-40GB",
+      "recorded_date": "2026-07-09",
+      "scope": "persistent engine, direct cgo; includes rejected P-256 rows",
+      "source_artifact": "smoke-suite/.smoke/rrp-01/a100-results/a100-bench.txt",
+      "source_sha256": "848d3f4f4add2ee910042107d80c811d8b13ea2a8571a58292f41ff19b49c352",
+      "source_line_numbers": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        22,
+        23,
+        24,
+        25,
+        26,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        39,
+        40,
+        41,
+        42,
+        43,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        56,
+        57,
+        58,
+        59,
+        60,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        73,
+        74,
+        75,
+        76,
+        77,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        90,
+        91,
+        92,
+        93,
+        94,
+        100,
+        101,
+        102,
+        103,
+        104
+      ],
+      "excerpt": "a100-20260709-shapes.txt",
+      "excerpt_sha256": "0db74eb907b2707d70c22cdfd09d2e6166635b8484b9f4e98682892e414c7bb6",
+      "notes": [
+        "P-256 rates 155049 and 96134 have accounting_ok=false and must not be promoted as accepted performance. AES and SHA rows have clean accounting. No latency distribution in this capture; submit/poll cadence is not request latency."
+      ]
+    },
+    {
+      "id": "rtx4070ti-20260317-envelope",
+      "excerpt": "rtx4070ti-20260317-envelope.json",
+      "excerpt_sha256": "0f9eb91c864a9d42ef4173d749b3a8f8ca12cb417cc4110d6589fd92aa74e294",
+      "source_sha256": "fdeb3b7ade1d0a518a95b8a09a18e58d525c80babd25f224a5cfc9340da97d8a",
+      "source_artifact": "smoke-suite/engine/results/batch_envelope_2026-03-17T22_54_11.json",
+      "notes": [
+        "Selected summary fields from JSON. Original status/count checks are not an independent correctness oracle. GPU service-time fields omitted because their units are not established."
+      ]
+    }
+  ],
+  "metadata_sources": [
+    {
+      "source_artifact": "smoke-suite/results/a100-2026-07-16/BENCHMARK_RECORD.md",
+      "source_sha256": "ad2e6ce5f65a8fcefda7ec5c3d8d22d77a5747cbfb6353f6907d62ab54fa2f70",
+      "used_for": "July 16 A100 hardware, toolchain, revision prefix and host-feed observation."
+    },
+    {
+      "source_artifact": "smoke-suite/.smoke/rrp-01/a100-results/A100-FINDINGS.md",
+      "source_sha256": "7fd86799b4d068398e249b4122e90b10bbff49b3c2eae952708e2cbee5ff90bc",
+      "used_for": "July 9 A100 hardware, toolchain and completion-accounting qualification."
+    },
+    {
+      "source_artifact": "smoke-suite/evidence/l40s-gpu-run-2026-07-07/RESULT.md",
+      "source_sha256": "e0c9bdc0b1639eb98bf02f9baa8d2f6afb299ad45afdcde599071324ec9b73c1",
+      "used_for": "July 7 L40S diagnostic hardware and toolchain."
+    },
+    {
+      "source_artifact": "smoke-suite/.smoke/rrp-01/gpu-results/l40s.json",
+      "source_sha256": "6c91568682d1d05708df5767de1df8129b6968b857cd1cd3aedefff86a449ea5",
+      "used_for": "Later L40S campaign hardware, toolchain and full source revision. Its combined latency fields are not used; raw per-run latency logs take precedence."
+    },
+    {
+      "source_artifact": "smoke-suite/.smoke/speed-01/pin-20260720-1420.txt",
+      "source_sha256": "77f07eb24b03c4883f398e7d688761940dc24c2f9e8bcad083a239532f44fb99",
+      "used_for": "RTX campaign hardware/driver/toolchain pin; not an immutable build manifest for the experimental full-window binary."
+    },
+    {
+      "source_artifact": "smoke-suite/CLAUDE.md",
+      "source_sha256": "781b8d870310bc4cc77e01b1b67fe6a756ca6e27e8667793597c487d38822325",
+      "used_for": "Historical full-window variant labeled pending promotion."
+    },
+    {
+      "source_artifact": "smoke-suite/engine/scripts/bench_batch_envelope.py",
+      "source_sha256": "d343849b50e533860d04887628a88051028a76a761b6488a583e70fb32b96391",
+      "used_for": "Historical sweep checks returned status/counts, not independent signature verification; uses wall timing and chunks above 4096."
+    },
+    {
+      "source_artifact": "smoke-suite/engine/memory-bank/BENCHMARKS.md",
+      "source_sha256": "2f637c2090b3b638079ad2ad35c264f9b8239586450b1f7288d3b2fface6bcbb",
+      "used_for": "Historical March 17 sweep hardware attribution and summary."
+    },
+    {
+      "source_artifact": "smoke-suite/gateway/cmd/bench-inproc/main.go",
+      "source_sha256": "ee382f49a8f7f489296d15715d81bb5921e18aed1e8bf511b6e8880b75774766",
+      "used_for": "Frame timing boundary in the available harness source: before submission until completion observation. Exact historic build source is not bundled."
+    }
+  ]
+}

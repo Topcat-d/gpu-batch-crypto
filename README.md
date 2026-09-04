@@ -4,9 +4,13 @@ An independent Apache-2.0 GPU cryptography engine for batch content hashing, aut
 
 **Technical preview.** This is a new source repository, not a public copy of Smoke. It has no Smoke runtime dependency, submodule, daemon, account system, or inherited Git history.
 
-[Measured GPU/CPU results](docs/RESULTS.md) · [Engineering note](docs/CLOUDFLARE.md) · [Validation record](docs/VALIDATION.md)
+[Current library results](docs/RESULTS.md) · [Historical A100 and GPU benchmarks](docs/HISTORICAL_BENCHMARKS.md) · [Batch sizes and latency](docs/BATCHING.md) · [Engineering note](docs/ENGINEERING.md)
 
 Fresh local measurements show a P-256 signing benefit at large batches: about 160,455 signatures/s on RTX 4070 Ti and 153,452 on RTX 3060 at batch 4,096, respectively 3.96× and 3.93× the single-thread CPU reference measured in each run. Small signing batches, AES-GCM and SHA-256 favor that CPU reference in this implementation. These are synchronous Python API measurements with warmed buffers, not server latency or optimized multi-core CPU comparisons.
+
+The project also publishes the earlier engine evidence that motivated this extraction: A100 at **110,200 P-256 signatures/s** and **399,446 AES-GCM seals/s** on 16-byte plaintext; experimental full-window signing at **260,998/s on RTX 4070 Ti** and **120,150/s on RTX 3060**; and L40S throughput and measured p50/p95/p99 latency. Each historical capture identifies its execution path, settings, completion accounting and sampled correctness. Those implementations differ from the current public library.
+
+Batching changes the result. In the current library, batch **1,024** delivers approximately **111K / 101K signatures/s** with **9.23 / 10.16 ms** mean batch completion on the 4070 Ti / 3060. Batch **4,096** raises throughput to **160K / 153K** at **25.53 / 26.69 ms**. [The batching guide](docs/BATCHING.md) explains these sampled tradeoffs, payload-dependent limits, and why batch wait time must be added to service latency.
 
 ## Included
 

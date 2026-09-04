@@ -1,0 +1,18 @@
+# Historical benchmark excerpt; selected original lines, in order.
+# Debug addresses, local paths and unrelated product telemetry omitted.
+# bench-cgo-pipeline — duration=30.0s batch=1500 ctas=60 shards=60 primitive=aes-gcm-seal payload=16
+# high_water=240 low_water=120 poll_burst=1 poll_max=1024 yield_us=0 oracle_samples=256
+  primitive:          aes-gcm-seal (opcode 0x0014)
+  duration:           30.00 s
+  submitted:          11545108
+  completed:          11545108
+  throughput:         384836 ops/s
+  submit calls:       7701  (avg 3895.6 us between calls)
+  poll calls:         122701  (avg 244.5 us between calls)
+  empty polls:        94315  (76.9% of polls)
+  accounting_ok:      true
+  oracle_status:      ok
+  oracle_passed:      256
+  oracle_failed:      0
+  oracle_skipped:     0
+  oracle_total:       256

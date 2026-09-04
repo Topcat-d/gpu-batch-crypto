@@ -1,0 +1,20 @@
+# Historical benchmark excerpt; selected original lines, in order.
+# Debug addresses, local paths and unrelated product telemetry omitted.
+# hardware: NVIDIA A100-SXM4-40GB, 580.105.08 | shape 108/108 | GPU idle verified before run | cgo direct path | 2026-07-16T23:10:08Z
+# bench-cgo-pipeline — duration=30.0s batch=1500 ctas=108 shards=108 primitive=aes-gcm-seal payload=16
+# high_water=432 low_water=216 poll_burst=1 poll_max=1024 yield_us=0 oracle_samples=256 drain_thread=false
+  primitive:          aes-gcm-seal (opcode 0x0014)
+  duration:           30.00 s
+  submitted:          11983431
+  completed:          11983431
+  throughput:         399446 ops/s
+  submit calls:       7989  (avg 3755.2 us between calls)
+  poll calls:         108878  (avg 275.5 us between calls)
+  empty polls:        82355  (75.6% of polls)
+  ring_full_backoffs: 0
+  accounting_ok:      true
+  oracle_status:      ok
+  oracle_passed:      256
+  oracle_failed:      0
+  oracle_skipped:     0
+  oracle_total:       256

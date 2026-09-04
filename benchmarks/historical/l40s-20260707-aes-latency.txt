@@ -1,0 +1,24 @@
+# Historical benchmark excerpt; selected original lines, in order.
+# Debug addresses, local paths and unrelated product telemetry omitted.
+# bench-inproc — duration=30.0s pack=64 primitive=aes-gcm-seal payload=16 clients=2 pipeline=2 depth=8 poll=blocking
+# ctas=60 shards=60 opcode=0x0014 in_len=28 out_len=32 oracle_samples=256
+  primitive:          aes-gcm-seal (opcode 0x0014)
+  duration:           30.01 s
+  frames_ok:          89221
+  frames_err:         0
+  ops_completed:      5710144 (= frames_ok * pack)
+  throughput:         190293 ops/s
+  latency p50:        2.089119ms
+  latency p95:        5.959837ms
+  latency p99:        7.341079ms
+  oracle_status:      ok
+  oracle_passed:      256
+  oracle_failed:      0
+  oracle_skipped:     0
+  oracle_total:       256
+  chunks_submitted:   89221
+  chunks_completed:   89221
+  resps_routed:       5710144
+  stale_resps_total:  0
+  cid_mismatches_total: 0
+  accounting_ok:      true

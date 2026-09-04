@@ -1,0 +1,24 @@
+# Historical benchmark excerpt; selected original lines, in order.
+# Debug addresses, local paths and unrelated product telemetry omitted.
+# bench-inproc — duration=20.0s pack=1500 primitive=p256-sign payload=16 clients=4 pipeline=1 depth=60 poll=blocking
+# ctas=60 shards=60 opcode=0x0000 in_len=32 out_len=64 oracle_samples=256
+  primitive:          p256-sign (opcode 0x0000)
+  duration:           20.04 s
+  frames_ok:          641
+  frames_err:         0
+  ops_completed:      961500 (= frames_ok * pack)
+  throughput:         47972 ops/s
+  latency p50:        131.851652ms
+  latency p95:        151.904667ms
+  latency p99:        214.241237ms
+  oracle_status:      ok
+  oracle_passed:      256
+  oracle_failed:      0
+  oracle_skipped:     0
+  oracle_total:       256
+  chunks_submitted:   7692
+  chunks_completed:   7692
+  resps_routed:       961500
+  stale_resps_total:  0
+  cid_mismatches_total: 0
+  accounting_ok:      true

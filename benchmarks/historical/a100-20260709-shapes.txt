@@ -1,0 +1,69 @@
+# Historical shape comparison: P-256 rows have failed completion accounting.
+### A100 BENCH Thu Jul  9 22:55:29 UTC 2026 — matched CTAs==shards ###
+NVIDIA A100-SXM4-40GB, 610.43.02, 8.0
+===== p256-sign  ctas=shards=108  spb=8  pw300/pb8  batch1500 10s =====
+  submitted:          1656000
+  completed:          1560576
+  throughput:         155049 ops/s
+  empty polls:        7  (0.5% of polls)
+  accounting_ok:      false
+  oracle_status:      ok
+  oracle_passed:      256
+  oracle_failed:      0
+  oracle_skipped:     0
+  oracle_total:       256
+===== aes-gcm-seal  ctas=shards=108  spb=8  pw300/pb8  batch1500 10s =====
+  submitted:          4566000
+  completed:          4566000
+  throughput:         456575 ops/s
+  empty polls:        6520  (40.2% of polls)
+  accounting_ok:      true
+  oracle_status:      ok
+  oracle_passed:      256
+  oracle_failed:      0
+  oracle_skipped:     0
+  oracle_total:       256
+===== sha256  ctas=shards=108  spb=8  pw300/pb8  batch1500 10s =====
+  submitted:          4711500
+  completed:          4711500
+  throughput:         471075 ops/s
+  empty polls:        17745  (43.2% of polls)
+  accounting_ok:      true
+  oracle_status:      ok
+  oracle_passed:      256
+  oracle_failed:      0
+  oracle_skipped:     0
+  oracle_total:       256
+===== hmac-sha256  ctas=shards=108  spb=8  pw300/pb8  batch1500 10s =====
+  submitted:          4509000
+  completed:          4509000
+  throughput:         450900 ops/s
+  empty polls:        12734  (42.6% of polls)
+  accounting_ok:      true
+  oracle_status:      ok
+  oracle_passed:      256
+  oracle_failed:      0
+  oracle_skipped:     0
+  oracle_total:       256
+===== p256-sign  ctas=shards=60  spb=8  pw300/pb8  batch1500 10s =====
+  submitted:          984000
+  completed:          971776
+  throughput:         96134 ops/s
+  empty polls:        14  (1.5% of polls)
+  accounting_ok:      false
+  oracle_status:      ok
+  oracle_passed:      256
+  oracle_failed:      0
+  oracle_skipped:     0
+  oracle_total:       256
+===== aes-gcm-seal  ctas=shards=60  spb=8  pw300/pb8  batch1500 10s =====
+  submitted:          3696000
+  completed:          3696000
+  throughput:         369596 ops/s
+  empty polls:        11362  (48.8% of polls)
+  accounting_ok:      true
+  oracle_status:      ok
+  oracle_passed:      256
+  oracle_failed:      0
+  oracle_skipped:     0
+  oracle_total:       256
