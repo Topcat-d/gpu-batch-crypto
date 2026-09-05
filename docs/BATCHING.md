@@ -2,7 +2,9 @@
 
 Batching lets a caller share submission, transfer and synchronization costs across independent cryptographic operations and expose enough parallel work to occupy a GPU. The useful batch size depends on the primitive, payload, key grouping, host submission path, GPU and latency budget. More queued work eventually adds waiting without a corresponding throughput gain.
 
-CPUs also benefit from batching and efficient native execution. The [CPU–GPU systems design](SYSTEMS_DESIGN.md) connects these measurements to CPU preparation, explicit CPU routing for small/urgent work, per-key fill time, device queues, verification and whole-system cost. The existing single-thread CPU baseline does not substitute for that complete comparison.
+CPUs also benefit from batching and efficient native execution. The [CPU–GPU systems design](SYSTEMS_DESIGN.md) connects these measurements to CPU preparation, explicit CPU routing for small/urgent work, per-key fill time, device queues, verification and whole-system cost. The newer [native pipeline](PIPELINE_RESULTS.md) includes those in-process costs, with explicit qualification of its diagnostic captures.
+
+**Version matters.** The following v0.1/v0.2 tables are preserved evidence. Version 0.3's [output-copy correction](DISPATCH_RESULTS.md) changes the large-batch curve. A batch of 4,096 can give high standalone signing throughput while a short online deadline requires smaller batches once filling and CPU verification are included. No universal per-card service sweet spot is established.
 
 ## Current table-backed signer
 

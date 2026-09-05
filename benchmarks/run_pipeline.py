@@ -5,6 +5,7 @@ The default matrix takes about four minutes plus warm-up; no cloud provisioning.
 """
 
 import argparse
+import csv
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -12,18 +13,61 @@ import os
 from pathlib import Path
 import platform
 import subprocess
+import threading
+import time
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def command(args):
+def command(args, timeout=30):
     return subprocess.check_output(
-        args, cwd=ROOT, text=True, stderr=subprocess.STDOUT
+        args, cwd=ROOT, text=True, stderr=subprocess.STDOUT, timeout=timeout
     ).strip()
 
 
 def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def telemetry():
+    fields = [
+        "index",
+        "name",
+        "display_active",
+        "pstate",
+        "utilization.gpu",
+        "memory.used",
+        "power.draw",
+        "clocks.gr",
+        "temperature.gpu",
+    ]
+    raw = command(
+        [
+            "nvidia-smi",
+            "--query-gpu=" + ",".join(fields),
+            "--format=csv,noheader,nounits",
+        ],
+        timeout=5,
+    )
+    return {
+        "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+        "gpus": [
+            dict(zip(fields, (value.strip() for value in row)))
+            for row in csv.reader(raw.splitlines())
+        ],
+    }
+
+
+def quiet_gpus(samples):
+    return len(samples) == 3 and all(
+        sample.get("gpus")
+        and all(
+            gpu.get("utilization.gpu", "").isdigit()
+            and int(gpu["utilization.gpu"]) <= 5
+            for gpu in sample["gpus"]
+        )
+        for sample in samples
+    )
 
 
 def main():
@@ -41,6 +85,11 @@ def main():
     p.add_argument("--batch", type=int, default=256)
     p.add_argument("--gpu-min", type=int, default=64)
     p.add_argument("--gpu-dispatch", choices=("caller", "owner"), default="caller")
+    p.add_argument(
+        "--allow-contended",
+        action="store_true",
+        help="explicitly label a diagnostic run when another GPU workload is active",
+    )
     p.add_argument("--output", required=True)
     a = p.parse_args()
     target = Path(a.output)
@@ -48,6 +97,17 @@ def main():
         p.error("output exists; preserve earlier captures")
     if command(["git", "diff", "--name-only", "HEAD"]):
         p.error("commit tracked changes before measurement")
+    preflight = []
+    for i in range(3):
+        if i:
+            time.sleep(1)
+        preflight.append(telemetry())
+    # Check all GPUs because the native CPU baseline shares the same host.
+    quiet = quiet_gpus(preflight)
+    if not quiet and not a.allow_contended:
+        p.error(
+            "GPU activity exceeds 5% or is unavailable in preflight; pause other work or explicitly use --allow-contended for diagnostic data"
+        )
     paths = [Path(x).resolve() for x in (a.executable, a.library, a.openssl_library)]
     env = os.environ.copy()
     env["PATH"] = (
@@ -83,6 +143,12 @@ def main():
             ]
         ),
         windows_timer_request_ms=1 if os.name == "nt" else None,
+        preflight_telemetry=preflight,
+        preflight_quiet=quiet,
+        contention_policy="diagnostic"
+        if a.allow_contended
+        else "quiet GPU preflight; not an exclusive-host guarantee",
+        monitoring="nvidia-smi sampled by the parent process each second; its CPU cost is outside child process_cpu_s",
         scope="in-process open-loop record generation + SHA256 + deterministic low-s signing + all-signature CPU verification; excludes network, TLS, authorization, payment, key setup and warm-up",
         workload=f"uniform round-robin key distribution; synthetic 512-byte records; random ephemeral keys; 8192 queued requests plus at most workers*{a.batch} in flight",
     )
@@ -142,14 +208,31 @@ def main():
             a.gpu_dispatch,
         ]
         started = datetime.now(timezone.utc).isoformat()
-        result = subprocess.run(
-            args,
-            cwd=ROOT,
-            env=env,
-            text=True,
-            capture_output=True,
-            timeout=a.seconds + 90,
-        )
+        samples = []
+        stop = threading.Event()
+
+        def monitor():
+            while not stop.is_set():
+                try:
+                    samples.append(telemetry())
+                except Exception as exc:
+                    samples.append({"error": str(exc)})
+                stop.wait(1)
+
+        observer = threading.Thread(target=monitor, daemon=True)
+        observer.start()
+        try:
+            result = subprocess.run(
+                args,
+                cwd=ROOT,
+                env=env,
+                text=True,
+                capture_output=True,
+                timeout=a.seconds + 90,
+            )
+        finally:
+            stop.set()
+            observer.join(timeout=10)
         if result.returncode:
             target.with_suffix(".failure.txt").write_text(
                 result.stdout + result.stderr, encoding="utf-8"
@@ -158,6 +241,7 @@ def main():
         row = json.loads(result.stdout)
         row["command"] = [paths[0].name] + args[1:]
         row["timestamp_utc"] = started
+        row["telemetry"] = samples
         rows.append(row)
         target.write_text(
             json.dumps(
@@ -166,6 +250,7 @@ def main():
             )
             + "\n",
             encoding="utf-8",
+            newline="\n",
         )
         print(
             f"{mode} workers={workers} keys={keys} offered={rate}: {row['goodput_rps']:.0f} within-SLO/s; p99={row['latency_p99_ms']:.2f}ms; late={row['late']} expired={row['expired']}",

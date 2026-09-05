@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "captures": [
+    "rtx4070ti-20260905-r1.json",
+    "rtx4070ti-b64-20260905-r1.json",
+    "rtx3060-b64-20260905-r1.json"
+  ],
+  "qualification": "diagnostic; not qualified as uncontended capacity or hardware cost comparisons",
+  "reason": "No quiet-host telemetry gate was present. After all benchmark child processes had exited, another workload left GPU 0 heavily utilized. These observations do not identify exactly which earlier cells overlapped that workload. Both cards share the CPU host.",
+  "post_campaign_observation_utc": "2026-09-05T15:25:43Z",
+  "gpu_0": {"name": "NVIDIA GeForce RTX 4070 Ti", "utilization_percent": 96, "memory_used_mib": 5955, "power_watts": 245, "display_active": true, "driver_model": "WDDM"},
+  "gpu_1": {"name": "NVIDIA GeForce RTX 3060", "utilization_percent": 0, "memory_used_mib": 0, "power_watts": 9, "display_active": false, "driver_model": "WDDM"},
+  "benchmark_processes_running_at_observation": false,
+  "conclusion": "Retain correctness, accounting, latency and overload diagnostics. Do not use these runs to establish uncontended GPU speedup, cost advantage, or a hardware ranking. The newer harness adds quiet-GPU preflight and time-series telemetry."
+}

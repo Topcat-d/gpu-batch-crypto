@@ -1,5 +1,7 @@
 # Public P-256 backend measurements — September 4, 2026
 
+**Preserved v0.2 measurements.** The later [output-copy correction](DISPATCH_RESULTS.md) changes large-batch behavior. For CPU verification, traffic and deadline costs, see the [native pipeline measurements](PIPELINE_RESULTS.md) and [economics](ECONOMICS.md). This page retains the original captures and conclusions about that version.
+
 The v0.2 comb and full-window paths are exercised through the same public runtime and C ABI as the reference signer. Full-window signing wins against the stated single-thread CPU baseline from sampled batch 64 on both cards in both runs. Batch 256 offers the most consistent mid-size tradeoff in these captures; larger batches show substantial variability and do not establish a reliable optimum.
 
 For an adoption decision, read these library measurements alongside the [CPU–GPU systems design](SYSTEMS_DESIGN.md): batch-fill delay, CPU preparation/verification, key distribution and total cost are additional parts of the service comparison.

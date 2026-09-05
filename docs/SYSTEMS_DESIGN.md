@@ -14,7 +14,7 @@ GPU Batch Crypto supplies explicit CPU operations and a synchronous CUDA batch e
 | Many compatible P-256 signatures ready together | Evaluate GPU full-window | First sampled CPU crossover was 64. Batch 256 gave the most consistent mid-size result across the two local runs per GPU. |
 | Key generation and independent signature verification | CPU | The provided standard-library paths run on CPU. The GPU timing excludes independent oracle verification; include required verification in the service budget. |
 
-CPU batching remains a valid alternative. Cached keys, native calls, vectorized work where supported, multiple cores and efficient memory management deserve the same attention as GPU tuning. The published CPU comparison is one Python thread with cached OpenSSL keys; it does not establish the capacity of a fully optimized CPU server.
+CPU batching remains a valid alternative. Cached keys, native calls, vectorized work where supported, multiple cores and efficient memory management deserve the same attention as GPU tuning. The v0.2 primitive comparison uses one Python thread. The newer native pipeline adds cached OpenSSL contexts and multiple CPU workers, but its first captures are qualified as shared-host diagnostic evidence; they do not establish the capacity of a fully optimized CPU server.
 
 ## Proposed request flow
 
@@ -58,7 +58,7 @@ The [recorded call timings](P256_RESULTS.md) include all of `T_call`, but do not
 
 At batch 256, full-window RTX 4070 Ti recorded **224,742–229,039 signatures/s** at **1.12–1.14 ms** mean call time. The same runs' CPU baselines recorded **41,218–44,130/s**, making the paired rate ratios **5.09–5.56×**. RTX 3060 recorded **177,810–194,276/s** at **1.32–1.44 ms**, with paired CPU ratios **4.10–4.77×**. These are two short local runs per card, not service capacity guarantees or cost savings.
 
-Batch 64 first beat CPU in the sampled full-window sweep; batches 1 and 8 did not. At 1,024 and 4,096, large variability changed the apparent optimum between repeats. Increasing batch size indefinitely is not supported by these results. [Both captures](P256_RESULTS.md) are retained.
+Batch 64 first beat CPU in the v0.2 sampled full-window sweep; batches 1 and 8 did not. The later [output-copy correction](DISPATCH_RESULTS.md) removes quadratic wrapper work and substantially changes large-batch results. Both sets of captures are retained. A primitive call's optimum still excludes batch formation and independent CPU verification.
 
 ## Traffic per compatible key determines fill time
 
@@ -121,10 +121,10 @@ Include CPU host capacity, GPU allocation, idle time, memory, relevant transport
 | Decision | Measure next | What this repository currently supplies |
 |---|---|---|
 | Does the workload fit? | Fresh-signature fraction, arrival/burst distribution, active key groups, payloads and deadlines | Primitive contracts and examples; no production traffic trace |
-| Is GPU assistance better than CPU alone? | Same workload through an optimized native multi-core CPU baseline and the hybrid service, with identical checks | Cached single-thread CPU baseline and full synchronous GPU calls |
-| Can requests meet their deadline? | Preparation, fill wait, queue wait, call time, verification and response p50/p95/p99; rejected work too | Short-run call samples; historical scheduler percentiles from different implementations |
+| Is GPU assistance better than CPU alone? | Same workload through an optimized native multi-core CPU baseline and the hybrid service, with identical checks | Primitive comparisons plus a native multi-worker pipeline; first pipeline captures qualified by uncontrolled host activity |
+| Can requests meet their deadline? | Preparation, fill wait, queue wait, call time, verification and response p50/p95/p99; rejected work too | Native in-process latency and complete overload accounting; no qualified deployment SLO |
 | Does it hold under sustained load? | Repeated long runs, temperature/clocks/utilization, overload, recovery and shared-host contention | Two local v0.2 runs per GPU; large-batch variability disclosed |
-| Does it scale across keys and devices? | Key skew, rotation under queued work, CPU saturation, per-device queues and multi-GPU goodput | Independent contexts and key epochs; no service scheduler or scaling claim |
+| Does it scale across keys and devices? | Key skew, rotation under queued work, CPU saturation, per-device queues and multi-GPU goodput | Atomic required epochs, 1/16-key diagnostic workloads and independent contexts; no multi-GPU scaling claim |
 | Is the security boundary acceptable? | Key residency and isolation requirements, side-channel review, failure policy and independent review | Known limitations, interoperability tests and source provenance; no independent audit |
 | Is the business case positive? | Goodput and total resource cost at the required latency and availability | Reproducible primitive evidence; no demonstrated publisher revenue or deployment ROI |
 

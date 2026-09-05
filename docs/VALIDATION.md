@@ -1,6 +1,14 @@
 # Validation record
 
-Local validation on September 4, 2026:
+Version 0.3, September 5, 2026:
+
+- Twenty-three tests passed on each RTX GPU after adding bounded-iterable consumption, epoch-bound sign/seal/open (including empty and retired slots), independently verified signing and controlled corrupt/truncated/reordered/wrong-epoch output cases. Two additional CPU cost-model tests check unit conversion, idle allocation and invalid inputs.
+- The updated C consumer passed, including stale-epoch output sentinels and successful use of a replacement generation. CUDA Compute Sanitizer memcheck reported **0 errors** for that C consumer. This remains limited coverage.
+- Hosted Linux CI passed the Python CPU suite and a native C++ OpenSSL 3.5.8 build/self-test and small CPU pipeline run at source `b1ae0d8`. Subsequent CI also checks the new published capture arithmetic and provenance; CI never claims GPU execution.
+- The native pipeline validates every warm-up GPU signature against deterministic OpenSSL output, then independently verifies every completed signature inside timed execution. The first three captures are qualified as **shared-host diagnostic evidence** after background GPU work was discovered. Correctness and accounting checks do not turn them into isolated capacity or cost evidence.
+- [Production readiness](PRODUCTION_READINESS.md) records implemented protections and the remaining security work. [Build fingerprints](../benchmarks/pipeline_build.json), [pipeline conditions](../benchmarks/pipeline_conditions.json) and [results](PIPELINE_RESULTS.md) preserve the distinction between executed validation and deployment claims.
+
+Earlier v0.2 validation on September 4, 2026:
 
 - CUDA 13.0.88, MSVC 19.44.35217, Release build, native architectures 86 and 89.
 - NVIDIA RTX 4070 Ti and RTX 3060, driver 610.62, Windows.

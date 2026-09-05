@@ -4,6 +4,8 @@
 
 The project is a technical preview with buildable code, interoperability tests and published measurements. It is ready for independent engineering evaluation. Production adoption still depends on workload fit, system-level performance and security review.
 
+Version 0.3 adds [atomic epoch binding and independently verified signing](PRODUCTION_READINESS.md), a substantial [output-copy fix with measured evidence](DISPATCH_RESULTS.md), [native CPU/hybrid pipeline measurements](PIPELINE_RESULTS.md), and [cost scenarios for the existing A100/L40S captures](ECONOMICS.md). The pipeline results include verification, queueing and missed deadlines; they do not yet establish a reliable hybrid cost advantage at a 10 ms target. The security record identifies remaining key-isolation, secret-dependent execution and independent-review requirements.
+
 ## The opportunity and the decision
 
 Applications may need large numbers of signed manifests, authorization grants, receipts or other records. If fresh signatures consume a meaningful share of their CPU budget, GPU assistance could increase available signing capacity or leave CPU resources for other work. That value depends on arrivals, key distribution, deadlines and the rest of the request path; the repository does not yet demonstrate a deployment cost saving.
@@ -14,7 +16,7 @@ Publishers, CDNs, storage systems and other infrastructure teams can evaluate th
 
 | Reader | Decision to make | Evidence available now |
 |---|---|---|
-| CEO / business leadership | Is fresh cryptographic work a real bottleneck, and could addressing it justify integration cost? | Working primitives and signing-capacity evidence; application goodput, total cost and revenue effects remain unmeasured. |
+| CEO / business leadership | Is fresh cryptographic work a real bottleneck, and could addressing it justify integration cost? | Primitive and within-SLO pipeline evidence, hardware inventory and explicit cost models; actual deployment cost savings and revenue effects remain unproven. |
 | CTO / engineering | Does the code fit our stack, traffic, latency budget and CPU–GPU design? | C ABI, Python API, source-level architecture, per-backend batch sweeps and a [heterogeneous systems design](SYSTEMS_DESIGN.md). |
 | CSO / security leadership | Can we permit this key residency and execution model, and what assurance is still required? | Documented trust boundary, independent CPU comparisons and validation; secret-dependent GPU behavior and no independent audit. |
 
@@ -47,13 +49,13 @@ Batching shares submission and synchronization costs and exposes independent wor
 
 The collection delay can reverse an attractive library result. At 100,000 compatible arrivals/s, filling 256 items adds approximately **1.275 ms average wait** in a simple evenly spaced, no-timeout model. At 1,000 compatible arrivals/s, it adds **127.5 ms**, before the roughly 1.1 ms call. Aggregate traffic is insufficient: 100,000 requests/s spread evenly across 100 incompatible keys gives the latter rate per key. These are calculated illustrations, not measured request latency.
 
-The [systems design](SYSTEMS_DESIGN.md) lays out CPU and GPU responsibilities, size/timeout routing, key epochs, bounded queues, multi-device dispatch, bottleneck accounting and cost per successful operation. It explicitly distinguishes the existing library from the proposed service components. A scheduler and an end-to-end hybrid service are not shipped or benchmarked in this release.
+The [systems design](SYSTEMS_DESIGN.md) lays out CPU and GPU responsibilities, size/timeout routing, key epochs, bounded queues, multi-device dispatch, bottleneck accounting and cost per successful operation. The separate native benchmark executes a bounded in-process CPU/hybrid pipeline. Its first three captures are qualified as shared-host diagnostic data after background GPU work was discovered. A production network service remains outside this release.
 
 ## Code and assurance an evaluator can inspect
 
 Start at the [execution engine](../src/engine/crypto_engine.cu), [device runtime](../src/engine/runtime.hpp), [C ABI implementation](../src/abi/batchcrypto_abi.cpp) and [public header](../include/batchcrypto.h). The [P-256 backend](P256.md) includes working reference, comb and full-window paths, checked-in tables and a generator. The [C consumer](../examples/c_api.c) exercises the exported ABI directly. The repo builds independently of its selected private origins; [EXTRACTION.json](../EXTRACTION.json) and [NOTICE](../NOTICE) record attribution.
 
-Seventeen tests passed independently on RTX 4070 Ti and RTX 3060. All 4,479 table points matched OpenSSL; 523,104 GPU signatures across timed and warmup benchmark calls matched deterministic CPU output. The C consumer passed a limited Compute Sanitizer check. Hosted CI verifies CPU behavior, tables and recorded evidence; it does not run CUDA tests. [Validation](VALIDATION.md) describes the exact coverage.
+The v0.3 regression suite passed independently on RTX 4070 Ti and RTX 3060, including required epochs and fail-closed verification. All 4,479 table points matched OpenSSL; the preserved v0.2 campaign checked 523,104 GPU signatures across timed and warm-up calls. The C consumer passed a limited Compute Sanitizer check. Hosted CI verifies CPU behavior, native CPU compilation, tables and recorded evidence; it does not run CUDA tests. [Validation](VALIDATION.md) describes the exact coverage.
 
 Keys are present in host and device memory, and GPU arithmetic/table accesses have secret-dependent behavior. Correct outputs do not establish side-channel resistance or hardware key isolation. There is no independent audit or production-security certification. The [security scope](../SECURITY.md) makes these constraints explicit for review.
 

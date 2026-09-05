@@ -2,11 +2,11 @@
 
 An independent **Apache-2.0 library for batch cryptography on NVIDIA GPUs**, with a native engine, C ABI and Python bindings. Applications can hash records, encrypt or decrypt content with AES-GCM, and generate P-256 ECDSA signatures using reusable device runtimes and public precomputation tables.
 
-**Technical preview, v0.2.** The strongest measured use case is signing many independent records when enough compatible work is ready together. The CPU remains responsible for application decisions and can handle cryptographic work that does not benefit from GPU execution.
+**Technical preview, v0.3.** The strongest measured use case is signing many independent records when enough compatible work is ready together. This version adds atomic key-epoch checks, a signer that verifies every output on CPU before returning it, and native CPU/GPU pipeline measurements. Production security and deployment ROI remain explicit evaluation questions.
 
 Publishers, CDNs and other infrastructure teams can evaluate the same engine. [Machine-authorized content](docs/MACHINE_AUTHORIZED_CONTENT.md) is one application: signed grants can bind a publisher's content and access terms to a recipient. Payment, identity and enforcement belong to the application.
 
-[Engineering note](docs/ENGINEERING.md) · [CPU–GPU systems design](docs/SYSTEMS_DESIGN.md) · [Current benchmarks](docs/P256_RESULTS.md) · [Historical A100 results](docs/HISTORICAL_BENCHMARKS.md) · [Security scope](SECURITY.md)
+[Engineering note](docs/ENGINEERING.md) · [Production security](docs/PRODUCTION_READINESS.md) · [Whole-system measurements](docs/PIPELINE_RESULTS.md) · [Costs and GPU inventory](docs/ECONOMICS.md) · [Historical A100 results](docs/HISTORICAL_BENCHMARKS.md)
 
 ## Where it fits
 
@@ -15,13 +15,17 @@ Publishers, CDNs and other infrastructure teams can evaluate the same engine. [M
 | Fresh P-256 signatures consume meaningful CPU capacity; many records share compatible keys/formats; batches fit the deadline | Evaluate the full-window GPU path against a tuned CPU implementation. Already assembled or offline batches avoid online fill delay. |
 | Requests are sparse or urgent, or AES/hash work dominates | Begin with CPU. Small signing batches and every AES/hash cell in the initial matrix favored the stated CPU baseline. |
 | Keys must remain in an HSM or another hardware-isolated boundary | This host/device key model does not meet that requirement. Review the security boundary before integration. |
-| You need a production service or a proven cost/revenue outcome | This is an engine and evidence base. A service scheduler, request-level latency, deployment economics and independent security review remain work to establish. |
+| You need a production service or a proven cost/revenue outcome | Inspect the native pipeline's SLO/overload results and explicit cost assumptions. Network-service validation, deployment economics and independent security review remain open. |
 
 The business question is whether acceleration improves **successful requests within a deadline at an acceptable total cost**. First establish how much fresh signing is necessary: cached signatures or reusable grants may remove work entirely. The [engineering note](docs/ENGINEERING.md) frames the leadership, engineering and security decisions.
 
 ## Measured evidence
 
-At **batch 256**, the v0.2 full-window signer recorded:
+The v0.3 wrapper fixes repeated copying of the entire output buffer for every result. In a paired **batch-4,096** comparison using the same native DLL, full-window signing changed from **195,603 to 1,821,543/s on RTX 4070 Ti**, and **183,581 to 1,364,320/s on RTX 3060**. Mean call times after the fix were **2.25 ms** and **3.00 ms**. One before/after sweep per card, seven timed calls per cell, with every output checked outside timing. [Captures and exact boundaries](docs/DISPATCH_RESULTS.md).
+
+Those are standalone library rates. The [native pipeline experiment](docs/PIPELINE_RESULTS.md) times record creation, hashing, queueing, signing and verification of every signature against a multi-worker OpenSSL CPU baseline. It retains missed deadlines and overload outcomes and **has not demonstrated a reliable hybrid cost advantage at the tested 10 ms target**. [Cost estimates](docs/ECONOMICS.md) distinguish primitive throughput from within-deadline goodput.
+
+For comparison, the preserved **v0.2, batch-256** full-window results were:
 
 | GPU | GPU signatures/s | Mean GPU call completion | CPU signatures/s | Paired GPU/CPU rate |
 |---|---:|---:|---:|---:|
@@ -30,7 +34,7 @@ At **batch 256**, the v0.2 full-window signer recorded:
 
 Ranges span two runs with seven timed calls each; ratios use the paired CPU result from each run. The CPU baseline is **one Python thread with cached OpenSSL keys** on a Ryzen 7 7800X3D. GPU timing includes the synchronous Python call, packing, transfers, execution, output construction and clearing. It excludes batch formation, queueing, key/table import and independent oracle checks. These are library measurements, not request latency, a multi-core CPU comparison or cost savings.
 
-Full-window first beat CPU at sampled batch **64** on both cards; batches **1 and 8 lost**. Batch 256 was the most consistent mid-size point. Larger batches varied substantially between repeats and changed the apparent optimum. [All four captures](docs/P256_RESULTS.md) retain raw timing, CPU/reference/comb/full-window rows, source and binary fingerprints, and correctness accounting.
+In those v0.2 captures, full-window first beat CPU at sampled batch **64** on both cards; batches **1 and 8 lost**. Batch 256 was the most consistent mid-size point of that implementation. The output-copy correction changes large-batch behavior; neither that old recommendation nor a new primitive peak defines an online service's optimal batch. [All four older captures](docs/P256_RESULTS.md) remain available.
 
 The [A100 archive](docs/HISTORICAL_BENCHMARKS.md) includes **110,200 P-256 signatures/s** and **399,446 AES-GCM seals/s** on 16-byte records from an earlier persistent engine. It also preserves L40S latency, earlier RTX measurements and rejected runs. Those execution paths differ from the current library; their numbers are not a ranking against this table. The [initial public matrix](docs/RESULTS.md) preserves the AES/hash results where CPU won every sampled cell.
 
@@ -49,7 +53,7 @@ flowchart LR
     G --> O
 ```
 
-This is an integration design: the library supplies CPU operations and GPU runtimes, while the application supplies routing, timed queues and deadline policy. No automatic hybrid scheduler is shipped. The [systems design](docs/SYSTEMS_DESIGN.md) explains placement, key epochs, bounded queues, multi-device dispatch and complete request accounting.
+The library supplies CPU operations and GPU runtimes; application policy controls routing, queues and deadlines. A separate [native benchmark](benchmarks/native) implements bounded in-process queues and CPU/hybrid routing for evaluation. It is not a production service or automatic routing inside the library. The [systems design](docs/SYSTEMS_DESIGN.md) explains the boundary.
 
 **Batch fill time can dominate the result.** In a simple steady-arrival model, collecting 256 compatible items adds 1.275 ms average wait at 100,000 items/s, but 127.5 ms at 1,000/s, before execution. Total traffic split across many signing keys can behave like the latter case. These are calculated illustrations, not measured service latency. See [batch sizes and latency](docs/BATCHING.md) and the [worked system model](docs/SYSTEMS_DESIGN.md).
 
@@ -58,7 +62,8 @@ This is an integration design: the library supplies CPU operations and GPU runti
 | Evidence | Where to inspect it |
 |---|---|
 | Independently buildable native library, public ABI, Python bindings and direct C consumer | [Engine](src/engine/crypto_engine.cu), [header](include/batchcrypto.h), [C example](examples/c_api.c), build instructions below |
-| 17 tests passed on each local GPU; all 4,479 public table points matched OpenSSL | [Validation record](docs/VALIDATION.md), [tests](tests), [table generator](tools/generate_p256_tables.py) |
+| Local GPU correctness, epoch, output-failure and bounded-input checks; all 4,479 public table points matched OpenSSL | [Validation record](docs/VALIDATION.md), [tests](tests), [table generator](tools/generate_p256_tables.py) |
+| Native multi-worker CPU comparison, queue/verification latency, overload accounting and explicit price scenarios | [Pipeline](docs/PIPELINE_RESULTS.md), [costs](docs/ECONOMICS.md), [raw captures](benchmarks/pipeline_results) |
 | 96 current backend result rows; every measured GPU signature checked; both repeat runs retained | [Results and provenance](docs/P256_RESULTS.md), [raw captures](benchmarks/p256_results), [verifier](benchmarks/verify_p256_results.py) |
 | Explicit limits on security and portability claims | [Security scope](SECURITY.md), [validation](docs/VALIDATION.md); hosted CI checks CPU behavior and evidence, not CUDA execution |
 | License, selected-source attribution and public/private boundary | [Apache-2.0](LICENSE), [NOTICE](NOTICE), [EXTRACTION.json](EXTRACTION.json), [architecture](docs/ARCHITECTURE.md) |
@@ -76,6 +81,8 @@ This is an integration design: the library supplies CPU operations and GPU runti
 | Public comb/full-window tables | [data/p256](data/p256) | Checked-in point data, typed layouts, metadata and SHA-256 fingerprints |
 | Table generator and verifier | [generate_p256_tables.py](tools/generate_p256_tables.py) | Rebuild and independently check all 4,479 public points against OpenSSL |
 | Python runtime | [batchcrypto](python/batchcrypto/__init__.py) | Thin bindings to the same C ABI |
+| Guarded signing boundary | [VerifiedSigner](python/batchcrypto/verified.py) | CPU public-key pin, required epoch, all-signature verification and failure quarantine |
+| Whole-pipeline benchmark | [pipeline.cpp](benchmarks/native/pipeline.cpp) | Native OpenSSL workers, bounded queues, optional GPU dispatch, request deadlines and accounting |
 
 The runtime is reusable across calls; the current execution model launches bounded CUDA batches. The historical persistent queue/scheduler is a different implementation and is not part of this native library. See [architecture](docs/ARCHITECTURE.md) and [P-256 tables and backends](docs/P256.md) for the exact boundary.
 
@@ -116,26 +123,23 @@ Install the Python bindings and CPU dependency after building the native library
 python -m pip install .
 ```
 
-For repeated work, use the owned runtime. Its stream, buffers and key slots persist across calls. This example assembles 256 records before submission and uses CPU hashing and verification around GPU signing. It demonstrates interoperability; it does not implement an arrival queue or time the full pipeline:
+For signing, use the guarded signer around an owned runtime. Its buffers and key slots persist across calls. This example assembles 256 records before submission and verifies the whole output batch against a CPU-derived public-key pin before returning it:
 
 ```python
-from batchcrypto import Cpu, Runtime, generate_p256_key, verify_p256
+from batchcrypto import Cpu, generate_p256_key
+from batchcrypto.verified import VerifiedSigner
 
 # Already assembled records: CPU preparation, GPU batch signing, CPU verification.
 records = [f"example record {i}".encode() for i in range(256)]
 digests = Cpu().sha256(records)
 
-with Runtime("build/Release/batchcrypto.dll", device=0, p256_backend="full_window_w8") as engine:
-    epoch = engine.load_key(0, generate_p256_key(), kind="p256")
-    signatures = engine.sign(0, digests)
-    public_key, signing_epoch = engine.public_key(0)
-    assert engine.last_report["key_epoch"] == signing_epoch == epoch
-    assert all(verify_p256(public_key, digest, signature)
-               for digest, signature in zip(digests, signatures))
-    print(engine.stats())
+with VerifiedSigner("build/Release/batchcrypto.dll", device=0) as signer:
+    epoch = signer.load_key(0, generate_p256_key())
+    signatures = signer.sign(0, digests, expected_epoch=epoch)
+    print(len(signatures))
 ```
 
-`reference` remains the default for existing callers. `comb_w8` and `full_window_w8` use the included public tables for both signing and public-key export. `engine.set_p256_backend(...)` changes the implementation without changing keys or epochs. The C equivalents are `bc_set_p256_backend` and `bc_get_p256_backend`; [`examples/c_api.c`](examples/c_api.c) exercises all three through the ABI.
+`VerifiedSigner` requires native v0.3 and defaults to full-window; it does not protect keys against the documented side channels or host access. `reference` remains the general `Runtime` default. A `Runtime` caller can use `set_p256_backend(...)` and `sign(..., expected_epoch=epoch)` directly, with independent verification supplied by the application. The C equivalents include `bc_set_p256_backend` and `bc_sign_at_epoch`; [`examples/c_api.c`](examples/c_api.c) exercises the ABI.
 
 AES nonces remain the caller's responsibility. Retiring a key makes its slot unusable and retains an epoch tombstone so a stale update cannot silently recreate it. Key replacement waits for that context's active batch to finish. Reports include the key epoch used.
 
