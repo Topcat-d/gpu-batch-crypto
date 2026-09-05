@@ -1,0 +1,20 @@
+Public P-256 v0.2 benchmark build evidence, checked September 4, 2026 (local).
+
+Measured implementation commit: 000e531408bec33c8304f99150366fb750c87ee4
+Native version: 0.2.0-preview
+Binary: build/Release/batchcrypto.dll
+SHA-256: cc3d35c7ad4dcf11494be2d6615b222b82390f32235987742bb76ff58218d803
+Build: Release; CUDA 13.0.88; MSVC 19.44.35217.0
+
+Selected build/CMakeCache.txt line:
+CMAKE_CUDA_ARCHITECTURES:UNINITIALIZED=86;89
+
+cuobjdump --list-elf build/Release/batchcrypto.dll:
+ELF file    1: batchcrypto.1.sm_86.cubin
+ELF file    2: batchcrypto.2.sm_89.cubin
+
+The four original JSON captures have an empty architectures array because the
+harness matched only CMake's STRING cache type. The configured value used
+UNINITIALIZED. This supplement records the checked cache value and the actual
+binary code objects; its binary fingerprint matches all four captures. The
+raw captures remain unchanged. The harness now accepts either cache type.

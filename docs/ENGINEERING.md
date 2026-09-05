@@ -20,7 +20,7 @@ The [content-grant example](../examples/content_grant.py) binds synthetic conten
 
 One call per small operation repeatedly pays submission, copying and synchronization overhead and can leave most of the GPU idle. Batching shares those costs and exposes parallel work. It also consumes latency: time collecting a batch, queueing behind other batches, and waiting for the whole call to finish. The right setting depends on the primitive, payload, signing-key distribution, host and GPU.
 
-The initial v0.1 reference implementation illustrates the tradeoff directly. On RTX 4070 Ti, batch 1,024 signs about **110,956 digests/s** at **9.23 ms** mean batch completion; batch 4,096 reaches **160,455/s** at **25.53 ms**. RTX 3060 records **100,741/s at 10.16 ms** and **153,452/s at 26.69 ms**, respectively. The smaller of those two batches retains roughly two-thirds of peak sampled throughput at a little over one-third of the batch completion time. These are sampled starting points, not universal sweet spots or p99 guarantees. Version 0.2 adds selectable [comb and full-window backends](P256.md) with separate measurements.
+The public v0.2 full-window signer illustrates this tradeoff: batches 1 and 8 lose to the CPU baseline, batch 64 first wins in the sampled sweep, and batch 256 supplies roughly 225–229K signatures/s on RTX 4070 Ti at about 1.1 ms mean batch completion. Larger batches vary substantially between repeat runs. More work per call does not automatically improve the result. The [comb and full-window implementations](P256.md) are available for inspection and reproduction.
 
 The [batching guide](BATCHING.md) gives per-card and per-payload tables, observed timing ranges, charts and a batch-fill model. It also shows a historical sweep where throughput peaked at 4,096 and fell at larger logical batch sizes. Filling the queue further can cost latency without buying throughput.
 
@@ -36,18 +36,20 @@ The [batching guide](BATCHING.md) gives per-card and per-payload tables, observe
 
 The [historical archive](HISTORICAL_BENCHMARKS.md) contains the selected captures, hardware/settings, hash provenance, full latency percentiles and rejected runs. Those paths are not identical to each other or to the current library, so the table is evidence of prior work rather than a GPU ranking. It does not establish an A100 batch optimum: the clean A100 captures lack a batch-size/latency sweep. The AES rate corresponds to 6.39 MB/s of small-record plaintext, not article delivery or payment throughput.
 
-## Initial public-library measurements
+## Public-library measurements
 
-On an AMD Ryzen 7 7800X3D host, the v0.1 reference implementation achieved:
+On an AMD Ryzen 7 7800X3D host, the v0.2 full-window implementation recorded the following at batch 256. Ranges span two run means, with seven timed calls per run:
 
-| P-256 signing, batch 4,096 | GPU signatures/s | CPU reference signatures/s | GPU/CPU |
+| GPU | Signatures/s | Mean batch completion | CPU reference signatures/s |
 |---|---:|---:|---:|
-| RTX 4070 Ti | 160,455 | 40,543 | 3.96× |
-| RTX 3060 | 153,452 | 39,079 | 3.93× |
+| RTX 4070 Ti | 224,742–229,039 | 1.12–1.14 ms | 41,218–44,130 |
+| RTX 3060 | 177,810–194,276 | 1.32–1.44 ms | 40,689–43,358 |
 
-The GPU first exceeded the CPU reference at the sampled batch size 1,024 on both cards; it lost at batch 256 and below. Average measured batch-4,096 call duration was approximately 25.5 ms on the 4070 Ti and 26.7 ms on the 3060, excluding time spent collecting a batch. These are aggregate throughput measurements over three timed calls after warmup, with transfers and buffer clearing included. The CPU reference uses cached cryptography/OpenSSL keys on one Python thread. An optimized native multi-core baseline remains necessary for a deployment comparison.
+These synchronous Python API timings include packing, transfers, CUDA execution, result construction and clearing, with table/key import and warmup excluded. They also exclude time collecting and queueing a batch. The CPU reference uses cached cryptography/OpenSSL keys on one Python thread. An optimized native multi-core baseline remains necessary for a deployment comparison.
 
-AES-GCM and SHA-256 were slower than the CPU reference in every measured cell. This release therefore supports an experiment around high-volume signing; it does not establish that moving an entire content-delivery pipeline to a GPU is beneficial. Raw samples, exact source and binary provenance, unsupported cells and the earlier shared-buffer runs are in the [results](RESULTS.md).
+The [full comparison](P256_RESULTS.md) includes reference, comb, full-window and CPU results, both runs' raw samples, and source/binary provenance. Batches 1,024 and 4,096 varied widely and did not produce a consistent optimum. The cause has not been isolated; these local Windows captures do not establish sustained throughput or request p99.
+
+The [initial v0.1 matrix](RESULTS.md) is preserved, including AES-GCM and SHA-256 cells where CPU won throughout. The v0.2 measurements focus on P-256 and establish no new AES/hash speedup. The evidence supports further signing evaluation; it does not establish that an entire content-delivery pipeline benefits from GPU execution.
 
 ## A useful next evaluation
 

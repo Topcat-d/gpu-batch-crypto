@@ -120,11 +120,11 @@ def plot():
             color=color,
         )
     axes[0, 0].set(
-        title="Public library: P-256 throughput",
+        title="Initial v0.1: P-256 throughput",
         ylabel="Thousands of signatures / second",
     )
     axes[0, 1].set(
-        title="Public library: mean batch completion", ylabel="Milliseconds per batch"
+        title="Initial v0.1: mean batch completion", ylabel="Milliseconds per batch"
     )
     old = json.loads(
         (ROOT / "benchmarks/historical/rtx4070ti-20260317-envelope.json").read_text()

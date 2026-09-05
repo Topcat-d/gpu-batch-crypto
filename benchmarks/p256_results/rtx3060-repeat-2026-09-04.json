@@ -1,0 +1,648 @@
+{
+  "metadata": {
+    "commit": "000e531408bec33c8304f99150366fb750c87ee4",
+    "source_sha256": {
+      "CMakeLists.txt": "12c929f15da66bdd0bcc295dc962b0002ee0ff779e8e6d5dc0f7982dd5a4c404",
+      "benchmarks/report_batching.py": "476a9412c1136b5b9f82c5c221aa5582d9eaeb10e1b010c62ea52e85d2848e25",
+      "benchmarks/run_matrix.py": "740b93cb2e4a1610174a69605dc98371b2fded69b5dfcef947dfe89823015563",
+      "benchmarks/run_p256_backends.py": "9c93344aab89f9c7916e8b84f36409d35c3da927ea8bfcabf78ac5557a38cc84",
+      "benchmarks/verify_history.py": "606a4699353c2bfa970efe48d4d7c34738491980a14f89ff5d0b0b34dba36ffa",
+      "benchmarks/verify_p256_results.py": "9c9a63c2ff768a4f0b947002f9bd89c02305e4a5733bc39a3e22e252e2b01021",
+      "benchmarks/verify_results.py": "cedeb5b76dfb6992b866c9d7cd7269985742500f99fe143d108bb8f5a8ccba57",
+      "cmake/EmbedP256Tables.cmake": "6c94bd6b85ee40d8e4321a640abb1b16bb01bf591843c3009b0bfcd06186e2e7",
+      "data/p256/comb_w8.bin": "5763fc89ecd6114dbb41a8f6556911a4737f23e3e5d5ecf9d5ae807c59b03086",
+      "data/p256/full_window_w8.bin": "5d62a2d7d346fe82dfd4a6cbaecc62749d939cc4541341bf4c06497bad8dd7a1",
+      "examples/c_api.c": "48bfde5e75c6167401e706fa2509f6831d04bfaa0f22088312578932b27bfce4",
+      "examples/content_grant.py": "463370d76f6fc75e7d6e2559ade68b6efc336c4a52882809f8e0a24eb7cc649f",
+      "examples/signed_batch_records.py": "1372f830874e9a19708f548b89101526c411147acfb1e95d0c8fa6a5fd9ca1ed",
+      "include/batchcrypto.h": "251531283a1914361143f41a9dc73fcbb09985b458511a9fd28fa033795c9b6e",
+      "pyproject.toml": "443920bcf64b8f1b2120bbdc1e6266bef81cae0a07272838556c36e3a35d9a8f",
+      "python/batchcrypto/__init__.py": "6d6fcc843ffc130b1d45fefc709e592f05f04e093bd13bdd582e67edc3a32340",
+      "src/abi/batchcrypto_abi.cpp": "f3532804a181245f2e42dec82b5ead90cb18a6814f9cb930d6ace0800662eee9",
+      "src/engine/crypto_engine.cu": "44afcae49f68cf7d7da5616c34161c20adb404af05a779add1e227c2a335fbaf",
+      "src/engine/crypto_engine.hpp": "56d5cac4ed329e1c85fe0d79b269945b0388015110973ada49f63fb8507b4b02",
+      "src/engine/runtime.hpp": "271b19703688ba06f9ee5b6c00e23e06e9c3bfad313055e0036b92fa25f9447e",
+      "src/imported/aes/aes256_ctr_device.cuh": "7a12864d3d78f45d29548cf9e7c47d7c42dd67845503097bd55b50de55fdde6b",
+      "src/imported/aes/aes256_gcm_device.cuh": "291e725f5b43011511b72d4a6d8d491d8045fe643c22f8060ea39fe08bfe42a1",
+      "src/imported/p256_persistent/p256_csprng_device.cuh": "4cb91d5395b647586eb04bf9df1793886212cef7f00acebaac4ea5c85073655c",
+      "src/imported/p256_persistent/p256_persistent.cuh": "6604b634a495107033fc11e21c63e8428da53696bc115ec081efcf7c6336fc08",
+      "src/imported/p256_persistent/p256_rfc6979_device.cuh": "37ac40c1c44facf86393464a93062cd60aeb85be4610548e62b2bbd0627d04d0",
+      "src/imported/sha256/sha256_device.cuh": "e7e159a703eaa639a0cf6a63aa36720a7f41b7fe8106015fc6a8dae155613d0a",
+      "src/kernels/crypto_kernels.cuh": "76843583ba37cab65fc951a2b420071c5420145c89f25193e1fd833a9c876ea6",
+      "src/p256/fixed_base.cuh": "63f4ed43cf8f7a0efd9e717ac6d99ee57abcef150f955a12178762514e3558c3",
+      "src/p256/tables.cpp": "b7da43cd4af0be65dbd257c95a19f1c1e11614e62610d4a0e1cec897212dd01f",
+      "src/p256/tables.hpp": "ae9026f01a2640498e85dac54dab482beee664e5cc495d17e99d543587c20a8e",
+      "tests/test_crypto.py": "947ab644b991d16a35cc734a6f08d63b189c88d26e0d955b7e7c72e1d912a60b",
+      "tests/test_grant.py": "e10e47287c7e9a295f4058225400edc18a6360f439f73c8ac31ea193c2c0ca11",
+      "tests/test_p256_tables.py": "1e9a08609b31029140bce2f807cc703685b9ecfa5db9cb74a37b60504e7a2705",
+      "tools/generate_p256_tables.py": "223906955dc40250eb0f4a01eed84c712dac2141f9eb12cf0c4cf17ebc7862be",
+      "tools/imported/p256_table_math.py": "5a3aa8baffc51c14f52cb4420ac5b2fe280441db73af93033112ec261537e506",
+      "tools/verify_extraction.py": "5d42b61790cc8df33dc0d54bbb80cb5f1dec73cab6efb96c197f4c659d764e67"
+    },
+    "timestamp_utc": "2026-09-05T00:05:40.333619+00:00",
+    "gpu": "NVIDIA GeForce RTX 3060, 610.62",
+    "device": 1,
+    "compiler_configuration": [
+      "set(CMAKE_CUDA_COMPILER_ID \"NVIDIA\")",
+      "set(CMAKE_CUDA_COMPILER_VERSION \"13.0.88\")",
+      "set(CMAKE_CXX_COMPILER_ID \"MSVC\")",
+      "set(CMAKE_CXX_COMPILER_VERSION \"19.44.35217.0\")"
+    ],
+    "architectures": [],
+    "build_configuration": "Release",
+    "cpu": "AMD Ryzen 7 7800X3D 8-Core Processor",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.14",
+    "cryptography": "50.0.1",
+    "openssl": "OpenSSL 4.0.2 25 Aug 2026",
+    "library_version": "0.2.0-preview",
+    "library_sha256": "cc3d35c7ad4dcf11494be2d6615b222b82390f32235987742bb76ff58218d803",
+    "timing_scope": "Synchronous Python API, warmed buffers; includes copies and clearing; excludes table/key import, batch formation and oracle checks.",
+    "cpu_scope": "Single Python thread, cached OpenSSL private key, deterministic ECDSA and low-s encoding.",
+    "comparison": "Identical key/digests within each run. Backend order rotates each iteration. Separate context per backend and batch size."
+  },
+  "rows": [
+    {
+      "backend": "cpu",
+      "batch": 1,
+      "iterations": 7,
+      "batch_seconds": [
+        9.80000477284193e-05,
+        5.630007945001125e-05,
+        4.83999028801918e-05,
+        4.0499959141016006e-05,
+        5.679996684193611e-05,
+        4.449998959898949e-05,
+        4.67000063508749e-05
+      ],
+      "total_operations": 7,
+      "outputs_checked": 7,
+      "ops_per_second": 17893.66272763037,
+      "mean_batch_ms": 0.055885707427348406,
+      "runtime_stats": null
+    },
+    {
+      "backend": "reference",
+      "batch": 1,
+      "iterations": 7,
+      "batch_seconds": [
+        0.005834300071001053,
+        0.005796500016003847,
+        0.005803999956697226,
+        0.005801900057122111,
+        0.0058259000070393085,
+        0.005818300181999803,
+        0.005814099917188287
+      ],
+      "total_operations": 7,
+      "outputs_checked": 7,
+      "ops_per_second": 172.01130272477647,
+      "mean_batch_ms": 5.813571458150234,
+      "runtime_stats": {
+        "calls": 8,
+        "submitted": 8,
+        "completed": 8,
+        "item_errors": 0,
+        "call_errors": 0,
+        "reserved_device_bytes": 129
+      }
+    },
+    {
+      "backend": "comb_w8",
+      "batch": 1,
+      "iterations": 7,
+      "batch_seconds": [
+        0.0038599998224526644,
+        0.0038395000156015158,
+        0.0039010001346468925,
+        0.003844799939543009,
+        0.003840700024738908,
+        0.003859299933537841,
+        0.003863800084218383
+      ],
+      "total_operations": 7,
+      "outputs_checked": 7,
+      "ops_per_second": 259.1719091613687,
+      "mean_batch_ms": 3.8584428506770303,
+      "runtime_stats": {
+        "calls": 8,
+        "submitted": 8,
+        "completed": 8,
+        "item_errors": 0,
+        "call_errors": 0,
+        "reserved_device_bytes": 16449
+      }
+    },
+    {
+      "backend": "full_window_w8",
+      "batch": 1,
+      "iterations": 7,
+      "batch_seconds": [
+        0.0011590002104640007,
+        0.00116429990157485,
+        0.001172299962490797,
+        0.0011946000158786774,
+        0.0011710000690072775,
+        0.0011624000035226345,
+        0.00117759988643229
+      ],
+      "total_operations": 7,
+      "outputs_checked": 7,
+      "ops_per_second": 853.5336240867915,
+      "mean_batch_ms": 1.1716000070529324,
+      "runtime_stats": {
+        "calls": 8,
+        "submitted": 8,
+        "completed": 8,
+        "item_errors": 0,
+        "call_errors": 0,
+        "reserved_device_bytes": 270465
+      }
+    },
+    {
+      "backend": "cpu",
+      "batch": 8,
+      "iterations": 7,
+      "batch_seconds": [
+        0.00023799994960427284,
+        0.00021920003928244114,
+        0.00019819987937808037,
+        0.00020699994638562202,
+        0.00021150009706616402,
+        0.000224800081923604,
+        0.0002164000179618597
+      ],
+      "total_operations": 56,
+      "outputs_checked": 56,
+      "ops_per_second": 36961.25639969235,
+      "mean_batch_ms": 0.21644285880029202,
+      "runtime_stats": null
+    },
+    {
+      "backend": "reference",
+      "batch": 8,
+      "iterations": 7,
+      "batch_seconds": [
+        0.008930000010877848,
+        0.008886199910193682,
+        0.008921299828216434,
+        0.008907800074666739,
+        0.008926999988034368,
+        0.00797699997201562,
+        0.00798610015772283
+      ],
+      "total_operations": 56,
+      "outputs_checked": 56,
+      "ops_per_second": 925.0785499708703,
+      "mean_batch_ms": 8.647914277389646,
+      "runtime_stats": {
+        "calls": 8,
+        "submitted": 64,
+        "completed": 64,
+        "item_errors": 0,
+        "call_errors": 0,
+        "reserved_device_bytes": 808
+      }
+    },
+    {
+      "backend": "comb_w8",
+      "batch": 8,
+      "iterations": 7,
+      "batch_seconds": [
+        0.004181999946013093,
+        0.00413250015117228,
+        0.004150099819526076,
+        0.004173099994659424,
+        0.003807300003245473,
+        0.003694599959999323,
+        0.0037533000577241182
+      ],
+      "total_operations": 56,
+      "outputs_checked": 56,
+      "ops_per_second": 2007.6793784740923,
+      "mean_batch_ms": 3.984699990334255,
+      "runtime_stats": {
+        "calls": 8,
+        "submitted": 64,
+        "completed": 64,
+        "item_errors": 0,
+        "call_errors": 0,
+        "reserved_device_bytes": 17128
+      }
+    },
+    {
+      "backend": "full_window_w8",
+      "batch": 8,
+      "iterations": 7,
+      "batch_seconds": [
+        0.001222599996253848,
+        0.001230600057169795,
+        0.001223099883645773,
+        0.001227000029757619,
+        0.0011108999606221914,
+        0.00109779997728765,
+        0.0011118999682366848
+      ],
+      "total_operations": 56,
+      "outputs_checked": 56,
+      "ops_per_second": 6809.421425962932,
+      "mean_batch_ms": 1.174842838996223,
+      "runtime_stats": {
+        "calls": 8,
+        "submitted": 64,
+        "completed": 64,
+        "item_errors": 0,
+        "call_errors": 0,
+        "reserved_device_bytes": 271144
+      }
+    },
+    {
+      "backend": "cpu",
+      "batch": 64,
+      "iterations": 7,
+      "batch_seconds": [
+        0.0015418000984936953,
+        0.0014861999079585075,
+        0.0014901000540703535,
+        0.0014971999917179346,
+        0.0014712999109178782,
+        0.0015325001440942287,
+        0.001446699956431985
+      ],
+      "total_operations": 448,
+      "outputs_checked": 448,
+      "ops_per_second": 42806.09196372106,
+      "mean_batch_ms": 1.4951142948120832,
+      "runtime_stats": null
+    },
+    {
+      "backend": "reference",
+      "batch": 64,
+      "iterations": 7,
+      "batch_seconds": [
+        0.008075499907135963,
+        0.008061099797487259,
+        0.008088000118732452,
+        0.008070999989286065,
+        0.00808380008675158,
+        0.008059800136834383,
+        0.008079299936071038
+      ],
+      "total_operations": 448,
+      "outputs_checked": 448,
+      "ops_per_second": 7926.608105657033,
+      "mean_batch_ms": 8.074071424614106,
+      "runtime_stats": {
+        "calls": 8,
+        "submitted": 512,
+        "completed": 512,
+        "item_errors": 0,
+        "call_errors": 0,
+        "reserved_device_bytes": 6240
+      }
+    },
+    {
+      "backend": "comb_w8",
+      "batch": 64,
+      "iterations": 7,
+      "batch_seconds": [
+        0.0037546998355537653,
+        0.003749700030311942,
+        0.0037780001293867826,
+        0.0037551000714302063,
+        0.0037505999207496643,
+        0.003797900164499879,
+        0.0037781998980790377
+      ],
+      "total_operations": 448,
+      "outputs_checked": 448,
+      "ops_per_second": 16992.740122976284,
+      "mean_batch_ms": 3.766314292858754,
+      "runtime_stats": {
+        "calls": 8,
+        "submitted": 512,
+        "completed": 512,
+        "item_errors": 0,
+        "call_errors": 0,
+        "reserved_device_bytes": 22560
+      }
+    },
+    {
+      "backend": "full_window_w8",
+      "batch": 64,
+      "iterations": 7,
+      "batch_seconds": [
+        0.0011373001616448164,
+        0.0011340000201016665,
+        0.0011941001284867525,
+        0.0011415998451411724,
+        0.00114799989387393,
+        0.0011435998603701591,
+        0.001167600043118
+      ],
+      "total_operations": 448,
+      "outputs_checked": 448,
+      "ops_per_second": 55540.40348925567,
+      "mean_batch_ms": 1.1523142789623566,
+      "runtime_stats": {
+        "calls": 8,
+        "submitted": 512,
+        "completed": 512,
+        "item_errors": 0,
+        "call_errors": 0,
+        "reserved_device_bytes": 276576
+      }
+    },
+    {
+      "backend": "cpu",
+      "batch": 256,
+      "iterations": 7,
+      "batch_seconds": [
+        0.006105500040575862,
+        0.006614499958232045,
+        0.006659700069576502,
+        0.0063645001500844955,
+        0.006300000008195639,
+        0.00585199985653162,
+        0.006145700113847852
+      ],
+      "total_operations": 1792,
+      "outputs_checked": 1792,
+      "ops_per_second": 40688.52597146285,
+      "mean_batch_ms": 6.291700028149145,
+      "runtime_stats": null
+    },
+    {
+      "backend": "reference",
+      "batch": 256,
+      "iterations": 7,
+      "batch_seconds": [
+        0.008421599864959717,
+        0.008413300151005387,
+        0.008425500011071563,
+        0.00843159994110465,
+        0.00839800015091896,
+        0.008393599884584546,
+        0.00841959984973073
+      ],
+      "total_operations": 1792,
+      "outputs_checked": 1792,
+      "ops_per_second": 30422.795441686114,
+      "mean_batch_ms": 8.414742836196508,
+      "runtime_stats": {
+        "calls": 8,
+        "submitted": 2048,
+        "completed": 2048,
+        "item_errors": 0,
+        "call_errors": 0,
+        "reserved_device_bytes": 24864
+      }
+    },
+    {
+      "backend": "comb_w8",
+      "batch": 256,
+      "iterations": 7,
+      "batch_seconds": [
+        0.00390110001899302,
+        0.003944899886846542,
+        0.0039669000543653965,
+        0.003971199970692396,
+        0.00393400015309453,
+        0.003973099868744612,
+        0.00392899988219142
+      ],
+      "total_operations": 1792,
+      "outputs_checked": 1792,
+      "ops_per_second": 64880.05194422507,
+      "mean_batch_ms": 3.945742833561131,
+      "runtime_stats": {
+        "calls": 8,
+        "submitted": 2048,
+        "completed": 2048,
+        "item_errors": 0,
+        "call_errors": 0,
+        "reserved_device_bytes": 41184
+      }
+    },
+    {
+      "backend": "full_window_w8",
+      "batch": 256,
+      "iterations": 7,
+      "batch_seconds": [
+        0.0013772998936474323,
+        0.0013200999237596989,
+        0.0012975998688489199,
+        0.001305100042372942,
+        0.0012938999570906162,
+        0.0013367999345064163,
+        0.0012932000681757927
+      ],
+      "total_operations": 1792,
+      "outputs_checked": 1792,
+      "ops_per_second": 194275.8088178652,
+      "mean_batch_ms": 1.3177142412002598,
+      "runtime_stats": {
+        "calls": 8,
+        "submitted": 2048,
+        "completed": 2048,
+        "item_errors": 0,
+        "call_errors": 0,
+        "reserved_device_bytes": 295200
+      }
+    },
+    {
+      "backend": "cpu",
+      "batch": 1024,
+      "iterations": 7,
+      "batch_seconds": [
+        0.025100599974393845,
+        0.026329899905249476,
+        0.024504899978637695,
+        0.024441499961540103,
+        0.023251099977642298,
+        0.023378599900752306,
+        0.023522299947217107
+      ],
+      "total_operations": 7168,
+      "outputs_checked": 7168,
+      "ops_per_second": 42033.93099295106,
+      "mean_batch_ms": 24.361271377918975,
+      "runtime_stats": null
+    },
+    {
+      "backend": "reference",
+      "batch": 1024,
+      "iterations": 7,
+      "batch_seconds": [
+        0.010219099931418896,
+        0.010052100056782365,
+        0.010481599951162934,
+        0.009700100170448422,
+        0.010202999925240874,
+        0.009723699884489179,
+        0.009773500030860305
+      ],
+      "total_operations": 7168,
+      "outputs_checked": 7168,
+      "ops_per_second": 102176.52541466666,
+      "mean_batch_ms": 10.02187142148614,
+      "runtime_stats": {
+        "calls": 8,
+        "submitted": 8192,
+        "completed": 8192,
+        "item_errors": 0,
+        "call_errors": 0,
+        "reserved_device_bytes": 99360
+      }
+    },
+    {
+      "backend": "comb_w8",
+      "batch": 1024,
+      "iterations": 7,
+      "batch_seconds": [
+        0.005761499982327223,
+        0.005562199978157878,
+        0.005593299865722656,
+        0.0052773000206798315,
+        0.0051884998101741076,
+        0.005270699970424175,
+        0.00525390007533133
+      ],
+      "total_operations": 7168,
+      "outputs_checked": 7168,
+      "ops_per_second": 189092.36867194794,
+      "mean_batch_ms": 5.415342814688172,
+      "runtime_stats": {
+        "calls": 8,
+        "submitted": 8192,
+        "completed": 8192,
+        "item_errors": 0,
+        "call_errors": 0,
+        "reserved_device_bytes": 115680
+      }
+    },
+    {
+      "backend": "full_window_w8",
+      "batch": 1024,
+      "iterations": 7,
+      "batch_seconds": [
+        0.003065000055357814,
+        0.0032554001081734896,
+        0.0030599001329392195,
+        0.0029619999695569277,
+        0.0026100000832229853,
+        0.0026063001714646816,
+        0.0026475999038666487
+      ],
+      "total_operations": 7168,
+      "outputs_checked": 7168,
+      "ops_per_second": 354742.596301272,
+      "mean_batch_ms": 2.886600060654538,
+      "runtime_stats": {
+        "calls": 8,
+        "submitted": 8192,
+        "completed": 8192,
+        "item_errors": 0,
+        "call_errors": 0,
+        "reserved_device_bytes": 369696
+      }
+    },
+    {
+      "backend": "cpu",
+      "batch": 4096,
+      "iterations": 7,
+      "batch_seconds": [
+        0.09407310001552105,
+        0.09329600003547966,
+        0.0941860000602901,
+        0.10163299995474517,
+        0.09324930002912879,
+        0.1143835000693798,
+        0.1032561999745667
+      ],
+      "total_operations": 28672,
+      "outputs_checked": 28672,
+      "ops_per_second": 41309.53174258793,
+      "mean_batch_ms": 99.15387144844446,
+      "runtime_stats": null
+    },
+    {
+      "backend": "reference",
+      "batch": 4096,
+      "iterations": 7,
+      "batch_seconds": [
+        0.06902469997294247,
+        0.06802030000835657,
+        0.0684716000687331,
+        0.06838109996169806,
+        0.06755029992200434,
+        0.06995829986408353,
+        0.07009979989379644
+      ],
+      "total_operations": 28672,
+      "outputs_checked": 28672,
+      "ops_per_second": 59546.493841642456,
+      "mean_batch_ms": 68.78658567023065,
+      "runtime_stats": {
+        "calls": 8,
+        "submitted": 32768,
+        "completed": 32768,
+        "item_errors": 0,
+        "call_errors": 0,
+        "reserved_device_bytes": 397344
+      }
+    },
+    {
+      "backend": "comb_w8",
+      "batch": 4096,
+      "iterations": 7,
+      "batch_seconds": [
+        0.06309429998509586,
+        0.06343759992159903,
+        0.06451709987595677,
+        0.06409929995425045,
+        0.06432350003160536,
+        0.06596860010176897,
+        0.06654899986460805
+      ],
+      "total_operations": 28672,
+      "outputs_checked": 28672,
+      "ops_per_second": 63435.115993467174,
+      "mean_batch_ms": 64.56991424784064,
+      "runtime_stats": {
+        "calls": 8,
+        "submitted": 32768,
+        "completed": 32768,
+        "item_errors": 0,
+        "call_errors": 0,
+        "reserved_device_bytes": 413664
+      }
+    },
+    {
+      "backend": "full_window_w8",
+      "batch": 4096,
+      "iterations": 7,
+      "batch_seconds": [
+        0.06144990003667772,
+        0.060312800109386444,
+        0.06054740003310144,
+        0.062159799970686436,
+        0.060189499985426664,
+        0.06319539994001389,
+        0.06418759981170297
+      ],
+      "total_operations": 28672,
+      "outputs_checked": 28672,
+      "ops_per_second": 66363.85689807161,
+      "mean_batch_ms": 61.720342840999365,
+      "runtime_stats": {
+        "calls": 8,
+        "submitted": 32768,
+        "completed": 32768,
+        "item_errors": 0,
+        "call_errors": 0,
+        "reserved_device_bytes": 667680
+      }
+    }
+  ]
+}

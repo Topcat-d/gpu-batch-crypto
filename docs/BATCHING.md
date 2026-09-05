@@ -2,6 +2,19 @@
 
 Batching lets a caller share submission, transfer and synchronization costs across independent cryptographic operations and expose enough parallel work to occupy a GPU. The useful batch size depends on the primitive, payload, key grouping, host submission path, GPU and latency budget. More queued work eventually adds waiting without a corresponding throughput gain.
 
+## Current table-backed signer
+
+The [v0.2 comparison](P256_RESULTS.md) measures reference, comb and full-window execution with two runs per GPU and seven timed calls per cell. Full-window first exceeds the single-thread CPU baseline at sampled batch 64. Batch 256 is a useful mid-size starting point in these captures:
+
+| GPU | Backend / batch | Signatures/s, range of two run means | Mean batch completion, range of two run means |
+|---|---|---:|---:|
+| RTX 4070 Ti | Full-window / 256 | 224,742–229,039 | 1.12–1.14 ms |
+| RTX 3060 | Full-window / 256 | 177,810–194,276 | 1.32–1.44 ms |
+
+At 1,024 and 4,096, results varied substantially between runs and the throughput peak changed. Both complete captures are published; neither card has an established universal optimum. The range above is across run means, not a latency percentile. Table/key import and batch formation are excluded; copying and clearing are included. See [the current chart and full sweep](P256_RESULTS.md).
+
+## Initial reference and historical curves
+
 ![Current and historical batch throughput and completion time](assets/batching.svg)
 
 The top panels measure the initial v0.1 public library on September 4, 2026. Version 0.2 adds [P-256 table backends](P256.md) with a separate comparison. The bottom panels show a different historical execution path on March 17. They illustrate two batching curves, not a comparison of implementations under identical conditions.

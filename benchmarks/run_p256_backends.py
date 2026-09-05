@@ -54,7 +54,7 @@ def main():
             )
         )
     cache = Path(args.build_dir, "CMakeCache.txt").read_text()
-    architectures = re.findall(r"CMAKE_CUDA_ARCHITECTURES:STRING=(.+)", cache)
+    architectures = re.findall(r"CMAKE_CUDA_ARCHITECTURES:[^=]+=(.+)", cache)
     key = generate_p256_key()
     private = ec.derive_private_key(int.from_bytes(key, "big"), ec.SECP256R1())
 
