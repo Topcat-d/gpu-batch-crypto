@@ -24,6 +24,8 @@ Publishers, CDNs, storage systems and other infrastructure teams can evaluate th
 
 The best current evaluation candidate is a trusted-host service with many independent P-256 signatures, compatible keys and formats, an available NVIDIA GPU, and enough latency budget to collect work. Offline signing and already assembled batches avoid some online fill delay. Bursty online workloads need a bounded wait policy.
 
+An agent's planned access calls offer another evaluation shape: prepare authorized proofs or grants while independent planning continues, serve sparse/urgent work on CPU, and evaluate GPU execution for larger ready groups under the same permitted signer and epoch. Established signing keys are reused according to policy; the optimization is usually preparing signed objects, rather than generating keys for every website. The [agent access design](AGENT_ACCESS_DESIGN.md) separates client proofs from publisher grants, explains dependency and freshness limits, and specifies a fair CPU/hybrid comparison. Several tool calls can also be efficient through ordinary concurrency and credential reuse without GPU signing.
+
 Sparse or urgent signing should begin with the CPU path. CPU also won every sampled AES-GCM and SHA-256 cell in the initial matrix; those GPU implementations are available, but there is no measured case here for moving all cryptography onto the GPU. A requirement that signing keys stay inside an HSM or another hardware-isolated boundary is incompatible with this native host/device key model. RSA and a complete TLS stack are outside this release.
 
 ## The numbers that matter

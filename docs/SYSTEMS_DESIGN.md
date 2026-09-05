@@ -4,6 +4,8 @@ The useful unit of evaluation is a complete request processed correctly within i
 
 GPU Batch Crypto supplies explicit CPU operations and a synchronous CUDA batch engine. The routing and queueing design below describes an integration an adopter could build. Version 0.3 also supplies a [native in-process pipeline benchmark](PIPELINE_RESULTS.md) with bounded queues, timed batches, CPU/hybrid routing and independent verification. That harness is an executable experiment, not a network service. The [library architecture](ARCHITECTURE.md) identifies the implemented components.
 
+For agents that identify several upcoming access calls, the [agent access design](AGENT_ACCESS_DESIGN.md) adds dependency-aware early preparation: reuse permitted credentials, prepare fresh proofs or grants once their inputs are stable, and route ready signing groups to CPU or GPU by compatibility and remaining deadline. Already-ready waves can avoid traffic-driven fill delay. This opportunity applies to CPU as well as GPU and has not yet been measured as an agent workflow.
+
 ## Assign work according to the evidence
 
 | Work | Starting placement for evaluation | Reason and evidence boundary |
@@ -12,7 +14,7 @@ GPU Batch Crypto supplies explicit CPU operations and a synchronous CUDA batch e
 | Content hashing and AES-GCM | CPU initially | CPU won every sampled cell in the [v0.1 matrix](RESULTS.md). CUDA implementations remain available for testing other shapes; v0.2 establishes no new AES/hash advantage. |
 | Sparse or urgent P-256 signing | CPU initially | Full-window GPU signing lost at batches 1 and 8 in all four v0.2 captures. Waiting for more work can dominate execution time. |
 | Many compatible P-256 signatures ready together | Evaluate GPU full-window | First sampled CPU crossover was 64. Batch 256 gave the most consistent mid-size result across the two local runs per GPU. |
-| Key generation and independent signature verification | CPU | The provided standard-library paths run on CPU. The GPU timing excludes independent oracle verification; include required verification in the service budget. |
+| Key generation and independent signature verification | CPU | The provided standard-library paths run on CPU. Primitive GPU timings exclude independent oracle checks; the native pipeline includes verification of every output in its timing. |
 
 CPU batching remains a valid alternative. Cached keys, native calls, vectorized work where supported, multiple cores and efficient memory management deserve the same attention as GPU tuning. The v0.2 primitive comparison uses one Python thread. The newer native pipeline adds cached OpenSSL contexts and multiple CPU workers, but its first captures are qualified as shared-host diagnostic evidence; they do not establish the capacity of a fully optimized CPU server.
 

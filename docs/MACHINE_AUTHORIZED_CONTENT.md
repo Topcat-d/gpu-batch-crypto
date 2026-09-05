@@ -12,6 +12,13 @@ The expected publisher public key, expected content ID, trusted time, and conten
 
 ## Infrastructure hypothesis
 
+The [agent access design](AGENT_ACCESS_DESIGN.md) describes how an agent's ready
+planning waves and a publisher's grant service could use the CPU–GPU engine.
+It distinguishes established keys, fresh proofs, issuer authorization and
+concurrent network calls, and keeps speculative preparation separate from
+purchase or billable delivery. This is a proposed integration around the
+example, not a payment protocol implemented by it.
+
 Fine-grained licensed machine access might generate large populations of independent content/grant operations. Those populations could offer batching opportunities. This hypothesis depends on actual traffic shape, the fraction of objects/grants that require fresh cryptographic work, and latency requirements; it does not follow merely from high crawler request counts.
 
 The competing designs matter:
@@ -22,4 +29,10 @@ The competing designs matter:
 - Access lookups, key management, payment accounting, object storage and network transfer may dominate the budget.
 - Edge locations may not accumulate useful batches within the response deadline, or may not have GPUs near the data.
 
-The current benchmark measures the cryptographic engine with explicit batches. It does not establish request-level economics, p99 under realistic arrivals, CDN placement, or the cost of authorization/key release. Those are the next measurements needed to connect primitive throughput to publisher revenue.
+The library benchmarks measure the cryptographic engine with explicit batches.
+The [native pipeline](PIPELINE_RESULTS.md) adds queueing, CPU preparation,
+all-output verification and deadline accounting under its recorded host
+conditions. Neither campaign measures an agent's planning overlap, production
+traffic, CDN placement or authorization/key-release costs. The proposed access
+design identifies those measurements for connecting the engine to a publisher
+service and its economics.

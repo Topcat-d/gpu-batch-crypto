@@ -6,6 +6,8 @@ An independent **Apache-2.0 library for batch cryptography on NVIDIA GPUs**, wit
 
 Publishers, CDNs and other infrastructure teams can evaluate the same engine. [Machine-authorized content](docs/MACHINE_AUTHORIZED_CONTENT.md) is one application: signed grants can bind a publisher's content and access terms to a recipient. Payment, identity and enforcement belong to the application.
 
+The proposed [agent access design](docs/AGENT_ACCESS_DESIGN.md) prepares required proofs or grants as upcoming calls become ready, uses CPU for small or urgent signing work, and evaluates GPU batches for larger compatible groups. It distinguishes key reuse, concurrent tool calls, issuer authorization and planning overlap from the measurements already published.
+
 [Engineering note](docs/ENGINEERING.md) · [Production security](docs/PRODUCTION_READINESS.md) · [Whole-system measurements](docs/PIPELINE_RESULTS.md) · [Costs and GPU inventory](docs/ECONOMICS.md) · [Historical A100 results](docs/HISTORICAL_BENCHMARKS.md)
 
 ## Where it fits
