@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(batchcrypto VERSION 0.2.0 LANGUAGES CXX CUDA)
+project(batchcrypto VERSION 0.3.0 LANGUAGES CXX CUDA)
 find_package(CUDAToolkit REQUIRED)
 include(cmake/EmbedP256Tables.cmake)
 add_library(batchcrypto SHARED src/abi/batchcrypto_abi.cpp src/engine/crypto_engine.cu src/p256/tables.cpp)

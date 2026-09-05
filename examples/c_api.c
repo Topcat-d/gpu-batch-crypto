@@ -48,6 +48,18 @@ int main(void) {
   }
   if (bc_key_remove(ctx, 1, 1, &epoch) || epoch != 2)
     goto fail;
+  memset(sig, 0xa5, sizeof(sig));
+  status = 255;
+  if (bc_sign_at_epoch(ctx, 1, 1, digest, 1, sig, &status, &report) !=
+          BC_KEY_CONFLICT ||
+      report.submitted || report.completed || report.errors ||
+      report.key_epoch != 2 || status != 255 || sig[0] != 0xa5 ||
+      sig[63] != 0xa5)
+    goto fail;
+  if (bc_key_put(ctx, 1, BC_KEY_P256, key, 2, &epoch) || epoch != 3 ||
+      bc_sign_at_epoch(ctx, 1, 3, digest, 1, sig, &status, &report) || status ||
+      report.key_epoch != 3 || report.completed != 1)
+    goto fail;
   bc_destroy(ctx);
   puts("C ABI: SHA-256, AES-GCM, P-256 and key lifecycle passed");
   return 0;

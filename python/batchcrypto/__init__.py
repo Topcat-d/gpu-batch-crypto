@@ -416,6 +416,13 @@ class Runtime:
             C.c_void_p,
             C.POINTER(_Report),
         ]
+        for name in ("bc_seal", "bc_open", "bc_sign"):
+            if hasattr(lib, name + "_at_epoch"):
+                getattr(lib, name + "_at_epoch").argtypes = (
+                    getattr(lib, name).argtypes[:2]
+                    + [C.c_uint64]
+                    + getattr(lib, name).argtypes[2:]
+                )
         lib.bc_hash.argtypes = [
             C.c_void_p,
             C.POINTER(_HashItem),
@@ -534,15 +541,31 @@ class Runtime:
             self._cuda._check(self._cuda.lib.bc_get_stats(self._handle, C.byref(s)))
             return {name: getattr(s, name) for name, _ in s._fields_}
 
-    def _aead(self, slot, records, opening):
+    def _keyed_call(self, name, slot, expected_epoch, *args):
+        if expected_epoch is None:
+            return getattr(self._cuda.lib, name)(self._handle, slot, *args)
+        self._epoch(expected_epoch)
+        fn = getattr(self._cuda.lib, name + "_at_epoch", None)
+        if fn is None:
+            raise RuntimeError("epoch-bound operations require native library v0.3+")
+        return fn(self._handle, slot, expected_epoch, *args)
+
+    def _aead(self, slot, records, opening, expected_epoch=None):
         self._slot(slot)
         with self._lock:
             self._live()
             r = _Report()
 
             def invoke(items, n, status):
-                fn = self._cuda.lib.bc_open if opening else self._cuda.lib.bc_seal
-                rc = fn(self._handle, slot, items, n, status, C.byref(r))
+                rc = self._keyed_call(
+                    "bc_open" if opening else "bc_seal",
+                    slot,
+                    expected_epoch,
+                    items,
+                    n,
+                    status,
+                    C.byref(r),
+                )
                 self._report(r)
                 return rc
 
@@ -552,13 +575,13 @@ class Runtime:
                 self._cuda._check(invoke(None, 0, None))
             return result
 
-    def seal(self, slot, records):
-        return self._aead(slot, records, False)
+    def seal(self, slot, records, *, expected_epoch=None):
+        return self._aead(slot, records, False, expected_epoch)
 
-    def open(self, slot, records):
-        return self._aead(slot, records, True)
+    def open(self, slot, records, *, expected_epoch=None):
+        return self._aead(slot, records, True, expected_epoch)
 
-    def sign(self, slot, digests):
+    def sign(self, slot, digests, *, expected_epoch=None):
         self._slot(slot)
         digests = _digests((1).to_bytes(32, "big"), digests)
         with self._lock:
@@ -566,9 +589,10 @@ class Runtime:
             out = C.create_string_buffer(max(1, len(digests) * 64))
             status = (C.c_ubyte * len(digests))()
             r = _Report()
-            rc = self._cuda.lib.bc_sign(
-                self._handle,
+            rc = self._keyed_call(
+                "bc_sign",
                 slot,
+                expected_epoch,
                 b"".join(digests),
                 len(digests),
                 out,

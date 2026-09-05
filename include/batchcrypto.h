@@ -88,6 +88,21 @@ BC_API int bc_open(bc_context *ctx, uint32_t slot, const bc_aead_item *items,
 BC_API int bc_sign(bc_context *ctx, uint32_t slot, const uint8_t *digests,
                    uint32_t count, uint8_t *signatures, uint8_t *statuses,
                    bc_batch_report *report);
+/* v0.3: require an exact key generation under the same lock as execution.
+ * A mismatch returns BC_KEY_CONFLICT before CUDA work or output writes,
+ * including for empty batches. The report has zero submitted/completed and
+ * the current slot epoch. On any call error discard all output buffers.
+ * These additive entry points retain ABI version 1. */
+BC_API int bc_sign_at_epoch(bc_context *ctx, uint32_t slot, uint64_t epoch,
+                            const uint8_t *digests, uint32_t count,
+                            uint8_t *signatures, uint8_t *statuses,
+                            bc_batch_report *report);
+BC_API int bc_seal_at_epoch(bc_context *ctx, uint32_t slot, uint64_t epoch,
+                            const bc_aead_item *items, uint32_t count,
+                            uint8_t *statuses, bc_batch_report *report);
+BC_API int bc_open_at_epoch(bc_context *ctx, uint32_t slot, uint64_t epoch,
+                            const bc_aead_item *items, uint32_t count,
+                            uint8_t *statuses, bc_batch_report *report);
 BC_API int bc_export_public_key(bc_context *ctx, uint32_t slot,
                                 uint8_t public_key[65], uint64_t *epoch);
 BC_API const char *bc_version(void);

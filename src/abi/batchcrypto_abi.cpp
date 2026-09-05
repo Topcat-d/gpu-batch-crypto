@@ -47,7 +47,8 @@ void account(bc_context *c, int rc, uint32_t n, const uint8_t *status,
 }
 template <class F>
 int keyed(bc_context *c, uint32_t slot, uint32_t kind, uint32_t n,
-          uint8_t *status, bc_batch_report *r, F fn) {
+          uint8_t *status, bc_batch_report *r, F fn,
+          const uint64_t *required_epoch = nullptr) {
   if (r)
     *r = {};
   if (!c || !r || slot >= BC_KEY_SLOTS)
@@ -55,16 +56,17 @@ int keyed(bc_context *c, uint32_t slot, uint32_t kind, uint32_t n,
   return guarded([&]() {
     std::lock_guard<std::mutex> lock(c->mutex);
     auto &k = c->slots[slot];
-    int rc = !k.loaded        ? BC_KEY_MISSING
-             : k.kind != kind ? BC_INVALID
-                              : fn(k.key, &c->work);
+    int rc = required_epoch && *required_epoch != k.epoch ? BC_KEY_CONFLICT
+             : !k.loaded                                  ? BC_KEY_MISSING
+             : k.kind != kind                             ? BC_INVALID
+                                                          : fn(k.key, &c->work);
     account(c, rc, n, status, r, k.epoch);
     return rc;
   });
 }
 } // namespace
 extern "C" {
-const char *bc_version() { return "0.2.0-preview"; }
+const char *bc_version() { return "0.3.0-preview"; }
 uint32_t bc_abi_version() { return 1; }
 const char *bc_error_string(int s) {
   switch (s) {
@@ -257,6 +259,36 @@ int bc_sign(bc_context *c, uint32_t slot, const uint8_t *h, uint32_t n,
                [&](const uint8_t *k, Workspace *w) {
                  return sign(c->device, k, h, n, out, s, w);
                });
+}
+int bc_seal_at_epoch(bc_context *c, uint32_t slot, uint64_t epoch,
+                     const bc_aead_item *i, uint32_t n, uint8_t *s,
+                     bc_batch_report *r) {
+  return keyed(
+      c, slot, BC_KEY_AES256, n, s, r,
+      [&](const uint8_t *k, Workspace *w) {
+        return aead(c->device, k, i, n, s, false, w);
+      },
+      &epoch);
+}
+int bc_open_at_epoch(bc_context *c, uint32_t slot, uint64_t epoch,
+                     const bc_aead_item *i, uint32_t n, uint8_t *s,
+                     bc_batch_report *r) {
+  return keyed(
+      c, slot, BC_KEY_AES256, n, s, r,
+      [&](const uint8_t *k, Workspace *w) {
+        return aead(c->device, k, i, n, s, true, w);
+      },
+      &epoch);
+}
+int bc_sign_at_epoch(bc_context *c, uint32_t slot, uint64_t epoch,
+                     const uint8_t *h, uint32_t n, uint8_t *out, uint8_t *s,
+                     bc_batch_report *r) {
+  return keyed(
+      c, slot, BC_KEY_P256, n, s, r,
+      [&](const uint8_t *k, Workspace *w) {
+        return sign(c->device, k, h, n, out, s, w);
+      },
+      &epoch);
 }
 int bc_export_public_key(bc_context *c, uint32_t slot, uint8_t *out,
                          uint64_t *epoch) {
