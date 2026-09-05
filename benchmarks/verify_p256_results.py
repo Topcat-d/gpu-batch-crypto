@@ -4,6 +4,7 @@ Checks published bytes, measured-commit source hashes, timing and accounting.
 Does not execute GPU work or independently attest the measurements.
 """
 
+import argparse
 import hashlib
 import json
 import math
@@ -11,7 +12,11 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-directory = ROOT / "benchmarks/p256_results"
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument(
+    "--directory", choices=("p256_results", "dispatch_results"), default="p256_results"
+)
+directory = ROOT / "benchmarks" / parser.parse_args().directory
 files = sorted(directory.glob("*.json"))
 checksums = {}
 for line in (directory / "SHA256SUMS").read_text().splitlines():

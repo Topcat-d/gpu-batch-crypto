@@ -27,6 +27,7 @@
 #include <condition_variable>
 #include <cstdint>
 #include <deque>
+#include <future>
 #include <iomanip>
 #include <iostream>
 #include <map>
@@ -165,7 +166,18 @@ struct Crypto {
 struct Gpu {
 #ifdef PIPELINE_GPU
   bc_context *ctx = nullptr;
-  Gpu(int device, const std::vector<Key> &keys) {
+  struct Task {
+    uint32_t key;
+    const std::vector<Digest> *digests;
+    std::vector<Signature> *output;
+    std::promise<void> done;
+  };
+  bool use_owner, stopping = false;
+  std::mutex mutex;
+  std::condition_variable cv;
+  std::deque<Task *> pending;
+  std::thread owner;
+  Gpu(int device, const std::vector<Key> &keys, bool owned) : use_owner(owned) {
     require(bc_create(device, &ctx) == BC_OK, "GPU create");
     try {
       require(bc_set_p256_backend(ctx, BC_P256_FULL_WINDOW_W8) == BC_OK,
@@ -188,15 +200,66 @@ struct Gpu {
                     epoch == 1 && actual == public_bytes(keys[i].get()),
                 "GPU public key pin");
       }
+      if (use_owner)
+        owner = std::thread([this] {
+          std::exception_ptr failure;
+          for (;;) {
+            Task *task;
+            {
+              std::unique_lock<std::mutex> lock(mutex);
+              cv.wait(lock, [this] { return stopping || !pending.empty(); });
+              if (pending.empty())
+                return;
+              task = pending.front();
+              pending.pop_front();
+            }
+            try {
+              if (failure)
+                std::rethrow_exception(failure);
+              execute(task->key, *task->digests, *task->output);
+              task->done.set_value();
+            } catch (...) {
+              failure = std::current_exception();
+              task->done.set_exception(failure);
+            }
+          }
+        });
     } catch (...) {
       bc_destroy(ctx);
       ctx = nullptr;
       throw;
     }
   }
-  ~Gpu() { bc_destroy(ctx); }
+  ~Gpu() {
+    if (owner.joinable()) {
+      {
+        std::lock_guard<std::mutex> lock(mutex);
+        stopping = true;
+      }
+      cv.notify_one();
+      owner.join();
+    }
+    bc_destroy(ctx);
+  }
   void sign(uint32_t key, const std::vector<Digest> &h,
             std::vector<Signature> &out) {
+    if (!use_owner) {
+      execute(key, h, out);
+      return;
+    }
+    Task task{key, &h, &out, {}};
+    auto done = task.done.get_future();
+    {
+      std::lock_guard<std::mutex> lock(mutex);
+      // At most one outstanding task per bounded CPU worker; warm-up is serial.
+      require(!stopping && pending.size() < 64, "GPU dispatch queue bound");
+      pending.push_back(&task);
+    }
+    cv.notify_one();
+    done.get();
+  }
+  void execute(uint32_t key, const std::vector<Digest> &h,
+               std::vector<Signature> &out) {
     std::vector<uint8_t> status(h.size(), 255);
     bc_batch_report report{};
     int rc = bc_sign_at_epoch(ctx, key, 1, h[0].data(),
@@ -210,7 +273,7 @@ struct Gpu {
             "GPU batch/report");
   }
 #else
-  Gpu(int, const std::vector<Key> &) {
+  Gpu(int, const std::vector<Key> &, bool) {
     throw std::runtime_error("built without GPU support");
   }
   void sign(uint32_t, const std::vector<Digest> &, std::vector<Signature> &) {}
@@ -252,6 +315,7 @@ uint64_t peak_rss() {
 }
 struct Options {
   std::string mode = "cpu";
+  std::string gpu_dispatch = "caller";
   int workers = 4, keys = 1, batch = 256, minimum = 64, capacity = 8192,
       payload = 512, device = 0;
   double rate = 20000, duration = 3, wait_ms = 1, slo_ms = 10;
@@ -310,7 +374,9 @@ int run(const Options &o) {
   // Scope the Windows scheduler timer request to this process/run. Without it,
   // coarse sleep scheduling can make the load generator miss a 10-ms deadline.
   struct Timer {
-    Timer() { require(timeBeginPeriod(1) == TIMERR_NOERROR, "1ms timer request"); }
+    Timer() {
+      require(timeBeginPeriod(1) == TIMERR_NOERROR, "1ms timer request");
+    }
     ~Timer() { timeEndPeriod(1); }
   } timer;
 #endif
@@ -326,7 +392,7 @@ int run(const Options &o) {
     crypto.push_back(std::make_unique<Crypto>(keys, pubs));
   std::unique_ptr<Gpu> gpu;
   if (o.mode != "cpu")
-    gpu = std::make_unique<Gpu>(o.device, keys);
+    gpu = std::make_unique<Gpu>(o.device, keys, o.gpu_dispatch == "owner");
   // Warm-up and independent per-key CPU/GPU equality outside steady-state
   // timing.
   for (int k = 0; k < o.keys; ++k) {
@@ -540,7 +606,8 @@ int run(const Options &o) {
 #ifdef PIPELINE_GPU
   std::cout << "\"native_version\":\"" << bc_version() << "\",";
 #endif
-  std::cout << "\"workers\":" << o.workers << ",\"keys\":" << o.keys
+  std::cout << "\"gpu_dispatch\":\"" << o.gpu_dispatch
+            << "\",\"workers\":" << o.workers << ",\"keys\":" << o.keys
             << ",\"device\":" << o.device << ",\"payload_bytes\":" << o.payload
             << ",\"max_batch\":" << o.batch
             << ",\"gpu_min_batch\":" << o.minimum
@@ -602,6 +669,8 @@ int main(int argc, char **argv) {
       std::string k = argv[i], v = argv[i + 1];
       if (k == "--mode")
         o.mode = v;
+      else if (k == "--gpu-dispatch")
+        o.gpu_dispatch = v;
       else if (k == "--workers")
         o.workers = std::stoi(v);
       else if (k == "--keys")
@@ -629,6 +698,8 @@ int main(int argc, char **argv) {
     }
     require(o.mode == "cpu" || o.mode == "gpu" || o.mode == "hybrid",
             "mode must be cpu/gpu/hybrid");
+    require(o.gpu_dispatch == "caller" || o.gpu_dispatch == "owner",
+            "GPU dispatch must be caller/owner");
     require(o.workers >= 1 && o.workers <= 64 && o.keys >= 1 && o.keys <= 16 &&
                 o.batch >= 1 && o.batch <= 4096 && o.minimum >= 1 &&
                 o.minimum <= o.batch && o.capacity >= 1 &&

@@ -40,6 +40,7 @@ def main():
     p.add_argument("--slo-ms", type=float, default=10)
     p.add_argument("--batch", type=int, default=256)
     p.add_argument("--gpu-min", type=int, default=64)
+    p.add_argument("--gpu-dispatch", choices=("caller", "owner"), default="caller")
     p.add_argument("--output", required=True)
     a = p.parse_args()
     target = Path(a.output)
@@ -137,6 +138,8 @@ def main():
             str(a.batch),
             "--gpu-min",
             str(a.gpu_min),
+            "--gpu-dispatch",
+            a.gpu_dispatch,
         ]
         started = datetime.now(timezone.utc).isoformat()
         result = subprocess.run(
