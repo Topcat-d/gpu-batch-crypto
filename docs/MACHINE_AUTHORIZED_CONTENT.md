@@ -10,6 +10,8 @@ The consumer uses an independent CPU implementation. It verifies the signature a
 
 The expected publisher public key, expected content ID, trusted time, and content decryption key are inputs established outside the engine. A principal string is not an authentication system. The example neither sells access nor implements key release. A signed expiry does not erase a key or plaintext already delivered. Decryption rights cannot prevent a legitimate recipient from copying the result.
 
+For a standard token encoding, the separate [ES256 JWS example](COMPATIBILITY.md) issues synthetic grants that PyJWT verifies. It complements this encrypted-content example; it does not implement the ledger or content-key delivery service.
+
 ## Infrastructure hypothesis
 
 The [keys instead of clicks thesis](KEYS_INSTEAD_OF_CLICKS.md) explains how an

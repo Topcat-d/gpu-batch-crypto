@@ -19,6 +19,11 @@ def main():
     parser.add_argument("--openssl-library", required=True)
     parser.add_argument("--device", type=int, required=True)
     parser.add_argument("--output", required=True)
+    parser.add_argument(
+        "--campaign",
+        choices=("ready-waves", "separate-consumer"),
+        default="ready-waves",
+    )
     args = parser.parse_args()
     output = Path(args.output)
     if output.exists():
@@ -36,6 +41,7 @@ def main():
     )
     source = command(["git", "ls-files"]).splitlines()
     metadata = {
+        "campaign": args.campaign,
         "commit": command(["git", "rev-parse", "HEAD"]),
         "timestamp_utc": datetime.now(timezone.utc).isoformat(),
         "source_sha256": {
@@ -47,6 +53,7 @@ def main():
                 "benchmarks/run_ready_wave.py",
                 "benchmarks/verify_ready_wave.py",
                 "benchmarks/READY_WAVE_CAMPAIGN.md",
+                "benchmarks/VERIFICATION_CONTROL.md",
                 "benchmarks/run_pipeline.py",
                 "benchmarks/verify_pipeline.py",
             )
@@ -82,19 +89,19 @@ def main():
         ) as key:
             metadata["cpu"] = winreg.QueryValueEx(key, "ProcessorNameString")[0].strip()
     cells = []
+    shapes = [(1, 1), (8, 1), (64, 1), (256, 1), (1024, 1), (4096, 1), (4096, 16)]
+    if args.campaign == "separate-consumer":
+        shapes = [(256, 1), (1024, 1)]
+        metadata["scope"] += (
+            "; additional independent issuer CPU guard for every GPU signature before separate consumer verification"
+        )
     for repeat in (1, 2):
         modes = ["cpu-es256", "cpu-eddsa", "hybrid-es256"]
+        if args.campaign == "separate-consumer":
+            modes.remove("cpu-eddsa")
         if repeat == 2:
             modes.reverse()
-        for wave, keys in [
-            (1, 1),
-            (8, 1),
-            (64, 1),
-            (256, 1),
-            (1024, 1),
-            (4096, 1),
-            (4096, 16),
-        ]:
+        for wave, keys in shapes:
             for workers in (4, 8):
                 cells.extend((repeat, mode, wave, keys, workers) for mode in modes)
     rows = []
@@ -153,6 +160,8 @@ def main():
             "3",
         ]
         observer = threading.Thread(target=monitor, daemon=True)
+        if args.campaign == "separate-consumer":
+            cmd += ["--guard", "separate"]
         observer.start()
         try:
             result = subprocess.run(

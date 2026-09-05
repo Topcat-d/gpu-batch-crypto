@@ -12,6 +12,8 @@ The proposed [agent access design](docs/AGENT_ACCESS_DESIGN.md) prepares require
 
 [Engineering note](docs/ENGINEERING.md) · [Production security](docs/PRODUCTION_READINESS.md) · [Whole-system measurements](docs/PIPELINE_RESULTS.md) · [Costs and GPU inventory](docs/ECONOMICS.md) · [Historical A100 results](docs/HISTORICAL_BENCHMARKS.md)
 
+A working [ES256 JWS integration](docs/COMPATIBILITY.md) now connects the P-256 engine to standard token consumers. The runnable example and tests verify GPU-produced tokens with PyJWT; existing Ed25519 protocols retain their own keys, format and algorithm policy.
+
 ## Where it fits
 
 | Your situation | Current evaluation guidance |

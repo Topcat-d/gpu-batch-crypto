@@ -149,6 +149,8 @@ Ed25519. The public [content-grant example](MACHINE_AUTHORIZED_CONTENT.md)
 demonstrates bindings using its own encoding, without implementing accounts,
 payment, request authentication or key release.
 
+The [ES256 JWS integration](COMPATIBILITY.md) now demonstrates one standard format using actual GPU signatures accepted by PyJWT. It supplies a concrete option for participants that accept ES256; it does not convert an Ed25519 credential or change an existing publisher contract.
+
 ## What would establish or disprove the thesis?
 
 | Hypothesis | Required evidence | Result that weakens or rejects it |

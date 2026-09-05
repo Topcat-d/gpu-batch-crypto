@@ -22,6 +22,8 @@ Publishers, CDNs, storage systems and other infrastructure teams can evaluate th
 | CTO / engineering | Does the code fit our stack, traffic, latency budget and CPU–GPU design? | C ABI, Python API, source-level architecture, per-backend batch sweeps and a [heterogeneous systems design](SYSTEMS_DESIGN.md). |
 | CSO / security leadership | Can we permit this key residency and execution model, and what assurance is still required? | Documented trust boundary, independent CPU comparisons and validation; secret-dependent GPU behavior and no independent audit. |
 
+The [ES256 compatibility demonstration](COMPATIBILITY.md) supplies a standard token format around the native signatures, with independent PyJWT verification and negative policy tests. This closes a concrete wire-format gap for ES256 consumers. Existing Ed25519 deployments require their current CPU path or an explicitly agreed protocol extension.
+
 ## Workload fit
 
 The best current evaluation candidate is a trusted-host service with many independent P-256 signatures, compatible keys and formats, an available NVIDIA GPU, and enough latency budget to collect work. Offline signing and already assembled batches avoid some online fill delay. Bursty online workloads need a bounded wait policy.

@@ -13,7 +13,7 @@ from run_pipeline import ROOT, quiet_gpus
 from verify_pipeline import verify_telemetry
 
 
-def check_row(row):
+def check_row(row, *, separate=False):
     for key, value in row.items():
         if isinstance(value, (int, float)) and not math.isfinite(value):
             raise ValueError(f"non-finite {key}")
@@ -41,6 +41,12 @@ def check_row(row):
         row["verified"] if row["mode"] == "hybrid-es256" and wave // keys >= 64 else 0
     )
     assert row["gpu_items"] == expected_gpu
+    if separate:
+        assert row["verification_profile"] == "separate"
+        assert row["gpu_guard_checks"] == expected_gpu
+    else:
+        assert row.get("verification_profile", "acceptance") == "acceptance"
+        assert row.get("gpu_guard_checks", 0) == 0
     assert row["within_10ms"] == wave * sum(t <= 10 for t in times)
     assert row["within_50ms"] == wave * sum(t <= 50 for t in times)
     assert row["elapsed_s"] >= 3 and row["process_cpu_s"] >= 0
@@ -125,7 +131,13 @@ def verify(path, *, sources=True):
     build = json.loads(
         (ROOT / "benchmarks/ready_wave_build.json").read_text(encoding="utf-8")
     )
-    assert meta["binaries"] == build["binaries"]
+    allowed = [build["binaries"]] + [
+        entry["binaries"] for entry in build.get("additional_builds", [])
+    ]
+    assert meta["binaries"] in allowed
+    campaign = meta.get("campaign", "ready-waves")
+    assert campaign in ("ready-waves", "separate-consumer")
+    separate = campaign == "separate-consumer"
     expected = {
         (r, m, n, k, w)
         for r in (1, 2)
@@ -141,13 +153,19 @@ def verify(path, *, sources=True):
         ]
         for w in (4, 8)
     }
+    if separate:
+        expected = {
+            cell
+            for cell in expected
+            if cell[1] != "cpu-eddsa" and (cell[2], cell[3]) in ((256, 1), (1024, 1))
+        }
     actual = set()
     for row in data["rows"]:
         cell = tuple(row[k] for k in ("repeat", "mode", "wave", "keys", "workers"))
         assert cell not in actual
         actual.add(cell)
         assert row["device"] == meta["selected_device"]
-        check_row(row)
+        check_row(row, separate=separate)
     assert actual == expected
     return data
 

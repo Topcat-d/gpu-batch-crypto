@@ -26,5 +26,24 @@
       "sha256": "acf285a10e428256dfefc489895fa104f3a49764a16c9a760748321397bab8e4"
     }
   },
-  "scope": "ready-wave executable; shared crypto support preserves existing deterministic pipeline default; wave CPU ES256 uses normal randomized nonces"
+  "scope": "ready-wave executable; shared crypto support preserves existing deterministic pipeline default; wave CPU ES256 uses normal randomized nonces",
+  "additional_builds": [
+    {
+      "description": "same SDK and GPU DLL; adds explicit separate issuer CPU verification before consumer verification",
+      "binaries": {
+        "ready_wave": {
+          "file": "ready_wave.exe",
+          "sha256": "2fd20aed8764206acf3c2be336ce0792abcc2a59557cbab52be05b4a415c0985"
+        },
+        "batchcrypto": {
+          "file": "batchcrypto.dll",
+          "sha256": "4b902e671a8f7cde9a08e3eae60edfc849cedf1730196cda7d8411134493821c"
+        },
+        "openssl": {
+          "file": "libcrypto-3.dll",
+          "sha256": "acf285a10e428256dfefc489895fa104f3a49764a16c9a760748321397bab8e4"
+        }
+      }
+    }
+  ]
 }

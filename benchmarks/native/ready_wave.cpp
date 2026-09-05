@@ -158,6 +158,7 @@ public:
 };
 struct WaveOptions {
   std::string mode = "cpu-es256";
+  std::string guard = "acceptance";
   int wave = 256, keys = 1, workers = 8, device = 0;
   double duration = 3;
 };
@@ -257,6 +258,16 @@ int run_wave(const WaveOptions &o) {
           signatures[i] = out[j];
       }
     auto signed_at = Clock::now();
+    if (o.guard == "separate" && gpu_per_wave) {
+      // Model VerifiedSigner at the issuer, before the separate consumer below.
+      // CPU-produced signatures need no GPU fault guard.
+      pool.run([&](size_t w) {
+        for (int i = static_cast<int>(w); i < o.wave; i += active)
+          if (gpu_key[i % o.keys])
+            require(cpu[w]->verify(i % o.keys, digests[i], signatures[i]),
+                    "issuer GPU output guard");
+      });
+    }
     pool.run([&](size_t w) {
       for (int i = static_cast<int>(w); i < o.wave; i += active) {
         tokens[i] =
@@ -315,6 +326,9 @@ int run_wave(const WaveOptions &o) {
             << ",\"elapsed_s\":" << elapsed << ",\"process_cpu_s\":" << consumed
             << ",\"waves\":" << n << ",\"verified\":" << n * o.wave
             << ",\"gpu_items\":" << n * gpu_per_wave
+            << ",\"verification_profile\":\"" << o.guard << "\""
+            << ",\"gpu_guard_checks\":"
+            << (o.guard == "separate" ? n * gpu_per_wave : 0)
             << ",\"within_10ms\":" << good10 * o.wave
             << ",\"within_50ms\":" << good50 * o.wave
             << ",\"throughput_rps\":" << n * o.wave / elapsed
@@ -348,6 +362,8 @@ int main(int argc, char **argv) {
       std::string k = argv[i], v = argv[i + 1];
       if (k == "--mode")
         o.mode = v;
+      else if (k == "--guard")
+        o.guard = v;
       else if (k == "--wave")
         o.wave = std::stoi(v);
       else if (k == "--keys")
@@ -361,6 +377,8 @@ int main(int argc, char **argv) {
       else
         throw std::runtime_error("unknown option");
     }
+    require(o.guard == "acceptance" || o.guard == "separate",
+            "invalid guard profile");
     require(o.mode == "cpu-es256" || o.mode == "cpu-eddsa" ||
                 o.mode == "hybrid-es256",
             "invalid mode");
