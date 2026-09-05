@@ -2,6 +2,16 @@
 
 The existing captures can support **cost per primitive operation at an explicit price**. A production decision additionally needs the complete system's goodput within a deadline, utilization and availability costs. These are different denominators; a fast signature alone is not a delivered authorization or a payment.
 
+For the publisher-payment idea, start with the newer [funded-access results](ACCESS_BOOK_RESULTS.md)
+and [editable contribution model](../benchmarks/access_business_model.py). They add
+actual local durable accounting, reservation release, an optimized single-commit
+CPU baseline, funding/payout assumptions and whole-host minimum billing. A fully
+used 32-item book achieved a 1.173x conservative throughput ratio with slower
+first-access latency; the 25%-use case was essentially tied. This is an application
+tradeoff, not a GPU return. Under the stated illustrative cost assumptions, $0.001
+access needs about 45.1 million monthly purchases to cover costs; $0.01 needs
+about 4.37 million. These are modeled thresholds, not measured demand or invoices.
+
 ## Hardware and price inventory
 
 The newer [ready-wave token measurements](READY_WAVE_RESULTS.md) use a

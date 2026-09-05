@@ -8,6 +8,10 @@ Version 0.3 adds [atomic epoch binding and independently verified signing](PRODU
 
 ## The opportunity and the decision
 
+An original [funded-access implementation](ACCESS_BOOK_DESIGN.md) now tests the application economics directly: CPU purchases can issue, independently verify and redeem under one durable commit; prepared books can amortize admission across exact resources while keeping per-resource accounting atomic. The [28-cell comparison](ACCESS_BOOK_RESULTS.md) reconciles 35,840 simulated redemptions. A fully used 32-item book measured 1.173x conservative throughput over the optimized CPU path, with slower first-access p99; at 25% consumption the paths were essentially tied. This supports workload-based selection, not mandatory GPU use or universal batching.
+
+The [contribution model](../benchmarks/access_business_model.py) includes funding and payout costs, publisher proceeds, unused-principal liabilities, variable service costs, utilization and whole allocated hosts. It exposes price/volume conditions under which the platform can cover its costs. Those assumptions and actual buyer value require a commercial pilot; a positive throughput result alone does not establish profitability.
+
 The [keys instead of clicks thesis](KEYS_INSTEAD_OF_CLICKS.md) connects machine consumption to publisher compensation: an approved buyer budget funds scoped access, a signed credential supports authorization, and a ledger records publisher accrual for settlement. It sets out the transaction, protocol compatibility requirements and falsifiable tests for demand, security and economics. The commercial hypothesis and the GPU performance hypothesis each need their own evidence.
 
 Applications may need large numbers of signed manifests, authorization grants, receipts or other records. If fresh signatures consume a meaningful share of their CPU budget, GPU assistance could increase available signing capacity or leave CPU resources for other work. That value depends on arrivals, key distribution, deadlines and the rest of the request path; the repository does not yet demonstrate a deployment cost saving.

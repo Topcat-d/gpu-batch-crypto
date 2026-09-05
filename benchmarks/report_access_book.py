@@ -16,7 +16,7 @@ def q99(values):
     return sorted(values)[math.ceil(len(values) * 0.99) - 1]
 
 
-def generate(data):
+def generate(data, control=None):
     rows = data["rows"]
     lines = [
         "# Amortized access: measured results and economics",
@@ -52,6 +52,7 @@ def generate(data):
     writer = csv.writer(csv_out, lineterminator="\n")
     writer.writerow(
         [
+            "campaign",
             "consumed_percent",
             "book_size",
             "repeat",
@@ -86,6 +87,7 @@ def generate(data):
             for r in pair:
                 writer.writerow(
                     [
+                        "books",
                         percent,
                         size,
                         r["repeat"],
@@ -133,9 +135,10 @@ def generate(data):
         "| Access price | Funded principal spent | Publisher accrual/access | Platform contribution/access before fixed costs | Whole-host break-even accesses/month | Accesses per publisher $50 payout |",
         "|---:|---:|---:|---:|---:|---:|",
     ]
+    rate_rows = control["rows"] if control else rows
     rate = min(
         r["completed"] / r["elapsed_seconds"]
-        for r in rows
+        for r in rate_rows
         if r["book_size"] == 32 and r["consumed_percent"] == 100
     )
     business = scenarios(rate)
@@ -174,8 +177,81 @@ def generate(data):
         "buyer demand, content rights, publisher acceptance and settlement need a pilot.",
         "",
     ]
+    report = "\n".join(lines)
+    if control:
+        control_lines = [
+            "## Stronger co-located CPU control",
+            "",
+            "**Use this comparison when the issuer and consumer share an authority.**",
+            "The on-demand CPU path issues, independently verifies and redeems in one",
+            "durable commit. The book path also fuses its issue and admission into one",
+            "commit. Both retain every signature, scope and accounting check. The",
+            "larger ratios below against three separate commits are not the advantage",
+            "over this optimized baseline.",
+            "",
+            f"Control source `{control['commit']}`; eight additional cells and",
+            f"{sum(r['completed'] for r in control['rows']):,} redemptions, all reconciled.",
+            "[Predeclared control](../benchmarks/ACCESS_BOOK_ATOMIC_CONTROL.md) ·",
+            "[Raw control](../benchmarks/access_book_results/ryzen7800x3d-atomic-2026-09-05.json)",
+            "",
+            "| Plan used | Atomic CPU accesses/s | Fused 32-item book accesses/s | Conservative ratio | Atomic first-access p99 ms | Book first-access p99 ms |",
+            "|---|---:|---:|---:|---:|---:|",
+        ]
+        for percent in (100, 25):
+            cpu = [
+                r
+                for r in control["rows"]
+                if r["book_size"] == 1 and r["consumed_percent"] == percent
+            ]
+            book = [
+                r
+                for r in control["rows"]
+                if r["book_size"] == 32 and r["consumed_percent"] == percent
+            ]
+            cpu_rates = [r["completed"] / r["elapsed_seconds"] for r in cpu]
+            book_rates = [r["completed"] / r["elapsed_seconds"] for r in book]
+            cpu_first = [q99(r["first_access_ms"]) for r in cpu]
+            book_first = [q99(r["first_access_ms"]) for r in book]
+            control_lines.append(
+                f"| {percent}% | {min(cpu_rates):.1f}–{max(cpu_rates):.1f} | {min(book_rates):.1f}–{max(book_rates):.1f} | {min(book_rates) / max(cpu_rates):.3f}× | {min(cpu_first):.2f}–{max(cpu_first):.2f} | {min(book_first):.2f}–{max(book_first):.2f} |"
+            )
+            for r in cpu + book:
+                writer.writerow(
+                    [
+                        "atomic-control",
+                        percent,
+                        r["book_size"],
+                        r["repeat"],
+                        r["completed"],
+                        f"{r['completed'] / r['elapsed_seconds']:.6f}",
+                        f"{r['transactions'] / r['completed']:.6f}",
+                        f"{r['signatures'] / r['completed']:.6f}",
+                        f"{q99(r['first_access_ms']):.6f}",
+                        f"{q99(r['redemption_ms']):.6f}",
+                        f"{q99(r['completion_ms']):.6f}",
+                    ]
+                )
+        control_lines += [
+            "",
+            "At full use, the book still performs 32 times fewer signatures and",
+            "verifications, but now requires 33 durable commits per 32 accesses",
+            "versus the atomic baseline's 32. At 25% use it requires ten commits",
+            "per eight accesses versus eight. The whole-path improvement is",
+            "therefore much smaller than the primitive work reduction. Use the",
+            "atomic CPU path for sparse or uncertain demand; evaluate books when",
+            "known reuse or delegation justifies the reservation and admission.",
+            "",
+        ]
+        report = report.replace(
+            "## Durable CPU comparison",
+            "\n".join(control_lines) + "\n## Original comparison with separate commits",
+        )
+        report = report.replace(
+            "slower full-consumption 32-item result",
+            "slower co-located full-consumption 32-item result",
+        )
     return (
-        "\n".join(lines),
+        report,
         csv_out.getvalue(),
         json.dumps(business, indent=2, allow_nan=False) + "\n",
     )
@@ -192,7 +268,13 @@ def main():
     )
     if not data["complete"]:
         raise RuntimeError("capture incomplete")
-    outputs = generate(data)
+    control_path = (
+        ROOT / "benchmarks/access_book_results/ryzen7800x3d-atomic-2026-09-05.json"
+    )
+    control = json.loads(control_path.read_text()) if control_path.exists() else None
+    if control and not control["complete"]:
+        raise RuntimeError("control capture incomplete")
+    outputs = generate(data, control)
     for path, value in zip(
         (
             "docs/ACCESS_BOOK_RESULTS.md",

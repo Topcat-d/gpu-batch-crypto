@@ -17,6 +17,14 @@ The fault tests substitute a controlled backend that corrupts, truncates or reor
 
 ## Use the guarded signing boundary
 
+The separate [funded-access example](ACCESS_BOOK_DESIGN.md) exercises application
+controls with simulated funds: authoritative pricing, bounded budgets, pinned
+ES256 admission, exact scope, key revocation, replay protection, cancellation,
+concurrent spending, transaction rollback and restart recovery. Its CPU-only
+accounting tests do not change the GPU key-isolation or timing assessment.
+Network authentication, distributed recovery, actual funding/payout adapters,
+expiry scheduling and independent review remain deployment work.
+
 ```python
 from batchcrypto import Cpu, generate_p256_key
 from batchcrypto.verified import VerifiedSigner

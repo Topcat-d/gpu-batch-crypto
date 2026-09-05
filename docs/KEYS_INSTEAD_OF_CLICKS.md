@@ -12,6 +12,13 @@ This is a proposed application and a testable business hypothesis around the
 cryptography and measurements. Buyer demand, publisher revenue, payment
 settlement and a production access service remain to be demonstrated.
 
+The hypothesis now has a runnable [funded-access example](ACCESS_BOOK_DESIGN.md):
+one signed book can cover exact resources, while atomic per-resource redemptions
+connect reserved buyer units to publisher receivables. Small or uncertain work
+can use a single-commit CPU purchase. [Measured accounting and costs](ACCESS_BOOK_RESULTS.md)
+include cancellation, a stronger co-located CPU baseline and editable economic
+thresholds. The example uses simulated funds; it makes no payment or adoption claim.
+
 ## The problem and the intended customer
 
 An answer can be valuable to an AI user even when that user never visits the

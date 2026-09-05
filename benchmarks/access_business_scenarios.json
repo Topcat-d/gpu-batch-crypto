@@ -18,22 +18,22 @@
       "publisher_monthly_cost_usd": 2.0,
       "platform_monthly_fixed_usd": 2500.0
     },
-    "measured_completed_per_second": 518.5307784885993,
+    "measured_completed_per_second": 528.917109642258,
     "publisher_accrual_per_access_usd": 0.00085,
     "funding_cost_per_access_usd": 5.9e-05,
-    "compute_per_access_usd": 2.1428064778521932e-06,
+    "compute_per_access_usd": 2.100728244285064e-06,
     "risk_per_access_usd": 1e-05,
     "payout_cost_per_access_usd": 6.374999999999999e-06,
     "external_per_access_usd": 2.5e-06,
-    "platform_contribution_per_access_usd": 6.998219352214786e-05,
+    "platform_contribution_per_access_usd": 7.0024271755715e-05,
     "fixed_monthly_usd": 2520.0,
-    "modeled_break_even_accesses_monthly": 36009160,
+    "modeled_break_even_accesses_monthly": 35987522,
     "whole_host_break_even_accesses_monthly": 45060659,
     "whole_host_allocations_at_break_even": 1,
-    "variable_cost_price_floor_usd": 6.221516218227393e-05,
+    "variable_cost_price_floor_usd": 6.165129975591373e-05,
     "accesses_per_publisher_payout": 58824,
     "minimum_monthly_compute_allocation_usd": 730.0,
-    "single_allocation_modeled_monthly_capacity": 340674721.4670097
+    "single_allocation_modeled_monthly_capacity": 347498541.0349635
   },
   {
     "assumptions": {
@@ -54,22 +54,22 @@
       "publisher_monthly_cost_usd": 2.0,
       "platform_monthly_fixed_usd": 2500.0
     },
-    "measured_completed_per_second": 518.5307784885993,
+    "measured_completed_per_second": 528.917109642258,
     "publisher_accrual_per_access_usd": 0.00085,
     "funding_cost_per_access_usd": 0.000118,
-    "compute_per_access_usd": 2.1428064778521932e-06,
+    "compute_per_access_usd": 2.100728244285064e-06,
     "risk_per_access_usd": 1e-05,
     "payout_cost_per_access_usd": 6.374999999999999e-06,
     "external_per_access_usd": 2.5e-06,
-    "platform_contribution_per_access_usd": 1.0982193522147882e-05,
+    "platform_contribution_per_access_usd": 1.102427175571501e-05,
     "fixed_monthly_usd": 2520.0,
-    "modeled_break_even_accesses_monthly": 229462357,
+    "modeled_break_even_accesses_monthly": 228586528,
     "whole_host_break_even_accesses_monthly": 247619048,
     "whole_host_allocations_at_break_even": 1,
-    "variable_cost_price_floor_usd": 0.00029713961458253984,
+    "variable_cost_price_floor_usd": 0.00029444660763424356,
     "accesses_per_publisher_payout": 58824,
     "minimum_monthly_compute_allocation_usd": 730.0,
-    "single_allocation_modeled_monthly_capacity": 340674721.4670097
+    "single_allocation_modeled_monthly_capacity": 347498541.0349635
   },
   {
     "assumptions": {
@@ -90,14 +90,14 @@
       "publisher_monthly_cost_usd": 2.0,
       "platform_monthly_fixed_usd": 2500.0
     },
-    "measured_completed_per_second": 518.5307784885993,
+    "measured_completed_per_second": 528.917109642258,
     "publisher_accrual_per_access_usd": 0.00085,
     "funding_cost_per_access_usd": 0.000236,
-    "compute_per_access_usd": 2.1428064778521932e-06,
+    "compute_per_access_usd": 2.100728244285064e-06,
     "risk_per_access_usd": 1e-05,
     "payout_cost_per_access_usd": 6.374999999999999e-06,
     "external_per_access_usd": 2.5e-06,
-    "platform_contribution_per_access_usd": -0.00010701780647785213,
+    "platform_contribution_per_access_usd": -0.000106975728244285,
     "fixed_monthly_usd": 2520.0,
     "modeled_break_even_accesses_monthly": null,
     "whole_host_break_even_accesses_monthly": null,
@@ -105,7 +105,7 @@
     "variable_cost_price_floor_usd": null,
     "accesses_per_publisher_payout": 58824,
     "minimum_monthly_compute_allocation_usd": 730.0,
-    "single_allocation_modeled_monthly_capacity": 340674721.4670097
+    "single_allocation_modeled_monthly_capacity": 347498541.0349635
   },
   {
     "assumptions": {
@@ -126,22 +126,22 @@
       "publisher_monthly_cost_usd": 2.0,
       "platform_monthly_fixed_usd": 2500.0
     },
-    "measured_completed_per_second": 518.5307784885993,
+    "measured_completed_per_second": 528.917109642258,
     "publisher_accrual_per_access_usd": 0.0085,
     "funding_cost_per_access_usd": 0.00059,
-    "compute_per_access_usd": 2.1428064778521932e-06,
+    "compute_per_access_usd": 2.100728244285064e-06,
     "risk_per_access_usd": 0.0001,
     "payout_cost_per_access_usd": 6.375e-05,
     "external_per_access_usd": 2.5e-06,
-    "platform_contribution_per_access_usd": 0.0007416071935221473,
+    "platform_contribution_per_access_usd": 0.0007416492717557144,
     "fixed_monthly_usd": 2520.0,
-    "modeled_break_even_accesses_monthly": 3398026,
+    "modeled_break_even_accesses_monthly": 3397833,
     "whole_host_break_even_accesses_monthly": 4369748,
     "whole_host_allocations_at_break_even": 1,
-    "variable_cost_price_floor_usd": 6.221516218227393e-05,
+    "variable_cost_price_floor_usd": 6.165129975591373e-05,
     "accesses_per_publisher_payout": 5883,
     "minimum_monthly_compute_allocation_usd": 730.0,
-    "single_allocation_modeled_monthly_capacity": 340674721.4670097
+    "single_allocation_modeled_monthly_capacity": 347498541.0349635
   },
   {
     "assumptions": {
@@ -162,22 +162,22 @@
       "publisher_monthly_cost_usd": 2.0,
       "platform_monthly_fixed_usd": 2500.0
     },
-    "measured_completed_per_second": 518.5307784885993,
+    "measured_completed_per_second": 528.917109642258,
     "publisher_accrual_per_access_usd": 0.0085,
     "funding_cost_per_access_usd": 0.00118,
-    "compute_per_access_usd": 2.1428064778521932e-06,
+    "compute_per_access_usd": 2.100728244285064e-06,
     "risk_per_access_usd": 0.0001,
     "payout_cost_per_access_usd": 6.375e-05,
     "external_per_access_usd": 2.5e-06,
-    "platform_contribution_per_access_usd": 0.00015160719352214734,
+    "platform_contribution_per_access_usd": 0.00015164927175571446,
     "fixed_monthly_usd": 2520.0,
-    "modeled_break_even_accesses_monthly": 16621903,
+    "modeled_break_even_accesses_monthly": 16617291,
     "whole_host_break_even_accesses_monthly": 21138212,
     "whole_host_allocations_at_break_even": 1,
-    "variable_cost_price_floor_usd": 0.00029713961458253984,
+    "variable_cost_price_floor_usd": 0.00029444660763424356,
     "accesses_per_publisher_payout": 5883,
     "minimum_monthly_compute_allocation_usd": 730.0,
-    "single_allocation_modeled_monthly_capacity": 340674721.4670097
+    "single_allocation_modeled_monthly_capacity": 347498541.0349635
   },
   {
     "assumptions": {
@@ -198,14 +198,14 @@
       "publisher_monthly_cost_usd": 2.0,
       "platform_monthly_fixed_usd": 2500.0
     },
-    "measured_completed_per_second": 518.5307784885993,
+    "measured_completed_per_second": 528.917109642258,
     "publisher_accrual_per_access_usd": 0.0085,
     "funding_cost_per_access_usd": 0.00236,
-    "compute_per_access_usd": 2.1428064778521932e-06,
+    "compute_per_access_usd": 2.100728244285064e-06,
     "risk_per_access_usd": 0.0001,
     "payout_cost_per_access_usd": 6.375e-05,
     "external_per_access_usd": 2.5e-06,
-    "platform_contribution_per_access_usd": -0.0010283928064778528,
+    "platform_contribution_per_access_usd": -0.0010283507282442855,
     "fixed_monthly_usd": 2520.0,
     "modeled_break_even_accesses_monthly": null,
     "whole_host_break_even_accesses_monthly": null,
@@ -213,7 +213,7 @@
     "variable_cost_price_floor_usd": null,
     "accesses_per_publisher_payout": 5883,
     "minimum_monthly_compute_allocation_usd": 730.0,
-    "single_allocation_modeled_monthly_capacity": 340674721.4670097
+    "single_allocation_modeled_monthly_capacity": 347498541.0349635
   },
   {
     "assumptions": {
@@ -234,22 +234,22 @@
       "publisher_monthly_cost_usd": 2.0,
       "platform_monthly_fixed_usd": 2500.0
     },
-    "measured_completed_per_second": 518.5307784885993,
+    "measured_completed_per_second": 528.917109642258,
     "publisher_accrual_per_access_usd": 0.085,
     "funding_cost_per_access_usd": 0.0059,
-    "compute_per_access_usd": 2.1428064778521932e-06,
+    "compute_per_access_usd": 2.100728244285064e-06,
     "risk_per_access_usd": 0.001,
     "payout_cost_per_access_usd": 0.0006375,
     "external_per_access_usd": 2.5e-06,
-    "platform_contribution_per_access_usd": 0.007457857193522147,
+    "platform_contribution_per_access_usd": 0.007457899271755715,
     "fixed_monthly_usd": 2520.0,
-    "modeled_break_even_accesses_monthly": 337899,
+    "modeled_break_even_accesses_monthly": 337897,
     "whole_host_break_even_accesses_monthly": 435657,
     "whole_host_allocations_at_break_even": 1,
-    "variable_cost_price_floor_usd": 6.221516218227393e-05,
+    "variable_cost_price_floor_usd": 6.165129975591373e-05,
     "accesses_per_publisher_payout": 589,
     "minimum_monthly_compute_allocation_usd": 730.0,
-    "single_allocation_modeled_monthly_capacity": 340674721.4670097
+    "single_allocation_modeled_monthly_capacity": 347498541.0349635
   },
   {
     "assumptions": {
@@ -270,22 +270,22 @@
       "publisher_monthly_cost_usd": 2.0,
       "platform_monthly_fixed_usd": 2500.0
     },
-    "measured_completed_per_second": 518.5307784885993,
+    "measured_completed_per_second": 528.917109642258,
     "publisher_accrual_per_access_usd": 0.085,
     "funding_cost_per_access_usd": 0.0118,
-    "compute_per_access_usd": 2.1428064778521932e-06,
+    "compute_per_access_usd": 2.100728244285064e-06,
     "risk_per_access_usd": 0.001,
     "payout_cost_per_access_usd": 0.0006375,
     "external_per_access_usd": 2.5e-06,
-    "platform_contribution_per_access_usd": 0.0015578571935221475,
+    "platform_contribution_per_access_usd": 0.0015578992717557147,
     "fixed_monthly_usd": 2520.0,
-    "modeled_break_even_accesses_monthly": 1617607,
+    "modeled_break_even_accesses_monthly": 1617563,
     "whole_host_break_even_accesses_monthly": 2083334,
     "whole_host_allocations_at_break_even": 1,
-    "variable_cost_price_floor_usd": 0.00029713961458253984,
+    "variable_cost_price_floor_usd": 0.00029444660763424356,
     "accesses_per_publisher_payout": 589,
     "minimum_monthly_compute_allocation_usd": 730.0,
-    "single_allocation_modeled_monthly_capacity": 340674721.4670097
+    "single_allocation_modeled_monthly_capacity": 347498541.0349635
   },
   {
     "assumptions": {
@@ -306,14 +306,14 @@
       "publisher_monthly_cost_usd": 2.0,
       "platform_monthly_fixed_usd": 2500.0
     },
-    "measured_completed_per_second": 518.5307784885993,
+    "measured_completed_per_second": 528.917109642258,
     "publisher_accrual_per_access_usd": 0.085,
     "funding_cost_per_access_usd": 0.0236,
-    "compute_per_access_usd": 2.1428064778521932e-06,
+    "compute_per_access_usd": 2.100728244285064e-06,
     "risk_per_access_usd": 0.001,
     "payout_cost_per_access_usd": 0.0006375,
     "external_per_access_usd": 2.5e-06,
-    "platform_contribution_per_access_usd": -0.010242142806477852,
+    "platform_contribution_per_access_usd": -0.010242100728244287,
     "fixed_monthly_usd": 2520.0,
     "modeled_break_even_accesses_monthly": null,
     "whole_host_break_even_accesses_monthly": null,
@@ -321,6 +321,6 @@
     "variable_cost_price_floor_usd": null,
     "accesses_per_publisher_payout": 589,
     "minimum_monthly_compute_allocation_usd": 730.0,
-    "single_allocation_modeled_monthly_capacity": 340674721.4670097
+    "single_allocation_modeled_monthly_capacity": 347498541.0349635
   }
 ]

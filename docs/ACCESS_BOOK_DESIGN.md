@@ -116,6 +116,9 @@ The engine credits 100% of simulated gross spend to publisher receivables.
 The economic model's illustrative 85% publisher share is a separate scenario;
 a real agreed fee split would need its own ledger accounts and reconciliation.
 Unspent buyer balances and unpaid publisher accruals remain liabilities.
+If a processor deducts fees from incoming funding, credit only backed principal
+or explicitly supply the working capital covering those fees. The simulation's
+fixture seeding function must never be exposed as a live funding endpoint.
 
 ## How an agent should prepare work
 
@@ -126,6 +129,13 @@ policy for evaluation, not a demonstrated universal optimum. Large books increas
 reserved funds, scope and first-access work. A single urgent request can use the
 atomic CPU path immediately. The current prototype has explicit paths; it does
 not predict plans or implement an automatic routing controller.
+
+The co-located control measured a 1.173x conservative full-use throughput ratio,
+but book first-access p99 reached 18.11 ms versus 6.08 ms for atomic purchases.
+This does not satisfy a 10 ms first-access target. The 25%-use throughput ratio
+was 1.008x, effectively a tie in these two observations. Planning overlap could
+move preparation off the critical path, but that has not been measured. A
+32-item book here reduces signatures by 32x, not end-to-end service cost by 32x.
 
 The scheduler should use measured `(publisher, operation, algorithm, key epoch)`
 compatibility, expected consumption, budget exposure and remaining deadline.

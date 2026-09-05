@@ -18,7 +18,34 @@ example path, not a tuned multi-core service or a deployment capacity promise.
 [Raw capture](../benchmarks/access_book_results/ryzen7800x3d-2026-09-05.json) ·
 [Runnable design](ACCESS_BOOK_DESIGN.md)
 
-## Durable CPU comparison
+## Stronger co-located CPU control
+
+**Use this comparison when the issuer and consumer share an authority.**
+The on-demand CPU path issues, independently verifies and redeems in one
+durable commit. The book path also fuses its issue and admission into one
+commit. Both retain every signature, scope and accounting check. The
+larger ratios below against three separate commits are not the advantage
+over this optimized baseline.
+
+Control source `7876d1d86166b13a7552bec5981d04b1635e4e8f`; eight additional cells and
+10,240 redemptions, all reconciled.
+[Predeclared control](../benchmarks/ACCESS_BOOK_ATOMIC_CONTROL.md) ·
+[Raw control](../benchmarks/access_book_results/ryzen7800x3d-atomic-2026-09-05.json)
+
+| Plan used | Atomic CPU accesses/s | Fused 32-item book accesses/s | Conservative ratio | Atomic first-access p99 ms | Book first-access p99 ms |
+|---|---:|---:|---:|---:|---:|
+| 100% | 441.6–450.9 | 528.9–536.7 | 1.173× | 5.92–6.08 | 9.38–18.11 |
+| 25% | 418.5–436.0 | 439.5–441.3 | 1.008× | 5.15–5.26 | 9.59–10.16 |
+
+At full use, the book still performs 32 times fewer signatures and
+verifications, but now requires 33 durable commits per 32 accesses
+versus the atomic baseline's 32. At 25% use it requires ten commits
+per eight accesses versus eight. The whole-path improvement is
+therefore much smaller than the primitive work reduction. Use the
+atomic CPU path for sparse or uncertain demand; evaluate books when
+known reuse or delegation justifies the reservation and admission.
+
+## Original comparison with separate commits
 
 Each range includes both repeats. The ratio divides the slower book run by
 the faster on-demand baseline at the same consumption fraction. This is a
@@ -53,7 +80,7 @@ of all its items: only committed redemptions accrue publisher proceeds.
 ## Editable economic scenarios
 
 These are **assumptions**, not observed revenue, invoices or a pricing proposal.
-The illustration uses the slower full-consumption 32-item result, $1/hour
+The illustration uses the slower co-located full-consumption 32-item result, $1/hour
 host allocation, 25% effective capacity utilization, 85% publisher share,
 1% risk allowance, $0.0000025 other variable cost/access, ten publishers,
 $2/month/publisher operating cost and $2,500/month platform fixed cost.
@@ -96,7 +123,7 @@ this loss: the funded-spend fraction concerns the eventual funding lifecycle.
 ```sh
 python benchmarks/verify_access_book.py
 python benchmarks/report_access_book.py --check
-python benchmarks/access_business_model.py --rate 518.530778
+python benchmarks/access_business_model.py --rate 528.917110
 # Override any assumptions using --assumptions path/to/cost-inputs.json
 ```
 

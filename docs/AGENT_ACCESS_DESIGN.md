@@ -20,6 +20,14 @@ integration and payment ledger described here remain application components.
 The [engineering note](ENGINEERING.md) and [systems design](SYSTEMS_DESIGN.md)
 connect this proposal to the implementation and published evidence.
 
+The new [access-book example](ACCESS_BOOK_DESIGN.md) implements a local portion
+of that application boundary with simulated prepaid balances, scoped admission,
+atomic redemption and cancellation. Its [measurements](ACCESS_BOOK_RESULTS.md)
+compare prepared books with on-demand CPU purchases, including 75% cancellation
+and fused transaction commits. It does not measure an agent planner, concurrent
+HTTP requests or real settlement. First-access preparation must fit the deadline;
+overlap with AI planning remains an integration hypothesis.
+
 ## Start with the right unit of work
 
 A tool call is an application action. An HTTP request is a transport action.
