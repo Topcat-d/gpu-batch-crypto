@@ -2,6 +2,12 @@
 
 The reusable boundary is cryptographic operations, device execution, buffers, keys, and observable results. Application policy and commercial trust systems remain above that boundary.
 
+For adoption, start with the [component contracts and dependency map](COMPONENTS.md)
+and [runnable entry points](GETTING_STARTED.md). The Python wheel, installed native
+SDK, public table data and source-only evaluation applications have distinct
+delivery boundaries. The engine/ABI/runtime source layers below form one native
+library; they are not independently packaged services.
+
 This page describes the implemented library. The [CPU–GPU systems design](SYSTEMS_DESIGN.md) explains how an adopter could combine it with CPU preparation, explicit routing, timed queues and completion processing, and which of those service components remain to be built and measured.
 
 ## Layers

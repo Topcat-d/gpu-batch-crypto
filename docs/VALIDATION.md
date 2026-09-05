@@ -2,6 +2,24 @@
 
 Version 0.3, September 5, 2026:
 
+- The component-adoption pass adds [CPU/GPU/token/access-book entry points](GETTING_STARTED.md)
+  and [per-component contracts](COMPONENTS.md). A freshly built Python wheel was
+  installed into a separate Windows Python 3.12 environment using the bundled
+  CPU cryptography dependency. `python -I` ran the copied consumer outside the
+  checkout with native library loading blocked and PyJWT absent; CPU hashing,
+  AES, signing/verification and ES256 construction passed. Wheel contents and
+  mandatory dependencies were checked. The CI packaging jobs exercise clean
+  Python 3.10/3.12 environments before and after adding the optional `interop` extra.
+- A C-only consumer was copied outside the repository, configured through the
+  installed `batchcrypto::batchcrypto` target, compiled with MSVC 19.44 and passed
+  its SHA-256 known-answer/accounting check on RTX 3060 (device 1). This confirms
+  the tested Windows SDK consumption path without a CUDA-language consumer
+  project; it is not validation of a Linux CUDA build.
+- The minimal guarded GPU example returned 256 independently verified signatures
+  and retired its synthetic key. CPU, ES256 and access-book entry points passed,
+  along with all **56 local regression tests** with the RTX 3060 selected. These
+  are adoption/correctness checks, not new performance measurements or an audit.
+
 - The RTX 3060 follow-up passed **29 tests** on device 1, including the four capture/preflight checks and all native CUDA tests. Its **32 new pipeline rows** offered 15,200,000 requests and independently verified 12,167,746 completions with zero verification/processing failures. Expired and late requests remain separate and prevent a blanket success claim. [Repeat results, telemetry and deadline quality](RTX3060_PIPELINE.md).
 
 - Twenty-three tests passed on each RTX GPU after adding bounded-iterable consumption, epoch-bound sign/seal/open (including empty and retired slots), independently verified signing and controlled corrupt/truncated/reordered/wrong-epoch output cases. Two additional CPU cost-model tests check unit conversion, idle allocation and invalid inputs.

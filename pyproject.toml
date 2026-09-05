@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "gpu-batch-crypto"
 version = "0.3.0"
 description = "Standalone CUDA batch AES-GCM and P-256 ECDSA technical preview"
+readme = "README.md"
 requires-python = ">=3.10"
 license = "Apache-2.0"
 dependencies = ["cryptography>=46,<51"]
@@ -13,5 +14,12 @@ dependencies = ["cryptography>=46,<51"]
 [project.optional-dependencies]
 interop = ["PyJWT==2.13.0"]
 
+[project.urls]
+Source = "https://github.com/Topcat-d/gpu-batch-crypto"
+Documentation = "https://github.com/Topcat-d/gpu-batch-crypto/blob/main/docs/GETTING_STARTED.md"
+Issues = "https://github.com/Topcat-d/gpu-batch-crypto/issues"
+
 [tool.setuptools.packages.find]
 where = ["python"]
+include = ["batchcrypto", "batchcrypto.*"]
+namespaces = false

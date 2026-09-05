@@ -4,6 +4,29 @@ An independent **Apache-2.0 library for batch cryptography on NVIDIA GPUs**, wit
 
 **Technical preview, v0.3.** The strongest measured use case is signing many independent records when enough compatible work is ready together. This version adds atomic key-epoch checks, a signer that verifies every output on CPU before returning it, and native CPU/GPU pipeline measurements. Production security and deployment ROI remain explicit evaluation questions.
 
+## Choose what you need
+
+You can adopt the cryptographic library without the publisher/accounting example.
+The Python core works on CPU without building CUDA. Native GPU operations ship
+as a separate SDK; examples, benchmarks and public table files stay outside the
+Python wheel.
+
+| Your goal | Entry point | Smallest runnable example |
+|---|---|---|
+| **Use CPU only** | `batchcrypto.Cpu` and key/verification helpers | [CPU quick start](docs/GETTING_STARTED.md#use-cpu-only) |
+| **Add GPU signing** | `batchcrypto.verified.VerifiedSigner` + native library | [Guarded GPU quick start](docs/GETTING_STARTED.md#add-gpu-signing) |
+| **Generate ES256 tokens** | `batchcrypto.jws.sign_es256` + your CPU/GPU signer | [Token quick start](docs/GETTING_STARTED.md#generate-es256-tokens) |
+| **Evaluate access books** | Separate `Authority` / `Offer` / `Clearing` example | [Accounting quick start](docs/GETTING_STARTED.md#evaluate-access-books) |
+| Use C/C++ without Python | Installed `batchcrypto::batchcrypto` target and C header | [Native consumer](docs/GETTING_STARTED.md#use-the-installed-c-abi) |
+| Reuse tables or model costs | Public P-256 data / standalone Python calculators | [Data and analysis tools](docs/GETTING_STARTED.md#use-data-and-analysis-tools) |
+
+[Component contracts and dependency map](docs/COMPONENTS.md) define purpose,
+dependencies, inputs/outputs, failure behavior, application ownership, evidence
+and maturity for each component. [Pilot brief](docs/PILOT_BRIEF.md) defines the
+buyer, differentiation and joint-benefit questions for a commercial evaluation.
+
+## Application and business context
+
 Publishers, CDNs and other infrastructure teams can evaluate the same engine. [Machine-authorized content](docs/MACHINE_AUTHORIZED_CONTENT.md) is one application: signed grants can bind a publisher's content and access terms to a recipient. Payment, identity and enforcement belong to the application.
 
 The [keys instead of clicks thesis](docs/KEYS_INSTEAD_OF_CLICKS.md) explains the business case: an AI buyer pays for authorized content access, a signed credential connects its budget to delivery, and the publisher accrues revenue without requiring a referral click. It distinguishes funded access from key generation, lays out the quote-to-settlement flow, and defines tests for buyer value, publisher proceeds and GPU economics.
@@ -129,10 +152,12 @@ Include [`batchcrypto.h`](include/batchcrypto.h) and link the library from C or 
 
 ## Python quick start
 
-Install the Python bindings and CPU dependency after building the native library:
+Install the Python package and its CPU dependency; this does **not** build or
+require the native library. The GPU examples additionally need the native SDK:
 
 ```sh
 python -m pip install .
+python examples/cpu_only.py
 ```
 
 For signing, use the guarded signer around an owned runtime. Its buffers and key slots persist across calls. This example assembles 256 records before submission and verifies the whole output batch against a CPU-derived public-key pin before returning it:

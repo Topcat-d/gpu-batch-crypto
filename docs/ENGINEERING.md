@@ -4,6 +4,13 @@
 
 The project is a technical preview with buildable code, interoperability tests and published measurements. It is ready for independent engineering evaluation. Production adoption still depends on workload fit, system-level performance and security review.
 
+An adopter can start with [CPU only, guarded GPU signing, ES256 tokens or access
+books](GETTING_STARTED.md). The [component catalog](COMPONENTS.md) defines exact
+dependencies, entry points, output/failure contracts, ownership, relevant evidence
+and maturity. The Python package and native SDK do not depend on the publisher
+example. The [pilot brief](PILOT_BRIEF.md) distinguishes technical adoption from
+the buyer, alternative and net-benefit evidence needed for a business decision.
+
 Version 0.3 adds [atomic epoch binding and independently verified signing](PRODUCTION_READINESS.md), a substantial [output-copy fix with measured evidence](DISPATCH_RESULTS.md), [native CPU/hybrid pipeline measurements](PIPELINE_RESULTS.md), and [cost scenarios for the existing A100/L40S captures](ECONOMICS.md). The pipeline results include verification, queueing and missed deadlines; they do not yet establish a reliable hybrid cost advantage at a 10 ms target. The security record identifies remaining key-isolation, secret-dependent execution and independent-review requirements.
 
 ## The opportunity and the decision
