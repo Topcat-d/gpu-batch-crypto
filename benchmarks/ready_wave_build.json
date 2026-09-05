@@ -1,0 +1,30 @@
+{
+  "build_date": "2026-09-05",
+  "platform": "Windows x64 Release",
+  "compiler": "MSVC 19.44.35217",
+  "cuda": "13.0.88",
+  "cuda_architectures": [
+    86,
+    89
+  ],
+  "openssl_sdk_source": "https://github.com/python/cpython-bin-deps/tree/763bc5ab30fe645cf70e3bacb0c8c04908a46620",
+  "openssl_sdk_tag": "openssl-bin-3.5.8",
+  "openssl_sdk_archive_sha256": "fb130e8b170b295f8aeaa78867fd62372c99f40d921c5be65ac088cd27af17de",
+  "openssl_version": "OpenSSL 3.5.8 25 Aug 2026",
+  "openssl_compiler_flags": "compiler: cl  /Zi /Fdossl_static.pdb /Gs0 /GF /Gy /MD /W3 /wd4090 /nologo /O2 -DL_ENDIAN -DOPENSSL_PIC -D\"OPENSSL_BUILDING_OPENSSL\" -D\"OPENSSL_SYS_WIN32\" -D\"WIN32_LEAN_AND_MEAN\" -D\"UNICODE\" -D\"_UNICODE\" -D\"_CRT_SECURE_NO_DEPRECATE\" -D\"_WINSOCK_DEPRECATED_NO_WARNINGS\" -D\"NDEBUG\"",
+  "binaries": {
+    "ready_wave": {
+      "file": "ready_wave.exe",
+      "sha256": "2eb6e1e3d1706629b76d5ca12005c3faf9bb696855d42e9014906e74d9496109"
+    },
+    "batchcrypto": {
+      "file": "batchcrypto.dll",
+      "sha256": "4b902e671a8f7cde9a08e3eae60edfc849cedf1730196cda7d8411134493821c"
+    },
+    "openssl": {
+      "file": "libcrypto-3.dll",
+      "sha256": "acf285a10e428256dfefc489895fa104f3a49764a16c9a760748321397bab8e4"
+    }
+  },
+  "scope": "ready-wave executable; shared crypto support preserves existing deterministic pipeline default; wave CPU ES256 uses normal randomized nonces"
+}

@@ -42,6 +42,13 @@
       "size_bytes": 73728,
       "source_sha256": "b4bc0e8bdc79ae2ac43cfa71e3eef0476795074e2ba85f09b0105edcc352e1c1",
       "description": "same compiler and SDK; dispatch tasks use shared ownership through promise completion; used by the RTX 3060 target-GPU and deadline-control campaigns, with shared-host qualifications recorded in each capture"
+    },
+    {
+      "sha256": "ea1568c7ad732a75cd4dd6b09401499fedc483eac773cc8dfd3b41386b71a518",
+      "size_bytes": 73728,
+      "source_sha256": "cf5451ec2a82c956325a2bb021331a3505975823a29cf7e64cc94cf932444900",
+      "shared_header_sha256": "0fc841ecc5bfa19e9126b6ac5df6cd8796c1c0050dca6545f1c85f3fd71f7d03",
+      "description": "same deterministic pipeline behavior; shared native crypto support extracted for separate ready-wave benchmark"
     }
   ]
 }
