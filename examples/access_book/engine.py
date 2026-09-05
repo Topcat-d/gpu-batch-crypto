@@ -188,6 +188,18 @@ class Clearing:
 
     @contextmanager
     def transaction(self):
+        if self.db.in_transaction:
+            # Compose application steps under one durable commit. A nested
+            # failure rolls back that step even if its caller catches it.
+            self.db.execute("SAVEPOINT access_book_step")
+            try:
+                yield
+                self.db.execute("RELEASE access_book_step")
+            except BaseException:
+                self.db.execute("ROLLBACK TO access_book_step")
+                self.db.execute("RELEASE access_book_step")
+                raise
+            return
         self.db.execute("BEGIN IMMEDIATE")
         try:
             yield
@@ -460,6 +472,51 @@ class Clearing:
     def revoke_key(self):
         """Trusted operator action; cached admission cannot bypass revocation."""
         self.db.execute("INSERT OR IGNORE INTO revoked_keys VALUES(?)", (KEY_ID,))
+
+    def purchase(
+        self,
+        resource,
+        *,
+        buyer,
+        publisher,
+        content_sha256,
+        terms_sha256,
+        max_units,
+        request_id,
+    ):
+        """Co-located, on-demand baseline: issue, verify and spend in one commit.
+
+        Retains the same signature, budget, exact-scope and receipt checks. No
+        intermediate reservation survives failure. Useful when an independent
+        issuer/consumer round trip or future delegation is unnecessary.
+        """
+        with self.transaction():
+            book, token = self.issue(
+                buyer=buyer,
+                publisher=publisher,
+                resources=[resource],
+                max_units=max_units,
+                request_id=request_id,
+            )
+            # An expired committed purchase can recover its receipt without
+            # new admission. Issuance retry policy still requires a live key;
+            # direct redeem can recover historical receipts after revocation.
+            prior = self.db.execute(
+                "SELECT 1 FROM redemptions WHERE buyer=? AND request_id=?",
+                (buyer, request_id),
+            ).fetchone()
+            if not prior:
+                self.activate(book, token, buyer=buyer, publisher=publisher)
+            receipt = self.redeem(
+                book,
+                resource,
+                buyer=buyer,
+                publisher=publisher,
+                content_sha256=content_sha256,
+                terms_sha256=terms_sha256,
+                request_id=request_id,
+            )
+            return book, token, receipt
 
     def audit(self):
         """Consistent snapshot; conservation across balances, books and receipts."""

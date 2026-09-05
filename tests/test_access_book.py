@@ -236,6 +236,43 @@ class AccessBookTests(unittest.TestCase):
             self.issue()
         self.assertEqual(self.store.audit(), before)
 
+    def test_atomic_purchase_commits_once_and_recovers_after_expiry(self):
+        transactions = []
+        self.store.db.set_trace_callback(
+            lambda sql: transactions.append(sql) if sql == "BEGIN IMMEDIATE" else None
+        )
+        args = dict(
+            buyer="buyer",
+            publisher="publisher",
+            content_sha256="a" * 64,
+            terms_sha256="b" * 64,
+            max_units=10,
+            request_id="purchase-1",
+        )
+        first = self.store.purchase("a", **args)
+        self.assertEqual(len(transactions), 1)
+        self.store.db.set_trace_callback(None)
+        self.now += 400
+        self.assertEqual(first, self.store.purchase("a", **args))
+        self.assertEqual(self.store.audit()["accounts"][0]["redeemed"], 10)
+        self.assertEqual(
+            (self.authority.signatures, self.authority.verifications), (1, 1)
+        )
+
+    def test_atomic_purchase_scope_failure_rolls_back_admission_and_reservation(self):
+        before = self.store.audit()
+        with self.assertRaises(Denied):
+            self.store.purchase(
+                "a",
+                buyer="buyer",
+                publisher="publisher",
+                content_sha256="c" * 64,
+                terms_sha256="b" * 64,
+                max_units=10,
+                request_id="purchase-1",
+            )
+        self.assertEqual(self.store.audit(), before)
+
 
 if __name__ == "__main__":
     unittest.main()

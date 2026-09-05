@@ -1,6 +1,7 @@
 """SPDX-License-Identifier: Apache-2.0. Predeclared durable access comparison."""
 
 import argparse
+from contextlib import nullcontext
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -27,6 +28,7 @@ SOURCES = [
     "python/batchcrypto/__init__.py",
     "benchmarks/run_access_book.py",
     "benchmarks/ACCESS_BOOK_CAMPAIGN.md",
+    "benchmarks/ACCESS_BOOK_ATOMIC_CONTROL.md",
 ]
 PLANNED = 2048
 
@@ -35,7 +37,7 @@ def git(*args):
     return subprocess.check_output(["git", *args], cwd=ROOT, text=True).strip()
 
 
-def measure(book_size, consumed_percent, planned=PLANNED):
+def measure(book_size, consumed_percent, planned=PLANNED, *, fused=False):
     with tempfile.TemporaryDirectory(prefix="access-book-") as temp:
         authority = Authority()
         store = Clearing(Path(temp) / "ledger.sqlite", authority)
@@ -68,19 +70,37 @@ def measure(book_size, consumed_percent, planned=PLANNED):
             for offset in range(0, planned, group_size):
                 group = list(range(offset, offset + group_size))
                 consumed = [i for i in group if consumed_percent == 100 or i % 4 == 0]
-                if book_size == 0 and not consumed:
+                if book_size in (0, 1) and not consumed:
                     continue
                 ready = time.perf_counter()
-                book, token = store.issue(
-                    buyer="buyer",
-                    publisher="publisher",
-                    resources=[f"resource-{i % 256}" for i in group],
-                    max_units=len(group) * 1000,
-                    request_id=f"issue-{offset}",
-                )
+                if book_size == 1:
+                    _, token, _ = store.purchase(
+                        f"resource-{offset % 256}",
+                        buyer="buyer",
+                        publisher="publisher",
+                        content_sha256="a" * 64,
+                        terms_sha256="b" * 64,
+                        max_units=1000,
+                        request_id=f"purchase-{offset}",
+                    )
+                    elapsed_ms = (time.perf_counter() - ready) * 1000
+                    completion_ms.append(elapsed_ms)
+                    redemption_ms.append(elapsed_ms)
+                    first_ms.append(elapsed_ms)
+                    issued += 1
+                    tokens_bytes += len(token)
+                    continue
+                with store.transaction() if fused else nullcontext():
+                    book, token = store.issue(
+                        buyer="buyer",
+                        publisher="publisher",
+                        resources=[f"resource-{i % 256}" for i in group],
+                        max_units=len(group) * 1000,
+                        request_id=f"issue-{offset}",
+                    )
+                    store.activate(book, token, buyer="buyer", publisher="publisher")
                 issued += 1
                 tokens_bytes += len(token)
-                store.activate(book, token, buyer="buyer", publisher="publisher")
                 for index, i in enumerate(consumed):
                     redemption_start = time.perf_counter()
                     store.redeem(
@@ -105,6 +125,7 @@ def measure(book_size, consumed_percent, planned=PLANNED):
             audit = store.audit()
             return {
                 "book_size": book_size,
+                "fused": fused,
                 "consumed_percent": consumed_percent,
                 "planned": planned,
                 "completed": len(completion_ms),
@@ -127,6 +148,9 @@ def measure(book_size, consumed_percent, planned=PLANNED):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--campaign", choices=("books", "atomic-control"), default="books"
+    )
     args = parser.parse_args()
     if args.output.exists():
         parser.error("preserve captures; output already exists")
@@ -134,6 +158,7 @@ def main():
         parser.error("commit the experiment before measurement")
     result = {
         "schema": 1,
+        "campaign": args.campaign,
         "commit": git("rev-parse", "HEAD"),
         "timestamp_utc": datetime.now(timezone.utc).isoformat(),
         "sources": {
@@ -163,12 +188,15 @@ def main():
         )
 
     matrix = [(size, used) for used in (100, 25) for size in (0, 8, 32, 128, 256)]
+    if args.campaign == "atomic-control":
+        matrix = [(size, used) for used in (100, 25) for size in (1, 32)]
     save()
     try:
         for repeat in (1, 2):
             for size, used in matrix if repeat == 1 else reversed(matrix):
-                measure(size, used, 256)  # Fixed, separately provisioned warmup.
-                row = measure(size, used)
+                fused = args.campaign == "atomic-control"
+                measure(size, used, 256, fused=fused)  # Separate warmup.
+                row = measure(size, used, fused=fused)
                 row["repeat"] = repeat
                 result["rows"].append(row)
                 save()
