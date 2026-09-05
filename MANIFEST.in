@@ -1,0 +1,13 @@
+# Python source distribution: the core and its build/license documentation.
+# Full native sources, examples, tests and evidence are in the Git source archive.
+include LICENSE NOTICE SECURITY.md python/README.md
+prune tests
+prune examples
+prune benchmarks
+prune tools
+prune src
+prune include
+prune cmake
+prune data
+prune docs
+prune .github

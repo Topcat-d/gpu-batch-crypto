@@ -51,7 +51,7 @@ Native integrations can use the same epoch-bound API and perform verification wi
 | Authorization and replay protection | Authenticated caller, domain-separated canonical messages, audience/scope/expiry/content version and replay rules; the signer must not be an unrestricted signing oracle | Application owner |
 | Overload and availability | Workload-specific queue limits/deadlines, permitted CPU routing, failure quarantine/recovery, redundancy and long-run SLO measurements | Service owner |
 | Broader validation | Independent cryptographic review; larger randomized differential corpus; sanitizer coverage beyond the C smoke path; Linux CUDA and additional GPU/toolchain coverage | Maintainers/reviewers |
-| Release and dependency lifecycle | Repeatable GPU release builds, dependency updates, supported versions, vulnerability triage ownership and published release evidence | Maintainers |
+| Release and dependency lifecycle | [Artifact checks and release/rollback procedure](RELEASING.md) now cover distribution scope, notices, version pairing and state ownership; repeatable GPU release builds, broader dependency/platform coverage and published release evidence remain required | Maintainers |
 
 Current hosted CI exercises CPU correctness, the native CPU benchmark and evidence integrity. Local CUDA acceptance covers the two RTX cards and documented Windows toolchain. Neither check certifies production security. The [validation record](VALIDATION.md) distinguishes executed checks from these open items.
 

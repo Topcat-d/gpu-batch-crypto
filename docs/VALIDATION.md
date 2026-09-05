@@ -2,6 +2,24 @@
 
 Version 0.3, September 5, 2026:
 
+- An ECC release-readiness pass fixed the native SDK's missing license notices
+  and the Python source distribution's incomplete test/example boundary.
+  [Artifact checks](../tools/check_distributions.py) compare distribution scope,
+  core source bytes, Python/native project versions and license notices.
+  Locally, setuptools 84.0.0 built an sdist; pip rebuilt its wheel from an
+  extracted copy with no build isolation or dependency downloads. A separate
+  Windows Python 3.12 environment, sharing the bundled cryptography dependency,
+  passed isolated CPU/JWS and CPU example checks with CUDA loading blocked and
+  PyJWT absent. CI builds through the `build` frontend in isolated environments.
+- A fresh native SDK install now carries `LICENSE`, `NOTICE` and `SECURITY.md`.
+  The external C-only consumer passed against that install on RTX 3060/device 1,
+  as did all **56 regressions** and 256 guarded GPU signatures. Negative artifact
+  checks rejected a wheel missing `NOTICE`, an unexpected application module,
+  changed core source bytes and the previous SDK without notices. These checks
+  establish packaging/consumer behavior, not artifact authenticity, reproducible
+  binaries, Linux CUDA acceptance or an independent security audit. The
+  [release/rollback procedure](RELEASING.md) records the remaining responsibilities.
+
 - The component-adoption pass adds [CPU/GPU/token/access-book entry points](GETTING_STARTED.md)
   and [per-component contracts](COMPONENTS.md). A freshly built Python wheel was
   installed into a separate Windows Python 3.12 environment using the bundled

@@ -331,9 +331,12 @@ no shared automatic scheduler, deployment service or performance SLA.
 ## Distribution and maintenance boundaries
 
 The source repository and source ZIP carry the library, examples, public data,
-docs, tests and evidence. The wheel carries only the `batchcrypto` package and
-distribution metadata. The native SDK carries the public C interface/library
-and CMake package. The standard entry points above avoid importing internal
+docs, tests and evidence. The Python source distribution carries the core and
+build documentation, without the repository's tests or their application/data
+dependencies. The wheel carries only `batchcrypto` and distribution/license
+metadata. The native SDK carries the public C interface/library, CMake package,
+license notices and security scope. [Release checks](RELEASING.md) verify these
+boundaries. The standard entry points above avoid importing internal
 underscore helpers or copying private engine headers into an application.
 
 Apache-2.0 source and selected-source notices are in [LICENSE](../LICENSE) and

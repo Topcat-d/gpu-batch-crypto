@@ -159,7 +159,8 @@ cmake --install build --config Release --prefix ./dist/native-sdk
 ```
 
 The installed SDK contains the shared library, public header, Windows import
-library where applicable and `batchcrypto::batchcrypto` CMake target. The
+library where applicable, `batchcrypto::batchcrypto` CMake target, license
+notices and security scope. The
 producer build requires CUDA; a C-only consumer can use that SDK without
 enabling the CUDA language or importing the repository's private source headers.
 The consumer still needs the compatible GPU, driver, CUDA runtime and platform
@@ -229,9 +230,13 @@ For a wheel consumer, build and install without installing the example app:
 
 ```sh
 python -m pip install build
-python -m build --wheel --outdir dist/wheels
+python -m build --outdir dist/release-python
+python tools/check_distributions.py --python-dist dist/release-python
 ```
 
+This builds the Python source distribution and then its wheel. The Python
+source distribution is distinct from the full native source ZIP. See
+[release and rollback instructions](RELEASING.md) for artifact scope and evidence.
 Install the resulting `.whl` into your application's Python environment. Run
 [check_python_install.py](../tools/check_python_install.py) with that environment
 and `python -I` before adding PyJWT to verify CPU/JWS construction independently

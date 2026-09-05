@@ -25,6 +25,10 @@ dependencies, inputs/outputs, failure behavior, application ownership, evidence
 and maturity for each component. [Pilot brief](docs/PILOT_BRIEF.md) defines the
 buyer, differentiation and joint-benefit questions for a commercial evaluation.
 
+[Release and rollback instructions](docs/RELEASING.md) explain artifact contents,
+checks and version pinning. [Contributing](CONTRIBUTING.md) maps proposed changes
+to the required correctness, packaging and benchmark evidence.
+
 ## Application and business context
 
 Publishers, CDNs and other infrastructure teams can evaluate the same engine. [Machine-authorized content](docs/MACHINE_AUTHORIZED_CONTENT.md) is one application: signed grants can bind a publisher's content and access terms to a recipient. Payment, identity and enforcement belong to the application.
