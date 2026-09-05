@@ -1,12 +1,14 @@
-# GPU batch cryptography for machine-authorized content
+# GPU Batch Crypto: engine, ABI and batching
 
 ## Engineering note
 
-Publishers need ways to earn from machine access to their work even when that access never produces an advertising click. Our contribution is an independent Apache-2.0 GPU cryptography engine that lets others investigate the costs of that model: hash content, encrypt it with authenticated metadata, and sign grants or records in batches. It includes a public benchmark corpus drawn from both the new standalone implementation and earlier A100, L40S and RTX experiments.
+GPU Batch Crypto is a general-purpose Apache-2.0 engine for applications with many independent hashing, authenticated-encryption and signature operations. Its public building blocks are a CUDA execution engine, device runtime, C ABI, Python bindings and P-256 precomputation tables. The project publishes code and measured evidence so infrastructure engineers can evaluate the engine for their own workloads.
 
-The engineering question is whether large populations of independent content objects and authorizations create enough compatible work to make batched cryptography useful within a service's latency budget. A publisher platform, CDN, hosting provider or machine consumer could evaluate that question. Services such as [Pay per crawl](https://developers.cloudflare.com/ai-crawl-control/features/pay-per-crawl/what-is-pay-per-crawl/) provide one example of the surrounding access/payment context; the library itself supplies cryptographic operations.
+Machine-authorized content is one application: publishers may need to earn from machine access that produces no advertising click, with content and access metadata cryptographically bound to a recipient. The same engine can support signed records, integrity checks and other batch workloads. A CDN or infrastructure provider, including Cloudflare, is a potential user or evaluator of this existing public project. The project has no provider-specific integration or product dependency.
 
 ## What is available
+
+Start with the [execution engine](../src/engine/crypto_engine.cu), [runtime](../src/engine/runtime.hpp), [ABI implementation](../src/abi/batchcrypto_abi.cpp), and [public C header](../include/batchcrypto.h). The [P-256 backend](../src/p256/fixed_base.cuh) uses the [published tables](../data/p256); the [generator](../tools/generate_p256_tables.py) checks every public point against OpenSSL. These are working native library components, with [the C example](../examples/c_api.c) demonstrating direct use.
 
 [GPU Batch Crypto](https://github.com/Topcat-d/gpu-batch-crypto) includes an independently buildable CUDA library with a versioned C ABI, Python bindings, reusable device buffers, streams, key slots and key epochs. It supports variable-length SHA-256, AES-256-GCM encryption/decryption with associated data, and deterministic P-256 ECDSA signing. CPU paths using cryptography/OpenSSL and hashlib supply verification, key generation, interoperability checks and comparison baselines.
 
@@ -18,7 +20,7 @@ The [content-grant example](../examples/content_grant.py) binds synthetic conten
 
 One call per small operation repeatedly pays submission, copying and synchronization overhead and can leave most of the GPU idle. Batching shares those costs and exposes parallel work. It also consumes latency: time collecting a batch, queueing behind other batches, and waiting for the whole call to finish. The right setting depends on the primitive, payload, signing-key distribution, host and GPU.
 
-The current implementation illustrates the tradeoff directly. On RTX 4070 Ti, batch 1,024 signs about **110,956 digests/s** at **9.23 ms** mean batch completion; batch 4,096 reaches **160,455/s** at **25.53 ms**. RTX 3060 records **100,741/s at 10.16 ms** and **153,452/s at 26.69 ms**, respectively. The smaller of those two batches retains roughly two-thirds of peak sampled throughput at a little over one-third of the batch completion time. These are sampled starting points, not universal sweet spots or p99 guarantees.
+The initial v0.1 reference implementation illustrates the tradeoff directly. On RTX 4070 Ti, batch 1,024 signs about **110,956 digests/s** at **9.23 ms** mean batch completion; batch 4,096 reaches **160,455/s** at **25.53 ms**. RTX 3060 records **100,741/s at 10.16 ms** and **153,452/s at 26.69 ms**, respectively. The smaller of those two batches retains roughly two-thirds of peak sampled throughput at a little over one-third of the batch completion time. These are sampled starting points, not universal sweet spots or p99 guarantees. Version 0.2 adds selectable [comb and full-window backends](P256.md) with separate measurements.
 
 The [batching guide](BATCHING.md) gives per-card and per-payload tables, observed timing ranges, charts and a batch-fill model. It also shows a historical sweep where throughput peaked at 4,096 and fell at larger logical batch sizes. Filling the queue further can cost latency without buying throughput.
 
@@ -34,9 +36,9 @@ The [batching guide](BATCHING.md) gives per-card and per-payload tables, observe
 
 The [historical archive](HISTORICAL_BENCHMARKS.md) contains the selected captures, hardware/settings, hash provenance, full latency percentiles and rejected runs. Those paths are not identical to each other or to the current library, so the table is evidence of prior work rather than a GPU ranking. It does not establish an A100 batch optimum: the clean A100 captures lack a batch-size/latency sweep. The AES rate corresponds to 6.39 MB/s of small-record plaintext, not article delivery or payment throughput.
 
-## Current public-library measurements
+## Initial public-library measurements
 
-On an AMD Ryzen 7 7800X3D host, the current public implementation achieved:
+On an AMD Ryzen 7 7800X3D host, the v0.1 reference implementation achieved:
 
 | P-256 signing, batch 4,096 | GPU signatures/s | CPU reference signatures/s | GPU/CPU |
 |---|---:|---:|---:|
@@ -57,6 +59,6 @@ We would welcome engineering feedback on representative signing workloads, accep
 
 ## Readiness
 
-This is a technical preview. Fourteen Python tests passed on each of the two GPUs; the C API consumer passed and a limited Compute Sanitizer check reported no errors. It is not independently audited. The inherited arithmetic has secret-dependent behavior, so it is not presented as a constant-time signer or an HSM replacement. Details are in [validation](VALIDATION.md) and [security scope](../SECURITY.md).
+This is a technical preview. Seventeen Python tests passed on each of the two GPUs, including all three P-256 backends; all 4,479 public table points matched OpenSSL. The C API consumer passed and a limited Compute Sanitizer check reported no errors. It is not independently audited. The arithmetic and table accesses have secret-dependent behavior, so it is not presented as a constant-time signer or an HSM replacement. Details are in [validation](VALIDATION.md) and [security scope](../SECURITY.md).
 
 The public repository contains selected generic primitives, benchmark evidence and the new standalone integration. It carries no private Smoke service architecture or Git history. This note is for engineering discussion and does not imply endorsement, integration or partnership with a named provider.

@@ -15,10 +15,20 @@ for row in manifest:
     expected.add(p)
     if hashlib.sha256(p.read_bytes()).hexdigest() != row["extracted_sha256"]:
         raise RuntimeError(f"changed extract: {row['destination']}")
-if expected != {p.resolve() for p in (root / "src/imported").rglob("*") if p.is_file()}:
+inventory = {p.resolve() for p in (root / "src/imported").rglob("*") if p.is_file()}
+inventory |= {p.resolve() for p in (root / "tools/imported").glob("*.py")}
+inventory.add((root / "tools/generate_p256_tables.py").resolve())
+if expected != inventory:
     raise RuntimeError("unrecorded or missing imported source")
-for p in list((root / "src").rglob("*.cu")) + list((root / "src").rglob("*.cuh")):
+for p in (
+    p for p in (root / "src").rglob("*") if p.suffix in (".cu", ".cuh", ".cpp", ".hpp")
+):
     for inc in re.findall(r'^\s*#include\s+"([^"]+)"', p.read_text(), re.M):
+        if inc == "p256_tables.hpp":
+            # CMake generates this header exclusively from checked-in public tables.
+            if not (root / "cmake/EmbedP256Tables.cmake").is_file():
+                raise RuntimeError("missing public table embedding rule")
+            continue
         found = next(
             (
                 q.resolve()

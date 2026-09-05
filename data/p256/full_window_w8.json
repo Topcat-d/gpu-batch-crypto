@@ -1,0 +1,17 @@
+{
+  "format": "GBCTBL01",
+  "version": 1,
+  "kind": "full_window_w8",
+  "type": 2,
+  "windows": 33,
+  "digits": 128,
+  "entry_bytes": 64,
+  "header_bytes": 32,
+  "total_bytes": 270368,
+  "layout": "AoS; X[8 u32 LE] then Y[8 u32 LE]; index=window*digits+digit-1",
+  "domain": "Montgomery x*2^256 mod p",
+  "curve": "NIST P-256",
+  "points_verified": 4224,
+  "independent_verifier": "cryptography/OpenSSL SECP256R1 public-key derivation",
+  "sha256": "5d62a2d7d346fe82dfd4a6cbaecc62749d939cc4541341bf4c06497bad8dd7a1"
+}

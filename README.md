@@ -1,16 +1,34 @@
 # GPU Batch Crypto
 
-An independent Apache-2.0 GPU cryptography engine for batch content hashing, authenticated encryption, and digital signatures. Extracted CUDA primitives have a versioned C ABI, thin Python bindings, device runtimes, reusable buffers, and generic key slots.
+A general-purpose Apache-2.0 GPU cryptography engine for batch hashing, authenticated encryption, and digital signatures. It provides a native C ABI, Python bindings, device runtimes, reusable buffers, key slots, and selectable P-256 fixed-base implementations.
 
-**Technical preview.** This is a new source repository, not a public copy of Smoke. It has no Smoke runtime dependency, submodule, daemon, account system, or inherited Git history.
+**Technical preview, v0.2.** The library builds independently from its selected Smoke origins. Applications own their protocols and policies. Publishers, CDNs, storage systems and other infrastructure can build on the same engine; machine-authorized content is one reference application.
 
-[Current library results](docs/RESULTS.md) · [Historical A100 and GPU benchmarks](docs/HISTORICAL_BENCHMARKS.md) · [Batch sizes and latency](docs/BATCHING.md) · [Engineering note](docs/ENGINEERING.md)
+## Start with the code
 
-Fresh local measurements show a P-256 signing benefit at large batches: about 160,455 signatures/s on RTX 4070 Ti and 153,452 on RTX 3060 at batch 4,096, respectively 3.96× and 3.93× the single-thread CPU reference measured in each run. Small signing batches, AES-GCM and SHA-256 favor that CPU reference in this implementation. These are synchronous Python API measurements with warmed buffers, not server latency or optimized multi-core CPU comparisons.
+| Component | Source | Responsibility |
+|---|---|---|
+| Cryptographic execution engine | [crypto_engine.cu](src/engine/crypto_engine.cu) | Validate and pack batches, dispatch CUDA work, return checked results |
+| Device runtime and buffers | [runtime.hpp](src/engine/runtime.hpp) | Device selection, stream ownership, reused buffers, clearing, resident public tables |
+| Native ABI implementation | [batchcrypto_abi.cpp](src/abi/batchcrypto_abi.cpp) | Opaque contexts, keys/epochs, status handling and C entry points |
+| Public C ABI | [batchcrypto.h](include/batchcrypto.h) | Versioned interface for C, C++ and language bindings |
+| CUDA kernels | [crypto_kernels.cuh](src/kernels/crypto_kernels.cuh) | AES-GCM, SHA-256, P-256 signing and public-key export |
+| P-256 table-backed multiplication | [fixed_base.cuh](src/p256/fixed_base.cuh) | Reference, fixed-window comb and full-window execution |
+| Public comb/full-window tables | [data/p256](data/p256) | Checked-in point data, typed layouts, metadata and SHA-256 fingerprints |
+| Table generator and verifier | [generate_p256_tables.py](tools/generate_p256_tables.py) | Rebuild and independently check all 4,479 public points against OpenSSL |
+| Python runtime | [batchcrypto](python/batchcrypto/__init__.py) | Thin bindings to the same C ABI |
+
+The runtime is reusable across calls; the current execution model launches bounded CUDA batches. The historical persistent queue/scheduler is a different implementation and is not part of this native library. See [architecture](docs/ARCHITECTURE.md) and [P-256 tables and backends](docs/P256.md) for the exact boundary.
+
+## Measurements
+
+[P-256 backends](docs/P256.md) · [Initial library results](docs/RESULTS.md) · [Historical A100 and GPU benchmarks](docs/HISTORICAL_BENCHMARKS.md) · [Batch sizes and latency](docs/BATCHING.md) · [Engineering note](docs/ENGINEERING.md)
+
+The initial v0.1 reference-path measurements show a P-256 signing benefit at large batches: about 160,455 signatures/s on RTX 4070 Ti and 153,452 on RTX 3060 at batch 4,096, respectively 3.96× and 3.93× the single-thread CPU reference measured in each run. Small signing batches, AES-GCM and SHA-256 favor that CPU reference in that implementation. These are synchronous Python API measurements with warmed buffers, not server latency or optimized multi-core CPU comparisons. The new table-backed paths have their own [backend comparison](docs/P256.md).
 
 The project also publishes the earlier engine evidence that motivated this extraction: A100 at **110,200 P-256 signatures/s** and **399,446 AES-GCM seals/s** on 16-byte plaintext; experimental full-window signing at **260,998/s on RTX 4070 Ti** and **120,150/s on RTX 3060**; and L40S throughput and measured p50/p95/p99 latency. Each historical capture identifies its execution path, settings, completion accounting and sampled correctness. Those implementations differ from the current public library.
 
-Batching changes the result. In the current library, batch **1,024** delivers approximately **111K / 101K signatures/s** with **9.23 / 10.16 ms** mean batch completion on the 4070 Ti / 3060. Batch **4,096** raises throughput to **160K / 153K** at **25.53 / 26.69 ms**. [The batching guide](docs/BATCHING.md) explains these sampled tradeoffs, payload-dependent limits, and why batch wait time must be added to service latency.
+Batching changes the result. In the initial reference-path matrix, batch **1,024** delivers approximately **111K / 101K signatures/s** with **9.23 / 10.16 ms** mean batch completion on the 4070 Ti / 3060. Batch **4,096** raises throughput to **160K / 153K** at **25.53 / 26.69 ms**. [The batching guide](docs/BATCHING.md) explains these sampled tradeoffs, payload-dependent limits, and why batch wait time must be added to service latency.
 
 ## Included
 
@@ -19,7 +37,7 @@ Batching changes the result. In the current library, batch **1,024** delivers ap
 | AES-256-GCM seal/open, 96-bit nonce, 128-bit tag | Yes | cryptography/OpenSSL |
 | Associated data and payloads up to 1 MiB | Yes | Yes |
 | SHA-256 variable-length batch hashing | Yes | hashlib |
-| P-256 ECDSA signing of SHA-256 digests | Yes, deterministic nonces and low-s output | Yes |
+| P-256 ECDSA signing of SHA-256 digests | Reference, comb_w8 and full_window_w8; deterministic nonces and low-s | Yes |
 | P-256 public-key export | Yes | Yes |
 | P-256 verification and key generation | — | Yes |
 
@@ -43,13 +61,13 @@ Include [`batchcrypto.h`](include/batchcrypto.h) and link the library from C or 
 
 ## Python quick start
 
-For repeated work, use the owned runtime. Its stream, buffers and key slots persist across calls:
+For repeated work, use the owned runtime. Its stream, buffers and key slots persist across calls. Table-backed signing is explicitly selectable with the v0.2 native library:
 
 ```python
 import os
 from batchcrypto import Runtime, Record, generate_p256_key
 
-with Runtime("build/Release/batchcrypto.dll", device=0) as engine:
+with Runtime("build/Release/batchcrypto.dll", device=0, p256_backend="full_window_w8") as engine:
     epoch = engine.load_key(0, os.urandom(32), kind="aes")
     engine.load_key(1, generate_p256_key(), kind="p256")
     digest = engine.sha256([b"content"])[0]
@@ -59,6 +77,8 @@ with Runtime("build/Release/batchcrypto.dll", device=0) as engine:
     next_epoch = engine.load_key(0, os.urandom(32), expected_epoch=epoch)
     print(engine.stats())
 ```
+
+`reference` remains the default for existing callers. `comb_w8` and `full_window_w8` use the included public tables for both signing and public-key export. `engine.set_p256_backend(...)` changes the implementation without changing keys or epochs. The C equivalents are `bc_set_p256_backend` and `bc_get_p256_backend`; [`examples/c_api.c`](examples/c_api.c) exercises all three through the ABI.
 
 AES nonces remain the caller's responsibility. Retiring a key makes its slot unusable and retains an epoch tombstone so a stale update cannot silently recreate it. Key replacement waits for that context's active batch to finish. Reports include the key epoch used.
 

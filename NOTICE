@@ -9,5 +9,10 @@ Standalone library API, streamed GCM integration, Python bindings, examples,
 tests, and packaging were added for this independent extraction in 2026.
 Modified imported files are identified by notices in their headers.
 
+Public P-256 table-generation arithmetic and the full-window layout are adapted
+from Smoke's gen_p256_comb_table.py and gen_p256_fullwindow_table.py. The public
+format uses a generic header. Every checked-in point is independently verified
+against cryptography/OpenSSL. These tables contain public curve points only.
+
 Cloudflare and NVIDIA names identify discussion context or tested hardware.
 No affiliation, sponsorship, or endorsement is implied.

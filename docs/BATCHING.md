@@ -4,9 +4,9 @@ Batching lets a caller share submission, transfer and synchronization costs acro
 
 ![Current and historical batch throughput and completion time](assets/batching.svg)
 
-The top panels measure the current public library on September 4, 2026. The bottom panels show a different historical execution path on March 17. They illustrate two batching curves, not a comparison of implementations under identical conditions.
+The top panels measure the initial v0.1 public library on September 4, 2026. Version 0.2 adds [P-256 table backends](P256.md) with a separate comparison. The bottom panels show a different historical execution path on March 17. They illustrate two batching curves, not a comparison of implementations under identical conditions.
 
-## Sampled starting points for the current library
+## Sampled starting points for the initial reference path
 
 For P-256 signing, batch 1,024 is a useful starting point when batch completion around ten milliseconds is acceptable. It is the first sampled size to outperform the single-thread CPU reference on both cards. Batch 4,096 has the highest sampled GPU rate, at a higher completion cost:
 

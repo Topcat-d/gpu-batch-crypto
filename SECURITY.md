@@ -14,4 +14,6 @@ The library attempts to clear its own temporary host/device buffers during clean
 
 P-256 output is deterministic ECDSA over SHA-256 digests with low-s normalization. A signer failure is returned as an error, never as a usable all-zero signature. CPU verification should remain a separate trust check when integrating the experimental CUDA signer.
 
+The comb and full-window tables contain only public multiples of the standard generator. Their generation is checked independently against OpenSSL, but the lookup addresses and control flow depend on secret scalars or signing nonces. These backends are not constant time. Selecting a table backend changes the multiplication method, not the host/GPU trust boundary or key-protection properties.
+
 Do not use the GitHub public issue tracker for private keys, user content or sensitive incident material. Until a private reporting channel is established, contact the repository owner through an already trusted channel.

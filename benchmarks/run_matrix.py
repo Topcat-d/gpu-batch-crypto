@@ -67,7 +67,9 @@ def main():
     source_hashes = {
         f: hashlib.sha256((ROOT / f).read_bytes()).hexdigest()
         for f in tracked
-        if f.endswith((".py", ".cu", ".cuh", ".h"))
+        if f.endswith(
+            (".py", ".cu", ".cuh", ".h", ".hpp", ".cpp", ".c", ".cmake", ".bin")
+        )
         or f in ("CMakeLists.txt", "pyproject.toml")
     }
     cache = Path(a.build_dir, "CMakeCache.txt").read_text()
@@ -249,7 +251,7 @@ def main():
         "python": platform.python_version(),
         "cryptography": cryptography.__version__,
         "openssl": openssl.openssl_version_text(),
-        "library_version": "0.1.0-preview",
+        "library_version": rt._cuda.lib.bc_version().decode(),
         "library_sha256": hashlib.sha256(Path(a.library).read_bytes()).hexdigest(),
         "timing_scope": "synchronous API calls; CUDA includes Python packing, host/device transfers, stream synchronization, output copies and temporary-buffer clearing; excludes key import, data generation and oracle comparisons; buffers reused after warmup",
         "cpu_scope": "single Python thread; cached cryptography/OpenSSL AES and P-256 keys, hashlib SHA-256; not a tuned multi-core native CPU engine",

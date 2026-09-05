@@ -362,7 +362,7 @@ class Runtime:
     Keys remain native-host-resident until rotation, retirement, or close.
     """
 
-    def __init__(self, library, device=0):
+    def __init__(self, library, device=0, p256_backend="reference"):
         self._cuda = Cuda(library, device)
         self._lock = threading.RLock()
         self._handle = C.c_void_p()
@@ -371,6 +371,8 @@ class Runtime:
         lib.bc_destroy.argtypes = [C.c_void_p]
         lib.bc_destroy.restype = None
         lib.bc_get_stats.argtypes = [C.c_void_p, C.POINTER(_Stats)]
+        lib.bc_set_p256_backend.argtypes = [C.c_void_p, C.c_uint32]
+        lib.bc_get_p256_backend.argtypes = [C.c_void_p, C.POINTER(C.c_uint32)]
         lib.bc_key_put.argtypes = [
             C.c_void_p,
             C.c_uint32,
@@ -418,6 +420,11 @@ class Runtime:
             C.POINTER(C.c_uint64),
         ]
         self._cuda._check(lib.bc_create(device, C.byref(self._handle)))
+        try:
+            self.set_p256_backend(p256_backend)
+        except Exception:
+            self.close()
+            raise
         self.last_report = {}
 
     def _live(self):
@@ -433,6 +440,27 @@ class Runtime:
     def _epoch(epoch):
         if not isinstance(epoch, int) or not 0 <= epoch < 2**64:
             raise ValueError("epoch must be uint64")
+
+    def set_p256_backend(self, backend):
+        """Select reference, comb_w8 or full_window_w8; keys/epochs are preserved."""
+        choices = ("reference", "comb_w8", "full_window_w8")
+        if backend not in choices:
+            raise ValueError("unknown P-256 backend")
+        with self._lock:
+            self._live()
+            self._cuda._check(
+                self._cuda.lib.bc_set_p256_backend(self._handle, choices.index(backend))
+            )
+
+    @property
+    def p256_backend(self):
+        with self._lock:
+            self._live()
+            mode = C.c_uint32()
+            self._cuda._check(
+                self._cuda.lib.bc_get_p256_backend(self._handle, C.byref(mode))
+            )
+            return ("reference", "comb_w8", "full_window_w8")[mode.value]
 
     def _report(self, r):
         self.last_report = {name: getattr(r, name) for name, _ in r._fields_}

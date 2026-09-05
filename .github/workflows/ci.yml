@@ -13,7 +13,9 @@ jobs:
       - run: python -m pip install .
       - run: python -m unittest discover -s tests -v
       - run: python tools/verify_extraction.py
+      - run: python tools/generate_p256_tables.py --check
       - run: python benchmarks/verify_results.py
+      - run: python benchmarks/verify_p256_results.py
       - run: python benchmarks/verify_history.py
       - run: python benchmarks/report_batching.py --check
       - run: python examples/content_grant.py

@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: Apache-2.0
+# Public constants are verified at configure time, then compiled into the library.
+set(_table_header "#pragma once\n#include <cstdint>\nnamespace gbc::tables {\n")
+foreach(_kind IN ITEMS comb_w8 full_window_w8)
+    set(_path "${CMAKE_CURRENT_SOURCE_DIR}/data/p256/${_kind}.bin")
+    file(SHA256 "${_path}" _actual)
+    file(READ "${CMAKE_CURRENT_SOURCE_DIR}/data/p256/${_kind}.sha256" _expected)
+    string(STRIP "${_expected}" _expected)
+    if(NOT _actual STREQUAL _expected)
+        message(FATAL_ERROR "P-256 table checksum mismatch: ${_kind}")
+    endif()
+    file(READ "${_path}" _hex HEX)
+    string(REGEX REPLACE "([0-9a-f][0-9a-f])" "0x\\1," _bytes "${_hex}")
+    string(APPEND _table_header "inline const uint8_t ${_kind}[] = {${_bytes}};\n")
+    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${_path}" "${CMAKE_CURRENT_SOURCE_DIR}/data/p256/${_kind}.sha256")
+endforeach()
+string(APPEND _table_header "}\n")
+file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/generated/p256_tables.hpp" "${_table_header}")

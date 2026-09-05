@@ -744,6 +744,9 @@ __device__ void generate_nonce(
  * useful for research, fuzzing, and stress testing. The stream ID must
  * be unique per signing operation to prevent nonce reuse.
  */
+// Modified for the standalone engine: optional fixed-base table selection.
+__device__ void fixed_base_mul(const uint32_t k[8], uint32_t x[8], uint32_t y[8],
+                               uint32_t z[8], const uint32_t *table, uint32_t mode);
 __device__ bool p256_sign_persistent(
     uint8_t out_r[32],
     uint8_t out_s[32],
@@ -754,7 +757,9 @@ __device__ bool p256_sign_persistent(
     bool low_s_enabled = true,
     bool use_random_nonce = false,
     const uint8_t* rng_seed = nullptr,
-    uint64_t rng_stream_id = 0
+    uint64_t rng_stream_id = 0,
+    const uint32_t *base_table = nullptr,
+    uint32_t base_mode = 0
 ) {
     // Convert inputs from big-endian bytes to little-endian limbs
     uint32_t h[8], d[8];
@@ -803,7 +808,7 @@ __device__ bool p256_sign_persistent(
 
     // Compute R = k*G
     uint32_t Rx[8], Ry[8], Rz[8];
-    scalar_mul_g(k, Rx, Ry, Rz);
+    fixed_base_mul(k, Rx, Ry, Rz, base_table, base_mode);
 
     // Convert R to affine
     uint32_t x_affine[8], y_affine[8];
