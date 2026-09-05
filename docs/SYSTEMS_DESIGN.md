@@ -2,7 +2,7 @@
 
 The useful unit of evaluation is a complete request processed correctly within its deadline. A fast signing kernel helps only if preparation, compatible batch formation, transfers, key handling and result processing leave enough time and capacity for it to matter.
 
-GPU Batch Crypto supplies explicit CPU operations and a synchronous CUDA batch engine. The routing and queueing design below describes an integration an adopter could build. It is not a shipped scheduler or a measured service. The [library architecture](ARCHITECTURE.md) identifies the implemented components; [benchmark results](P256_RESULTS.md) identify the measured execution path.
+GPU Batch Crypto supplies explicit CPU operations and a synchronous CUDA batch engine. The routing and queueing design below describes an integration an adopter could build. Version 0.3 also supplies a [native in-process pipeline benchmark](PIPELINE_RESULTS.md) with bounded queues, timed batches, CPU/hybrid routing and independent verification. That harness is an executable experiment, not a network service. The [library architecture](ARCHITECTURE.md) identifies the implemented components.
 
 ## Assign work according to the evidence
 
@@ -87,7 +87,7 @@ An integration should group work only when the operation, format, tenant/trust p
 
 Dispatch when the target size is reached or the oldest item's allowed wait expires. At timeout, evaluate the partial batch against the current CPU/GPU profiles and remaining deadline. Select a CPU path before submission only when that path is permitted to hold the key and execute the operation. Routing also depends on each device's queued work and health, not just its nominal signatures/s.
 
-Key epochs deserve explicit coordination. The native context serializes rotation against an active call, and the returned report identifies the epoch actually used. `bc_sign` does not take a caller-supplied required epoch. Application queues must therefore coordinate draining or invalidating queued work during rotation, and check returned epochs against policy before releasing results. The context mechanism alone does not bind a previously queued request to an old key generation.
+Bind queued work to the intended key generation. Version 0.3's `bc_sign_at_epoch` checks that generation atomically with dispatch under the context mutex; stale work fails before GPU execution. `bc_seal_at_epoch` and `bc_open_at_epoch` provide the same property. Python exposes `expected_epoch`; the guarded signer requires it and verifies every output. Legacy `bc_sign` still uses the current slot generation. Applications must decide whether to discard, reauthorize or explicitly requeue stale work; silently replacing its requested epoch defeats that policy.
 
 Use bounded per-key and per-device queues and an admission policy. When offered work exceeds measured service capacity, additional queueing increases latency; it does not create capacity. Reject, defer or route work according to application policy and record that decision. A CUDA call failure is explicit; the library does not silently switch to CPU. Retries require operation-aware handling and duplicate accounting. AES nonce allocation must remain correct across workers, routes and retries.
 
@@ -114,7 +114,7 @@ cost per million = 1,000,000 * fully allocated hourly system cost
                    / (3,600 * measured goodput per second)
 ```
 
-Include CPU host capacity, GPU allocation, idle time, memory, relevant transport and the deployment's failure/redundancy requirements. A shared GPU needs an allocation and contention policy; an already owned GPU still has capacity and operating costs. The repo has no measured end-to-end cost-per-million result, and a primitive throughput ratio is not an ROI calculation.
+Include CPU host capacity, GPU allocation, idle time, memory, relevant transport and the deployment's failure/redundancy requirements. A shared GPU needs an allocation and contention policy; an already owned GPU still has capacity and operating costs. The [cost model and GPU inventory](ECONOMICS.md) price the existing primitive captures with explicit assumptions. The [native pipeline experiment](PIPELINE_RESULTS.md) adds within-SLO goodput and process CPU time. Neither includes a network deployment or establishes publisher revenue.
 
 ## Evidence needed for an adoption decision
 

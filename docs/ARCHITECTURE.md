@@ -14,6 +14,10 @@ The [ABI implementation](../src/abi/batchcrypto_abi.cpp), [execution engine](../
 
 Each key slot has a kind and monotonically increasing epoch. Import/replace/remove requires the caller's expected epoch. Removal retains the epoch tombstone. The context mutex prevents rotation in the middle of a call; a report binds a batch to the used epoch. These are local engine mechanics, not distributed key management, attestation, durable nonce allocation or proof of deletion.
 
+Version 0.3 adds `bc_sign_at_epoch`, `bc_seal_at_epoch` and `bc_open_at_epoch`. The required epoch is checked under that same native mutex before execution. Mismatches leave outputs untouched and report zero submitted/completed items. `Runtime` exposes the optional `expected_epoch` keyword; legacy calls continue to use the slot's current generation. The additive functions retain ABI version 1.
+
+The separate [VerifiedSigner](../python/batchcrypto/verified.py) owns a runtime, pins a CPU-derived public key and independently verifies every signature before returning a complete batch. Epochs are mandatory on its sign requests. This guard requires v0.3 and quarantines itself on backend/output faults. See [production security](PRODUCTION_READINESS.md).
+
 ## API contract
 
 ABI version 1 uses fixed-width counts and status values plus opaque context pointers. C++ exceptions are translated to return codes. CUDA absence/failure never selects CPU. Python has separate `Cpu`, stateless `Cuda`, and owned `Runtime` interfaces.

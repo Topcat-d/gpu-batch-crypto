@@ -38,6 +38,8 @@ def main():
     p.add_argument("--keys", default="1,16")
     p.add_argument("--modes", default="cpu,hybrid")
     p.add_argument("--slo-ms", type=float, default=10)
+    p.add_argument("--batch", type=int, default=256)
+    p.add_argument("--gpu-min", type=int, default=64)
     p.add_argument("--output", required=True)
     a = p.parse_args()
     target = Path(a.output)
@@ -81,7 +83,7 @@ def main():
         ),
         windows_timer_request_ms=1 if os.name == "nt" else None,
         scope="in-process open-loop record generation + SHA256 + deterministic low-s signing + all-signature CPU verification; excludes network, TLS, authorization, payment, key setup and warm-up",
-        workload="uniform round-robin key distribution; synthetic 512-byte records; random ephemeral keys; 8192 queued requests plus at most workers*256 in flight",
+        workload=f"uniform round-robin key distribution; synthetic 512-byte records; random ephemeral keys; 8192 queued requests plus at most workers*{a.batch} in flight",
     )
     if os.name == "nt":
         import winreg
@@ -100,6 +102,7 @@ def main():
     ]
     if (
         len(cells) > 100
+        or not 1 <= a.gpu_min <= a.batch <= 4096
         or not 0.01 <= a.seconds <= 120
         or any(
             not 1 <= w <= 64
@@ -130,6 +133,10 @@ def main():
             str(a.slo_ms),
             "--device",
             str(a.device),
+            "--batch",
+            str(a.batch),
+            "--gpu-min",
+            str(a.gpu_min),
         ]
         started = datetime.now(timezone.utc).isoformat()
         result = subprocess.run(

@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "observed_date_utc": "2026-09-05",
+  "currency": "USD",
+  "kind": "public listing scenarios, not historical invoices or guaranteed offers",
+  "providers_used_as_reported_by_maintainer": ["Runpod", "Phala", "Lambda"],
+  "historical_run_provider_mapping": "unconfirmed; do not infer provider from GPU model",
+  "listings": [
+    {
+      "provider": "Lambda",
+      "url": "https://lambda.ai/instances",
+      "configuration": "1x A100 SXM 40GB, 30 vCPUs, 220 GiB RAM, 512 GiB SSD",
+      "hourly_usd": 1.99,
+      "scope": "single-GPU instance compute listing; tax excluded",
+      "match": "same GPU model class as historical A100-SXM4-40GB; host and actual historic bill unconfirmed"
+    },
+    {
+      "provider": "Runpod",
+      "url": "https://www.runpod.io/product/cloud-gpus",
+      "configuration": "L40S 48GB, 16 vCPUs, 94 GB RAM",
+      "hourly_usd": 0.99,
+      "scope": "displayed on-demand Pod compute configuration; confirm cloud tier, region and additional storage at checkout",
+      "match": "same GPU model as historical L40S; CPU host and actual historic bill unconfirmed"
+    },
+    {
+      "provider": "Runpod",
+      "url": "https://www.runpod.io/product/cloud-gpus",
+      "configuration": "A100 SXM 80GB, 16 vCPUs, 125 GB RAM",
+      "hourly_usd": 1.59,
+      "scope": "displayed on-demand Pod compute configuration",
+      "match": "does not match the archived 40GB GPU; not applied to that result"
+    },
+    {
+      "provider": "Phala",
+      "url": "https://phala.com/pricing",
+      "configuration": null,
+      "hourly_usd": null,
+      "scope": "no matched historical GPU/configuration/rate established",
+      "match": "unresolved; no cost calculation or confidential-computing claim inferred"
+    }
+  ]
+}
