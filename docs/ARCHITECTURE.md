@@ -2,6 +2,8 @@
 
 The reusable boundary is cryptographic operations, device execution, buffers, keys, and observable results. Application policy and commercial trust systems remain above that boundary.
 
+This page describes the implemented library. The [CPU–GPU systems design](SYSTEMS_DESIGN.md) explains how an adopter could combine it with CPU preparation, explicit routing, timed queues and completion processing, and which of those service components remain to be built and measured.
+
 ## Layers
 
 `C/Python caller → versioned C ABI → per-device runtime → independent CUDA records`

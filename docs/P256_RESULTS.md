@@ -2,6 +2,8 @@
 
 The v0.2 comb and full-window paths are exercised through the same public runtime and C ABI as the reference signer. Full-window signing wins against the stated single-thread CPU baseline from sampled batch 64 on both cards in both runs. Batch 256 offers the most consistent mid-size tradeoff in these captures; larger batches show substantial variability and do not establish a reliable optimum.
 
+For an adoption decision, read these library measurements alongside the [CPU–GPU systems design](SYSTEMS_DESIGN.md): batch-fill delay, CPU preparation/verification, key distribution and total cost are additional parts of the service comparison.
+
 ![P-256 backend throughput and batch completion across two runs per GPU](assets/p256-backends.svg)
 
 Lines combine the two runs' measured time; shaded bands span their individual run means. Bands are not confidence intervals or within-run latency percentiles. Every row remains available separately in the [derived CSV](../benchmarks/p256_profiles.csv) and raw captures below.

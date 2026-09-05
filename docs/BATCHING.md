@@ -2,6 +2,8 @@
 
 Batching lets a caller share submission, transfer and synchronization costs across independent cryptographic operations and expose enough parallel work to occupy a GPU. The useful batch size depends on the primitive, payload, key grouping, host submission path, GPU and latency budget. More queued work eventually adds waiting without a corresponding throughput gain.
 
+CPUs also benefit from batching and efficient native execution. The [CPU–GPU systems design](SYSTEMS_DESIGN.md) connects these measurements to CPU preparation, explicit CPU routing for small/urgent work, per-key fill time, device queues, verification and whole-system cost. The existing single-thread CPU baseline does not substitute for that complete comparison.
+
 ## Current table-backed signer
 
 The [v0.2 comparison](P256_RESULTS.md) measures reference, comb and full-window execution with two runs per GPU and seven timed calls per cell. Full-window first exceeds the single-thread CPU baseline at sampled batch 64. Batch 256 is a useful mid-size starting point in these captures:
