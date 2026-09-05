@@ -74,11 +74,15 @@ def render():
     return output.getvalue()
 
 
-def plot():
+def plot(preview=False):
     import matplotlib
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+
+    plt.rcParams.update(
+        {"svg.fonttype": "none", "svg.hashsalt": "batchcrypto-pipeline-diagnostic"}
+    )
 
     figure, axes = plt.subplots(2, 2, figsize=(11, 7), constrained_layout=True)
     for line, (card, filename) in enumerate(
@@ -126,6 +130,16 @@ def plot():
     )
     destination = ROOT / "docs/assets/pipeline-diagnostic.svg"
     figure.savefig(destination, metadata={"Date": None}, bbox_inches="tight")
+    destination.write_text(
+        "\n".join(line.rstrip() for line in destination.read_text().splitlines())
+        + "\n",
+        encoding="utf-8",
+        newline="\n",
+    )
+    if preview:
+        preview_path = ROOT / "dist/pipeline-diagnostic.png"
+        preview_path.parent.mkdir(exist_ok=True)
+        figure.savefig(preview_path, dpi=140, bbox_inches="tight")
     plt.close(figure)
 
 
@@ -133,6 +147,7 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--check", action="store_true")
     p.add_argument("--plot", action="store_true")
+    p.add_argument("--preview", action="store_true")
     a = p.parse_args()
     path = ROOT / "benchmarks/pipeline.csv"
     text = render()
@@ -141,6 +156,6 @@ if __name__ == "__main__":
             raise SystemExit("pipeline CSV is stale")
         print("PASS: pipeline CSV matches captures.")
     else:
-        path.write_text(text, encoding="utf-8")
+        path.write_text(text, encoding="utf-8", newline="\n")
     if a.plot:
-        plot()
+        plot(a.preview)

@@ -175,7 +175,7 @@ struct Gpu {
   bool use_owner, stopping = false;
   std::mutex mutex;
   std::condition_variable cv;
-  std::deque<Task *> pending;
+  std::deque<std::shared_ptr<Task>> pending;
   std::thread owner;
   Gpu(int device, const std::vector<Key> &keys, bool owned) : use_owner(owned) {
     require(bc_create(device, &ctx) == BC_OK, "GPU create");
@@ -204,7 +204,7 @@ struct Gpu {
         owner = std::thread([this] {
           std::exception_ptr failure;
           for (;;) {
-            Task *task;
+            std::shared_ptr<Task> task;
             {
               std::unique_lock<std::mutex> lock(mutex);
               cv.wait(lock, [this] { return stopping || !pending.empty(); });
@@ -247,13 +247,16 @@ struct Gpu {
       execute(key, h, out);
       return;
     }
-    Task task{key, &h, &out, {}};
-    auto done = task.done.get_future();
+    auto task = std::make_shared<Task>();
+    task->key = key;
+    task->digests = &h;
+    task->output = &out;
+    auto done = task->done.get_future();
     {
       std::lock_guard<std::mutex> lock(mutex);
       // At most one outstanding task per bounded CPU worker; warm-up is serial.
       require(!stopping && pending.size() < 64, "GPU dispatch queue bound");
-      pending.push_back(&task);
+      pending.push_back(task);
     }
     cv.notify_one();
     done.get();

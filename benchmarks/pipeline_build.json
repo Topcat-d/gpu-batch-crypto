@@ -36,6 +36,12 @@
       "size_bytes": 73216,
       "source_sha256": "fb6ac372ab343a856e1f27e433873ae67e6021b7cc579b1a1f04b6e16a31237c",
       "description": "same compiler and SDK; adds optional dedicated GPU owner thread; default remains caller"
+    },
+    {
+      "sha256": "05710ebf64d7a44f155852303c07ac58fe3b7adb880d476c1b328693fbf315a6",
+      "size_bytes": 73728,
+      "source_sha256": "b4bc0e8bdc79ae2ac43cfa71e3eef0476795074e2ba85f09b0105edcc352e1c1",
+      "description": "same compiler and SDK; dispatch tasks use shared ownership through promise completion; correctness tested, no new performance claim"
     }
   ]
 }
