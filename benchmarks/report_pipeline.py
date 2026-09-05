@@ -9,6 +9,33 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def pair_key(row):
+    return tuple(
+        row.get(k, "caller" if k == "gpu_dispatch" else None)
+        for k in (
+            "workers",
+            "keys",
+            "offered_rate",
+            "max_batch",
+            "gpu_min_batch",
+            "max_wait_ms",
+            "slo_ms",
+            "duration_s",
+            "payload_bytes",
+            "device",
+            "gpu_dispatch",
+        )
+    )
+
+
+def cpu_samples(row, field):
+    return [
+        s["system_cpu_percent"]
+        for s in row.get(field, [])
+        if s.get("system_cpu_percent") is not None
+    ]
+
+
 def render():
     output = io.StringIO(newline="")
     fields = [
@@ -19,6 +46,11 @@ def render():
         "workers",
         "keys",
         "max_batch",
+        "gpu_min_batch",
+        "gpu_dispatch",
+        "max_wait_ms",
+        "duration_s",
+        "slo_ms",
         "offered_rate",
         "goodput_rps",
         "within_slo_fraction",
@@ -32,11 +64,18 @@ def render():
         "mean_cpu_cores",
         "gpu_items",
         "cpu_items",
+        "gpu_fraction_of_verified",
+        "mean_batch_size",
+        "preflight_system_cpu_min_percent",
+        "preflight_system_cpu_max_percent",
+        "during_system_cpu_min_percent",
+        "during_system_cpu_max_percent",
         "prepare_worker_s",
         "sign_worker_s",
         "verify_worker_s",
         "usd_per_million_per_hourly_dollar",
         "paired_hybrid_cpu_goodput_ratio",
+        "paired_deadline_quality_pass",
     ]
     writer = csv.DictWriter(output, fields, lineterminator="\n")
     writer.writeheader()
@@ -45,11 +84,7 @@ def render():
         conditions = json.loads(
             (ROOT / "benchmarks/pipeline_conditions.json").read_text()
         )
-        cpus = {
-            (r["workers"], r["keys"], r["offered_rate"], r["max_batch"]): r
-            for r in data["rows"]
-            if r["mode"] == "cpu"
-        }
+        cpus = {pair_key(r): r for r in data["rows"] if r["mode"] == "cpu"}
         for r in data["rows"]:
             row = {k: r[k] for k in fields if k in r}
             row.update(
@@ -60,14 +95,33 @@ def render():
                 gpu=data["metadata"]["gpu"].split(",")[0],
                 within_slo_fraction=r["within_slo"] / r["offered"],
                 mean_cpu_cores=r["process_cpu_s"] / r["elapsed_s"],
+                gpu_fraction_of_verified=r["gpu_items"] / r["verified"]
+                if r["verified"]
+                else 0,
+                mean_batch_size=r["verified"] / (r["cpu_batches"] + r["gpu_batches"])
+                if r["verified"]
+                else 0,
                 usd_per_million_per_hourly_dollar=1e6 / (3600 * r["goodput_rps"])
                 if r["goodput_rps"]
                 else "undefined",
             )
-            cpu = cpus.get((r["workers"], r["keys"], r["offered_rate"], r["max_batch"]))
+            for label, field in (
+                ("preflight", "preflight_telemetry"),
+                ("during", "telemetry"),
+            ):
+                samples = cpu_samples(r, field)
+                row[f"{label}_system_cpu_min_percent"] = min(samples) if samples else ""
+                row[f"{label}_system_cpu_max_percent"] = max(samples) if samples else ""
+            cpu = cpus.get(pair_key(r))
             row["paired_hybrid_cpu_goodput_ratio"] = (
                 r["goodput_rps"] / cpu["goodput_rps"]
                 if r["mode"] == "hybrid" and cpu and cpu["goodput_rps"]
+                else ""
+            )
+            row["paired_deadline_quality_pass"] = (
+                r["within_slo"] / r["offered"] >= 0.99
+                and cpu["within_slo"] / cpu["offered"] >= 0.99
+                if r["mode"] == "hybrid" and cpu
                 else ""
             )
             writer.writerow(row)

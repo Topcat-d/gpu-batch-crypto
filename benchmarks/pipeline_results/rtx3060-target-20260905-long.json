@@ -1,0 +1,5832 @@
+{
+  "metadata": {
+    "commit": "7d8602445e36bc8b071b6cb8edac20fd294a7516",
+    "timestamp_utc": "2026-09-05T15:57:17.354489+00:00",
+    "source_sha256": {
+      "CMakeLists.txt": "7216c5e5c852cf2337fc4b27994d893aa0a36890aa31be115958d674e9cfbc89",
+      "benchmarks/native/CMakeLists.txt": "381b27adb140694704025ca8ffa0b00d8cc92ca26cefd92181b544679cd8f898",
+      "benchmarks/native/pipeline.cpp": "b4bc0e8bdc79ae2ac43cfa71e3eef0476795074e2ba85f09b0105edcc352e1c1",
+      "benchmarks/run_pipeline.py": "43be411743ecd5b94719a67352b6513b4012984622dd7ffdba352c92c54f01be",
+      "cmake/EmbedP256Tables.cmake": "6c94bd6b85ee40d8e4321a640abb1b16bb01bf591843c3009b0bfcd06186e2e7",
+      "cmake/batchcryptoConfig.cmake.in": "1da2cc2e307eae7c9b2e61e62ac9fdeaa7958fe08b7def56a511d5decf96e7c4",
+      "data/p256/README.md": "c23f1e003698557bb07124267f50444b334120ddcf67e78c2747e7185d09166e",
+      "data/p256/comb_w8.bin": "5763fc89ecd6114dbb41a8f6556911a4737f23e3e5d5ecf9d5ae807c59b03086",
+      "data/p256/comb_w8.json": "8c6f5f7f600214b845790847549f286657af137571750638ca91f3624be1213e",
+      "data/p256/comb_w8.sha256": "0d0c0cb8d53b372fd3b800b2028a4bcd4388b988a28eb7b2a67139f351879596",
+      "data/p256/full_window_w8.bin": "5d62a2d7d346fe82dfd4a6cbaecc62749d939cc4541341bf4c06497bad8dd7a1",
+      "data/p256/full_window_w8.json": "a29cc58cdfd7eaf09009b99e48ff386a0dca58797498aed1fc814a8adc44a0bb",
+      "data/p256/full_window_w8.sha256": "64b5e7f0204c0433eb1746344bac8d9c613fa600715dd87b8b2993f7f0b41ec8",
+      "include/batchcrypto.h": "bb67645f5a3c0f01263cc9c1c3aff10b617cea4a9592632287cb96a045dd70f1",
+      "src/abi/batchcrypto_abi.cpp": "52116ee6367535fe98083923d11edb721c1f12afbe78e6b62f388da73f79b6de",
+      "src/engine/crypto_engine.cu": "44afcae49f68cf7d7da5616c34161c20adb404af05a779add1e227c2a335fbaf",
+      "src/engine/crypto_engine.hpp": "56d5cac4ed329e1c85fe0d79b269945b0388015110973ada49f63fb8507b4b02",
+      "src/engine/runtime.hpp": "271b19703688ba06f9ee5b6c00e23e06e9c3bfad313055e0036b92fa25f9447e",
+      "src/imported/aes/aes256_ctr_device.cuh": "7a12864d3d78f45d29548cf9e7c47d7c42dd67845503097bd55b50de55fdde6b",
+      "src/imported/aes/aes256_gcm_device.cuh": "291e725f5b43011511b72d4a6d8d491d8045fe643c22f8060ea39fe08bfe42a1",
+      "src/imported/p256_persistent/p256_csprng_device.cuh": "4cb91d5395b647586eb04bf9df1793886212cef7f00acebaac4ea5c85073655c",
+      "src/imported/p256_persistent/p256_persistent.cuh": "6604b634a495107033fc11e21c63e8428da53696bc115ec081efcf7c6336fc08",
+      "src/imported/p256_persistent/p256_rfc6979_device.cuh": "37ac40c1c44facf86393464a93062cd60aeb85be4610548e62b2bbd0627d04d0",
+      "src/imported/sha256/sha256_device.cuh": "e7e159a703eaa639a0cf6a63aa36720a7f41b7fe8106015fc6a8dae155613d0a",
+      "src/kernels/crypto_kernels.cuh": "76843583ba37cab65fc951a2b420071c5420145c89f25193e1fd833a9c876ea6",
+      "src/p256/fixed_base.cuh": "63f4ed43cf8f7a0efd9e717ac6d99ee57abcef150f955a12178762514e3558c3",
+      "src/p256/tables.cpp": "b7da43cd4af0be65dbd257c95a19f1c1e11614e62610d4a0e1cec897212dd01f",
+      "src/p256/tables.hpp": "ae9026f01a2640498e85dac54dab482beee664e5cc495d17e99d543587c20a8e"
+    },
+    "binaries": {
+      "pipeline": {
+        "file": "pipeline.exe",
+        "sha256": "05710ebf64d7a44f155852303c07ac58fe3b7adb880d476c1b328693fbf315a6"
+      },
+      "batchcrypto": {
+        "file": "batchcrypto.dll",
+        "sha256": "4b902e671a8f7cde9a08e3eae60edfc849cedf1730196cda7d8411134493821c"
+      },
+      "openssl": {
+        "file": "libcrypto-3.dll",
+        "sha256": "acf285a10e428256dfefc489895fa104f3a49764a16c9a760748321397bab8e4"
+      }
+    },
+    "platform": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD Ryzen 7 7800X3D 8-Core Processor",
+    "logical_cpus": 16,
+    "gpu": "NVIDIA GeForce RTX 3060, 610.62, 12288 MiB, 00000000:06:00.0",
+    "windows_timer_request_ms": 1,
+    "preflight_telemetry": [
+      {
+        "timestamp_utc": "2026-09-05T15:57:14.587029+00:00",
+        "system_cpu_times": {
+          "total_s": 11864454.828125,
+          "idle_s": 8731407.640625
+        },
+        "gpus": [
+          {
+            "index": "0",
+            "name": "NVIDIA GeForce RTX 4070 Ti",
+            "display_active": "Enabled",
+            "pstate": "P0",
+            "utilization.gpu": "94",
+            "memory.used": "8337",
+            "power.draw": "244.81",
+            "clocks.gr": "2835",
+            "temperature.gpu": "67"
+          },
+          {
+            "index": "1",
+            "name": "NVIDIA GeForce RTX 3060",
+            "display_active": "Disabled",
+            "pstate": "P8",
+            "utilization.gpu": "0",
+            "memory.used": "0",
+            "power.draw": "9.56",
+            "clocks.gr": "210",
+            "temperature.gpu": "28"
+          }
+        ],
+        "system_cpu_percent": null
+      },
+      {
+        "timestamp_utc": "2026-09-05T15:57:15.753474+00:00",
+        "system_cpu_times": {
+          "total_s": 11864473.578125,
+          "idle_s": 8731418.8125
+        },
+        "gpus": [
+          {
+            "index": "0",
+            "name": "NVIDIA GeForce RTX 4070 Ti",
+            "display_active": "Enabled",
+            "pstate": "P0",
+            "utilization.gpu": "98",
+            "memory.used": "8339",
+            "power.draw": "249.89",
+            "clocks.gr": "2835",
+            "temperature.gpu": "68"
+          },
+          {
+            "index": "1",
+            "name": "NVIDIA GeForce RTX 3060",
+            "display_active": "Disabled",
+            "pstate": "P8",
+            "utilization.gpu": "0",
+            "memory.used": "0",
+            "power.draw": "9.58",
+            "clocks.gr": "210",
+            "temperature.gpu": "28"
+          }
+        ],
+        "system_cpu_percent": 40.416666666666664
+      },
+      {
+        "timestamp_utc": "2026-09-05T15:57:16.925386+00:00",
+        "system_cpu_times": {
+          "total_s": 11864492.328125,
+          "idle_s": 8731427.859375
+        },
+        "gpus": [
+          {
+            "index": "0",
+            "name": "NVIDIA GeForce RTX 4070 Ti",
+            "display_active": "Enabled",
+            "pstate": "P0",
+            "utilization.gpu": "96",
+            "memory.used": "8339",
+            "power.draw": "249.57",
+            "clocks.gr": "2835",
+            "temperature.gpu": "68"
+          },
+          {
+            "index": "1",
+            "name": "NVIDIA GeForce RTX 3060",
+            "display_active": "Disabled",
+            "pstate": "P8",
+            "utilization.gpu": "0",
+            "memory.used": "0",
+            "power.draw": "9.59",
+            "clocks.gr": "210",
+            "temperature.gpu": "28"
+          }
+        ],
+        "system_cpu_percent": 51.75
+      }
+    ],
+    "preflight_quiet": true,
+    "preflight_scope": "target-gpu",
+    "selected_device": 1,
+    "contention_policy": "idle target GPU; shared CPU host with background activity recorded",
+    "monitoring": "nvidia-smi and aggregate system CPU counters sampled by the parent process each second; monitoring CPU cost is outside child process_cpu_s; utilization is not exclusive-host proof or wall-system energy",
+    "scope": "in-process open-loop record generation + SHA256 + deterministic low-s signing + all-signature CPU verification; excludes network, TLS, authorization, payment, key setup and warm-up",
+    "workload": "uniform round-robin key distribution; synthetic 512-byte records; random ephemeral keys; 8192 queued requests plus at most workers*64 in flight"
+  },
+  "rows": [
+    {
+      "schema": 1,
+      "mode": "cpu",
+      "openssl": "OpenSSL 3.5.8 25 Aug 2026",
+      "native_version": "0.3.0-preview",
+      "gpu_dispatch": "caller",
+      "workers": 8,
+      "keys": 1,
+      "device": 1,
+      "payload_bytes": 512,
+      "max_batch": 64,
+      "gpu_min_batch": 64,
+      "queue_capacity": 8192,
+      "max_wait_ms": 1,
+      "slo_ms": 10,
+      "offered_rate": 40000,
+      "duration_s": 30,
+      "elapsed_s": 30.0087631,
+      "process_cpu_s": 107.703125,
+      "peak_rss_bytes": 32006144,
+      "queue_high_water": 710,
+      "offered": 1200000,
+      "rejected": 0,
+      "expired": 386518,
+      "failed": 0,
+      "verified": 813482,
+      "within_slo": 253043,
+      "late": 560439,
+      "goodput_rps": 8432.30356269,
+      "cpu_items": 813482,
+      "gpu_items": 0,
+      "cpu_batches": 24352,
+      "gpu_batches": 0,
+      "prepare_worker_s": 1.3231184,
+      "sign_worker_s": 36.2454022,
+      "verify_worker_s": 69.664963,
+      "queue_request_s": 3798.56566165,
+      "latency_p50_ms": 11.9913,
+      "latency_p95_ms": 19.5001,
+      "latency_p99_ms": 28.538,
+      "latency_max_ms": 73.4321,
+      "batch_histogram": {
+        "1": 3220,
+        "2": 1080,
+        "3": 1144,
+        "4": 1336,
+        "5": 703,
+        "6": 435,
+        "7": 364,
+        "8": 351,
+        "9": 364,
+        "10": 318,
+        "11": 266,
+        "12": 225,
+        "13": 204,
+        "14": 214,
+        "15": 219,
+        "16": 189,
+        "17": 136,
+        "18": 160,
+        "19": 115,
+        "20": 141,
+        "21": 119,
+        "22": 99,
+        "23": 110,
+        "24": 109,
+        "25": 106,
+        "26": 102,
+        "27": 97,
+        "28": 101,
+        "29": 92,
+        "30": 88,
+        "31": 76,
+        "32": 86,
+        "33": 101,
+        "34": 79,
+        "35": 95,
+        "36": 97,
+        "37": 98,
+        "38": 78,
+        "39": 92,
+        "40": 81,
+        "41": 97,
+        "42": 119,
+        "43": 94,
+        "44": 86,
+        "45": 90,
+        "46": 97,
+        "47": 77,
+        "48": 82,
+        "49": 77,
+        "50": 71,
+        "51": 55,
+        "52": 85,
+        "53": 73,
+        "54": 88,
+        "55": 78,
+        "56": 93,
+        "57": 89,
+        "58": 88,
+        "59": 119,
+        "60": 100,
+        "61": 109,
+        "62": 95,
+        "63": 105,
+        "64": 9195
+      },
+      "latency_histogram_100us": {
+        "1": 32,
+        "2": 60,
+        "3": 96,
+        "4": 134,
+        "5": 203,
+        "6": 283,
+        "7": 310,
+        "8": 296,
+        "9": 361,
+        "10": 479,
+        "11": 651,
+        "12": 738,
+        "13": 772,
+        "14": 852,
+        "15": 1009,
+        "16": 1165,
+        "17": 1187,
+        "18": 1167,
+        "19": 1157,
+        "20": 1418,
+        "21": 1393,
+        "22": 1230,
+        "23": 1258,
+        "24": 1236,
+        "25": 1322,
+        "26": 1375,
+        "27": 1335,
+        "28": 1336,
+        "29": 1368,
+        "30": 1379,
+        "31": 1368,
+        "32": 1375,
+        "33": 1383,
+        "34": 1440,
+        "35": 1503,
+        "36": 1535,
+        "37": 1571,
+        "38": 1577,
+        "39": 1608,
+        "40": 1648,
+        "41": 1646,
+        "42": 1692,
+        "43": 1759,
+        "44": 1801,
+        "45": 1829,
+        "46": 1799,
+        "47": 1810,
+        "48": 1853,
+        "49": 1922,
+        "50": 1983,
+        "51": 1977,
+        "52": 2004,
+        "53": 2005,
+        "54": 2102,
+        "55": 2231,
+        "56": 2316,
+        "57": 2393,
+        "58": 2468,
+        "59": 2489,
+        "60": 2584,
+        "61": 2654,
+        "62": 2750,
+        "63": 2848,
+        "64": 2926,
+        "65": 3008,
+        "66": 3053,
+        "67": 3141,
+        "68": 3155,
+        "69": 3188,
+        "70": 3278,
+        "71": 3394,
+        "72": 3495,
+        "73": 3619,
+        "74": 3697,
+        "75": 3797,
+        "76": 3940,
+        "77": 3993,
+        "78": 4104,
+        "79": 4162,
+        "80": 4265,
+        "81": 4357,
+        "82": 4496,
+        "83": 4616,
+        "84": 4656,
+        "85": 4693,
+        "86": 4743,
+        "87": 4860,
+        "88": 5108,
+        "89": 5308,
+        "90": 5410,
+        "91": 5463,
+        "92": 5659,
+        "93": 5793,
+        "94": 5928,
+        "95": 6081,
+        "96": 6210,
+        "97": 6354,
+        "98": 6570,
+        "99": 6990,
+        "100": 7907,
+        "101": 9069,
+        "102": 9101,
+        "103": 8768,
+        "104": 8256,
+        "105": 8030,
+        "106": 7861,
+        "107": 7756,
+        "108": 7522,
+        "109": 7364,
+        "110": 7319,
+        "111": 7345,
+        "112": 7306,
+        "113": 7230,
+        "114": 7192,
+        "115": 7197,
+        "116": 7239,
+        "117": 7280,
+        "118": 7303,
+        "119": 7306,
+        "120": 7332,
+        "121": 7371,
+        "122": 7420,
+        "123": 7349,
+        "124": 7456,
+        "125": 7503,
+        "126": 7523,
+        "127": 7470,
+        "128": 7519,
+        "129": 7587,
+        "130": 7599,
+        "131": 7597,
+        "132": 7469,
+        "133": 7445,
+        "134": 7389,
+        "135": 7281,
+        "136": 7247,
+        "137": 7144,
+        "138": 7100,
+        "139": 7100,
+        "140": 7048,
+        "141": 7063,
+        "142": 7037,
+        "143": 7075,
+        "144": 6985,
+        "145": 6889,
+        "146": 6755,
+        "147": 6661,
+        "148": 6629,
+        "149": 6648,
+        "150": 6588,
+        "151": 6491,
+        "152": 6398,
+        "153": 6360,
+        "154": 6198,
+        "155": 6043,
+        "156": 5895,
+        "157": 5713,
+        "158": 5496,
+        "159": 5316,
+        "160": 5139,
+        "161": 4947,
+        "162": 4774,
+        "163": 4613,
+        "164": 4416,
+        "165": 4178,
+        "166": 3935,
+        "167": 3767,
+        "168": 3577,
+        "169": 3374,
+        "170": 3215,
+        "171": 3047,
+        "172": 2893,
+        "173": 2716,
+        "174": 2632,
+        "175": 2467,
+        "176": 2321,
+        "177": 2215,
+        "178": 2102,
+        "179": 1973,
+        "180": 1880,
+        "181": 1769,
+        "182": 1691,
+        "183": 1560,
+        "184": 1447,
+        "185": 1407,
+        "186": 1341,
+        "187": 1272,
+        "188": 1232,
+        "189": 1180,
+        "190": 1106,
+        "191": 1069,
+        "192": 1031,
+        "193": 990,
+        "194": 956,
+        "195": 923,
+        "196": 900,
+        "197": 862,
+        "198": 818,
+        "199": 807,
+        "200": 766,
+        "201": 719,
+        "202": 728,
+        "203": 723,
+        "204": 708,
+        "205": 701,
+        "206": 689,
+        "207": 661,
+        "208": 640,
+        "209": 620,
+        "210": 614,
+        "211": 609,
+        "212": 601,
+        "213": 587,
+        "214": 593,
+        "215": 581,
+        "216": 559,
+        "217": 558,
+        "218": 534,
+        "219": 502,
+        "220": 482,
+        "221": 451,
+        "222": 432,
+        "223": 422,
+        "224": 431,
+        "225": 424,
+        "226": 410,
+        "227": 386,
+        "228": 367,
+        "229": 361,
+        "230": 338,
+        "231": 327,
+        "232": 330,
+        "233": 320,
+        "234": 327,
+        "235": 318,
+        "236": 309,
+        "237": 311,
+        "238": 298,
+        "239": 287,
+        "240": 277,
+        "241": 280,
+        "242": 269,
+        "243": 253,
+        "244": 267,
+        "245": 265,
+        "246": 255,
+        "247": 257,
+        "248": 249,
+        "249": 233,
+        "250": 226,
+        "251": 223,
+        "252": 223,
+        "253": 226,
+        "254": 237,
+        "255": 226,
+        "256": 220,
+        "257": 210,
+        "258": 203,
+        "259": 195,
+        "260": 174,
+        "261": 167,
+        "262": 169,
+        "263": 164,
+        "264": 158,
+        "265": 164,
+        "266": 158,
+        "267": 161,
+        "268": 164,
+        "269": 168,
+        "270": 148,
+        "271": 141,
+        "272": 136,
+        "273": 130,
+        "274": 122,
+        "275": 119,
+        "276": 117,
+        "277": 112,
+        "278": 106,
+        "279": 107,
+        "280": 109,
+        "281": 98,
+        "282": 101,
+        "283": 95,
+        "284": 94,
+        "285": 89,
+        "286": 86,
+        "287": 92,
+        "288": 94,
+        "289": 100,
+        "290": 107,
+        "291": 108,
+        "292": 107,
+        "293": 110,
+        "294": 110,
+        "295": 109,
+        "296": 105,
+        "297": 110,
+        "298": 107,
+        "299": 100,
+        "300": 92,
+        "301": 84,
+        "302": 80,
+        "303": 70,
+        "304": 67,
+        "305": 63,
+        "306": 62,
+        "307": 62,
+        "308": 72,
+        "309": 80,
+        "310": 84,
+        "311": 77,
+        "312": 85,
+        "313": 87,
+        "314": 91,
+        "315": 96,
+        "316": 93,
+        "317": 97,
+        "318": 104,
+        "319": 109,
+        "320": 113,
+        "321": 111,
+        "322": 108,
+        "323": 106,
+        "324": 93,
+        "325": 78,
+        "326": 68,
+        "327": 67,
+        "328": 55,
+        "329": 51,
+        "330": 48,
+        "331": 45,
+        "332": 48,
+        "333": 50,
+        "334": 45,
+        "335": 35,
+        "336": 35,
+        "337": 38,
+        "338": 36,
+        "339": 36,
+        "340": 37,
+        "341": 39,
+        "342": 36,
+        "343": 40,
+        "344": 40,
+        "345": 44,
+        "346": 33,
+        "347": 35,
+        "348": 39,
+        "349": 36,
+        "350": 34,
+        "351": 40,
+        "352": 38,
+        "353": 36,
+        "354": 36,
+        "355": 36,
+        "356": 36,
+        "357": 38,
+        "358": 40,
+        "359": 36,
+        "360": 36,
+        "361": 33,
+        "362": 36,
+        "363": 29,
+        "364": 25,
+        "365": 23,
+        "366": 22,
+        "367": 24,
+        "368": 27,
+        "369": 24,
+        "370": 26,
+        "371": 27,
+        "372": 25,
+        "373": 25,
+        "374": 32,
+        "375": 32,
+        "376": 32,
+        "377": 31,
+        "378": 28,
+        "379": 30,
+        "380": 33,
+        "381": 36,
+        "382": 38,
+        "383": 37,
+        "384": 39,
+        "385": 40,
+        "386": 38,
+        "387": 36,
+        "388": 36,
+        "389": 38,
+        "390": 32,
+        "391": 32,
+        "392": 32,
+        "393": 32,
+        "394": 32,
+        "395": 28,
+        "396": 23,
+        "397": 20,
+        "398": 16,
+        "399": 20,
+        "400": 17,
+        "401": 16,
+        "402": 16,
+        "403": 12,
+        "404": 12,
+        "405": 9,
+        "406": 10,
+        "407": 15,
+        "408": 16,
+        "409": 19,
+        "410": 20,
+        "411": 20,
+        "412": 20,
+        "413": 18,
+        "414": 22,
+        "415": 20,
+        "416": 20,
+        "417": 20,
+        "418": 20,
+        "419": 20,
+        "420": 20,
+        "421": 21,
+        "422": 24,
+        "423": 21,
+        "424": 20,
+        "425": 17,
+        "426": 16,
+        "427": 16,
+        "428": 16,
+        "429": 16,
+        "430": 9,
+        "431": 7,
+        "432": 8,
+        "433": 8,
+        "434": 12,
+        "435": 16,
+        "436": 16,
+        "437": 15,
+        "438": 12,
+        "439": 12,
+        "440": 12,
+        "441": 12,
+        "442": 12,
+        "443": 12,
+        "444": 12,
+        "445": 12,
+        "446": 13,
+        "447": 13,
+        "448": 10,
+        "449": 8,
+        "450": 5,
+        "451": 4,
+        "452": 4,
+        "453": 4,
+        "454": 4,
+        "455": 4,
+        "456": 4,
+        "457": 4,
+        "458": 4,
+        "459": 4,
+        "460": 4,
+        "461": 4,
+        "462": 3,
+        "463": 4,
+        "464": 4,
+        "465": 4,
+        "466": 4,
+        "467": 4,
+        "468": 4,
+        "469": 4,
+        "470": 4,
+        "471": 4,
+        "472": 4,
+        "473": 4,
+        "474": 4,
+        "475": 4,
+        "476": 4,
+        "477": 6,
+        "478": 8,
+        "479": 4,
+        "480": 4,
+        "481": 4,
+        "482": 4,
+        "483": 4,
+        "484": 4,
+        "485": 4,
+        "486": 7,
+        "487": 8,
+        "488": 8,
+        "489": 8,
+        "490": 8,
+        "491": 8,
+        "492": 8,
+        "493": 6,
+        "494": 4,
+        "495": 4,
+        "496": 4,
+        "497": 4,
+        "498": 4,
+        "499": 4,
+        "500": 4,
+        "501": 4,
+        "502": 1,
+        "514": 1,
+        "515": 4,
+        "516": 4,
+        "517": 4,
+        "518": 4,
+        "519": 4,
+        "520": 4,
+        "521": 4,
+        "522": 4,
+        "523": 4,
+        "524": 4,
+        "525": 4,
+        "526": 4,
+        "527": 4,
+        "528": 4,
+        "529": 4,
+        "530": 3,
+        "531": 4,
+        "532": 4,
+        "533": 4,
+        "534": 5,
+        "535": 8,
+        "536": 11,
+        "537": 12,
+        "538": 12,
+        "539": 12,
+        "540": 12,
+        "541": 12,
+        "542": 13,
+        "543": 16,
+        "544": 16,
+        "545": 16,
+        "546": 16,
+        "547": 12,
+        "548": 12,
+        "549": 12,
+        "550": 11,
+        "551": 8,
+        "552": 5,
+        "553": 4,
+        "554": 4,
+        "555": 4,
+        "556": 4,
+        "557": 4,
+        "558": 3,
+        "559": 2,
+        "560": 5,
+        "561": 8,
+        "562": 8,
+        "563": 8,
+        "564": 8,
+        "565": 11,
+        "566": 12,
+        "567": 12,
+        "568": 12,
+        "569": 12,
+        "570": 12,
+        "571": 10,
+        "572": 9,
+        "573": 12,
+        "574": 12,
+        "575": 13,
+        "576": 15,
+        "577": 12,
+        "578": 12,
+        "579": 12,
+        "580": 12,
+        "581": 9,
+        "582": 8,
+        "583": 8,
+        "584": 8,
+        "585": 8,
+        "586": 8,
+        "587": 8,
+        "588": 7,
+        "589": 4,
+        "590": 4,
+        "591": 3,
+        "602": 4,
+        "603": 4,
+        "604": 4,
+        "605": 4,
+        "606": 4,
+        "607": 4,
+        "608": 4,
+        "609": 4,
+        "610": 4,
+        "611": 4,
+        "612": 4,
+        "613": 4,
+        "614": 4,
+        "615": 4,
+        "616": 4,
+        "617": 4,
+        "718": 2,
+        "719": 4,
+        "720": 4,
+        "721": 4,
+        "722": 4,
+        "723": 4,
+        "724": 4,
+        "725": 4,
+        "726": 4,
+        "727": 4,
+        "728": 4,
+        "729": 4,
+        "730": 4,
+        "731": 4,
+        "732": 4,
+        "733": 4,
+        "734": 2
+      },
+      "command": [
+        "pipeline.exe",
+        "--mode",
+        "cpu",
+        "--workers",
+        "8",
+        "--keys",
+        "1",
+        "--rate",
+        "40000",
+        "--seconds",
+        "30.0",
+        "--slo-ms",
+        "10",
+        "--device",
+        "1",
+        "--batch",
+        "64",
+        "--gpu-min",
+        "64",
+        "--gpu-dispatch",
+        "caller"
+      ],
+      "timestamp_utc": "2026-09-05T15:57:20.275344+00:00",
+      "telemetry": [
+        {
+          "timestamp_utc": "2026-09-05T15:57:20.440795+00:00",
+          "system_cpu_times": {
+            "total_s": 11864548.578125,
+            "idle_s": 8731460.015625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "88",
+              "memory.used": "8470",
+              "power.draw": "237.07",
+              "clocks.gr": "2835",
+              "temperature.gpu": "65"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.58",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": null
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:21.651555+00:00",
+          "system_cpu_times": {
+            "total_s": 11864567.828125,
+            "idle_s": 8731465.03125
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "95",
+              "memory.used": "8493",
+              "power.draw": "245.72",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.55",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 73.9448051948052
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:22.848281+00:00",
+          "system_cpu_times": {
+            "total_s": 11864587.078125,
+            "idle_s": 8731472.109375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "97",
+              "memory.used": "8469",
+              "power.draw": "254.38",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.58",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 63.23051948051948
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:24.029288+00:00",
+          "system_cpu_times": {
+            "total_s": 11864605.828125,
+            "idle_s": 8731481.171875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8470",
+              "power.draw": "254.31",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.60",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 51.666666666666664
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:25.203753+00:00",
+          "system_cpu_times": {
+            "total_s": 11864624.578125,
+            "idle_s": 8731487.625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "96",
+              "memory.used": "8468",
+              "power.draw": "253.91",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.58",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 65.58333333333333
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:26.387056+00:00",
+          "system_cpu_times": {
+            "total_s": 11864643.578125,
+            "idle_s": 8731491.546875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "95",
+              "memory.used": "8466",
+              "power.draw": "252.78",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.53",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 79.35855263157895
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:27.579089+00:00",
+          "system_cpu_times": {
+            "total_s": 11864662.578125,
+            "idle_s": 8731497.765625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "96",
+              "memory.used": "8466",
+              "power.draw": "255.91",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.47",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 67.26973684210526
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:28.767951+00:00",
+          "system_cpu_times": {
+            "total_s": 11864681.828125,
+            "idle_s": 8731503.1875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8466",
+              "power.draw": "251.93",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.50",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 71.83441558441558
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:29.973795+00:00",
+          "system_cpu_times": {
+            "total_s": 11864701.078125,
+            "idle_s": 8731507.9375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8483",
+              "power.draw": "254.80",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.53",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 75.32467532467533
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:31.243116+00:00",
+          "system_cpu_times": {
+            "total_s": 11864721.328125,
+            "idle_s": 8731516.390625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "97",
+              "memory.used": "8459",
+              "power.draw": "262.30",
+              "clocks.gr": "2835",
+              "temperature.gpu": "70"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.51",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 58.25617283950617
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:32.425775+00:00",
+          "system_cpu_times": {
+            "total_s": 11864740.328125,
+            "idle_s": 8731520.453125
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8460",
+              "power.draw": "262.58",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.49",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 78.61842105263158
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:33.613356+00:00",
+          "system_cpu_times": {
+            "total_s": 11864759.328125,
+            "idle_s": 8731527.0
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "97",
+              "memory.used": "8483",
+              "power.draw": "244.69",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.49",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 65.54276315789474
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:34.795953+00:00",
+          "system_cpu_times": {
+            "total_s": 11864778.078125,
+            "idle_s": 8731534.921875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "93",
+              "memory.used": "8464",
+              "power.draw": "247.02",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.56",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 57.75
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:35.973329+00:00",
+          "system_cpu_times": {
+            "total_s": 11864797.078125,
+            "idle_s": 8731547.640625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "96",
+              "memory.used": "8464",
+              "power.draw": "246.18",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.53",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 33.05921052631579
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:37.164052+00:00",
+          "system_cpu_times": {
+            "total_s": 11864816.078125,
+            "idle_s": 8731556.546875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "96",
+              "memory.used": "8467",
+              "power.draw": "242.48",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.55",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 53.125
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:38.349312+00:00",
+          "system_cpu_times": {
+            "total_s": 11864835.078125,
+            "idle_s": 8731563.84375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "97",
+              "memory.used": "8461",
+              "power.draw": "246.65",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.51",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 61.5953947368421
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:39.466460+00:00",
+          "system_cpu_times": {
+            "total_s": 11864852.828125,
+            "idle_s": 8731567.09375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "71",
+              "memory.used": "8551",
+              "power.draw": "245.52",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.56",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 81.69014084507042
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:40.668066+00:00",
+          "system_cpu_times": {
+            "total_s": 11864872.078125,
+            "idle_s": 8731574.015625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "96",
+              "memory.used": "8554",
+              "power.draw": "215.99",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.46",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 64.04220779220779
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:41.869164+00:00",
+          "system_cpu_times": {
+            "total_s": 11864891.328125,
+            "idle_s": 8731575.90625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8575",
+              "power.draw": "253.95",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.51",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 90.17857142857143
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:43.065773+00:00",
+          "system_cpu_times": {
+            "total_s": 11864910.578125,
+            "idle_s": 8731577.375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "64",
+              "memory.used": "8558",
+              "power.draw": "251.44",
+              "clocks.gr": "2835",
+              "temperature.gpu": "66"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.48",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 92.37012987012987
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:44.180664+00:00",
+          "system_cpu_times": {
+            "total_s": 11864928.328125,
+            "idle_s": 8731579.140625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "65",
+              "memory.used": "8575",
+              "power.draw": "255.48",
+              "clocks.gr": "2835",
+              "temperature.gpu": "65"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.51",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 90.05281690140845
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:45.395404+00:00",
+          "system_cpu_times": {
+            "total_s": 11864947.828125,
+            "idle_s": 8731580.515625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "96",
+              "memory.used": "8557",
+              "power.draw": "225.88",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.60",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 92.94871794871794
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:46.636739+00:00",
+          "system_cpu_times": {
+            "total_s": 11864967.578125,
+            "idle_s": 8731581.9375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "97",
+              "memory.used": "8580",
+              "power.draw": "258.70",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.59",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 92.8006329113924
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:47.813760+00:00",
+          "system_cpu_times": {
+            "total_s": 11864986.578125,
+            "idle_s": 8731583.78125
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "96",
+              "memory.used": "8574",
+              "power.draw": "255.84",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.57",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 90.29605263157895
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:49.003686+00:00",
+          "system_cpu_times": {
+            "total_s": 11865005.578125,
+            "idle_s": 8731586.5
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8571",
+              "power.draw": "255.49",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.60",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 85.6907894736842
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:50.187851+00:00",
+          "system_cpu_times": {
+            "total_s": 11865024.375,
+            "idle_s": 8731590.109375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "88",
+              "memory.used": "8581",
+              "power.draw": "255.49",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.61",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 80.79800498753117
+        }
+      ],
+      "preflight_telemetry": [
+        {
+          "timestamp_utc": "2026-09-05T15:57:17.953544+00:00",
+          "system_cpu_times": {
+            "total_s": 11864508.578125,
+            "idle_s": 8731435.40625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "96",
+              "memory.used": "8471",
+              "power.draw": "247.56",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.57",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": null
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:19.108362+00:00",
+          "system_cpu_times": {
+            "total_s": 11864527.078125,
+            "idle_s": 8731447.71875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8466",
+              "power.draw": "246.27",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.50",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 33.445945945945944
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:20.275344+00:00",
+          "system_cpu_times": {
+            "total_s": 11864545.828125,
+            "idle_s": 8731458.984375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "88",
+              "memory.used": "8464",
+              "power.draw": "237.07",
+              "clocks.gr": "2835",
+              "temperature.gpu": "65"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.58",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 39.916666666666664
+        }
+      ],
+      "preflight_quiet": true
+    },
+    {
+      "schema": 1,
+      "mode": "hybrid",
+      "openssl": "OpenSSL 3.5.8 25 Aug 2026",
+      "native_version": "0.3.0-preview",
+      "gpu_dispatch": "caller",
+      "workers": 8,
+      "keys": 1,
+      "device": 1,
+      "payload_bytes": 512,
+      "max_batch": 64,
+      "gpu_min_batch": 64,
+      "queue_capacity": 8192,
+      "max_wait_ms": 1,
+      "slo_ms": 10,
+      "offered_rate": 40000,
+      "duration_s": 30,
+      "elapsed_s": 30.0156511,
+      "process_cpu_s": 66.859375,
+      "peak_rss_bytes": 252014592,
+      "queue_high_water": 726,
+      "offered": 1200000,
+      "rejected": 0,
+      "expired": 391884,
+      "failed": 0,
+      "verified": 808116,
+      "within_slo": 175873,
+      "late": 632243,
+      "goodput_rps": 5859.37647709,
+      "cpu_items": 220916,
+      "gpu_items": 587200,
+      "cpu_batches": 14853,
+      "gpu_batches": 9175,
+      "prepare_worker_s": 1.023505,
+      "sign_worker_s": 43.0959984,
+      "verify_worker_s": 57.9763888,
+      "queue_request_s": 3813.4286222,
+      "latency_p50_ms": 12.9498,
+      "latency_p95_ms": 16.3743,
+      "latency_p99_ms": 19.2437,
+      "latency_max_ms": 32.7943,
+      "batch_histogram": {
+        "1": 2953,
+        "2": 1187,
+        "3": 1299,
+        "4": 1097,
+        "5": 793,
+        "6": 482,
+        "7": 334,
+        "8": 347,
+        "9": 329,
+        "10": 277,
+        "11": 246,
+        "12": 214,
+        "13": 185,
+        "14": 199,
+        "15": 251,
+        "16": 197,
+        "17": 151,
+        "18": 133,
+        "19": 120,
+        "20": 132,
+        "21": 101,
+        "22": 108,
+        "23": 100,
+        "24": 100,
+        "25": 98,
+        "26": 103,
+        "27": 91,
+        "28": 106,
+        "29": 100,
+        "30": 88,
+        "31": 94,
+        "32": 95,
+        "33": 108,
+        "34": 87,
+        "35": 106,
+        "36": 113,
+        "37": 91,
+        "38": 78,
+        "39": 86,
+        "40": 102,
+        "41": 96,
+        "42": 86,
+        "43": 85,
+        "44": 85,
+        "45": 81,
+        "46": 69,
+        "47": 82,
+        "48": 89,
+        "49": 90,
+        "50": 85,
+        "51": 70,
+        "52": 71,
+        "53": 82,
+        "54": 72,
+        "55": 84,
+        "56": 73,
+        "57": 93,
+        "58": 90,
+        "59": 107,
+        "60": 114,
+        "61": 97,
+        "62": 86,
+        "63": 85,
+        "64": 9175
+      },
+      "latency_histogram_100us": {
+        "10": 1,
+        "11": 34,
+        "12": 55,
+        "13": 91,
+        "14": 151,
+        "15": 235,
+        "16": 305,
+        "17": 357,
+        "18": 415,
+        "19": 562,
+        "20": 926,
+        "21": 1079,
+        "22": 1019,
+        "23": 1087,
+        "24": 1173,
+        "25": 1243,
+        "26": 1281,
+        "27": 1339,
+        "28": 1334,
+        "29": 1396,
+        "30": 1455,
+        "31": 1539,
+        "32": 1593,
+        "33": 1617,
+        "34": 1676,
+        "35": 1701,
+        "36": 1760,
+        "37": 1797,
+        "38": 1824,
+        "39": 1853,
+        "40": 1896,
+        "41": 1944,
+        "42": 2026,
+        "43": 2177,
+        "44": 2265,
+        "45": 2323,
+        "46": 2364,
+        "47": 2377,
+        "48": 2407,
+        "49": 2462,
+        "50": 2552,
+        "51": 2626,
+        "52": 2721,
+        "53": 2850,
+        "54": 2986,
+        "55": 3124,
+        "56": 3234,
+        "57": 3397,
+        "58": 3485,
+        "59": 3631,
+        "60": 3746,
+        "61": 3884,
+        "62": 3916,
+        "63": 3985,
+        "64": 4049,
+        "65": 4034,
+        "66": 4025,
+        "67": 3942,
+        "68": 3797,
+        "69": 3648,
+        "70": 3495,
+        "71": 3334,
+        "72": 3182,
+        "73": 2955,
+        "74": 2738,
+        "75": 2558,
+        "76": 2377,
+        "77": 2156,
+        "78": 1962,
+        "79": 1818,
+        "80": 1667,
+        "81": 1524,
+        "82": 1406,
+        "83": 1266,
+        "84": 1175,
+        "85": 1081,
+        "86": 1019,
+        "87": 973,
+        "88": 947,
+        "89": 963,
+        "90": 1026,
+        "91": 1048,
+        "92": 1104,
+        "93": 1151,
+        "94": 1206,
+        "95": 1383,
+        "96": 1443,
+        "97": 1658,
+        "98": 1933,
+        "99": 2549,
+        "100": 3575,
+        "101": 5103,
+        "102": 5258,
+        "103": 4943,
+        "104": 4713,
+        "105": 4525,
+        "106": 4411,
+        "107": 4537,
+        "108": 4697,
+        "109": 4867,
+        "110": 5209,
+        "111": 5405,
+        "112": 5672,
+        "113": 5989,
+        "114": 6343,
+        "115": 6695,
+        "116": 7152,
+        "117": 7616,
+        "118": 8150,
+        "119": 8813,
+        "120": 9562,
+        "121": 10220,
+        "122": 10888,
+        "123": 11440,
+        "124": 11970,
+        "125": 12558,
+        "126": 13066,
+        "127": 13579,
+        "128": 14050,
+        "129": 14529,
+        "130": 15039,
+        "131": 15551,
+        "132": 15899,
+        "133": 16111,
+        "134": 16264,
+        "135": 16210,
+        "136": 15960,
+        "137": 15822,
+        "138": 15583,
+        "139": 15374,
+        "140": 15112,
+        "141": 14686,
+        "142": 14207,
+        "143": 13650,
+        "144": 13058,
+        "145": 12377,
+        "146": 11693,
+        "147": 10922,
+        "148": 10149,
+        "149": 9464,
+        "150": 8786,
+        "151": 8173,
+        "152": 7553,
+        "153": 6891,
+        "154": 6330,
+        "155": 5756,
+        "156": 5161,
+        "157": 4687,
+        "158": 4272,
+        "159": 3888,
+        "160": 3514,
+        "161": 3200,
+        "162": 2933,
+        "163": 2697,
+        "164": 2503,
+        "165": 2310,
+        "166": 2144,
+        "167": 1995,
+        "168": 1870,
+        "169": 1740,
+        "170": 1640,
+        "171": 1536,
+        "172": 1441,
+        "173": 1333,
+        "174": 1235,
+        "175": 1121,
+        "176": 1022,
+        "177": 942,
+        "178": 884,
+        "179": 832,
+        "180": 801,
+        "181": 752,
+        "182": 691,
+        "183": 648,
+        "184": 611,
+        "185": 573,
+        "186": 519,
+        "187": 500,
+        "188": 472,
+        "189": 463,
+        "190": 453,
+        "191": 442,
+        "192": 426,
+        "193": 395,
+        "194": 362,
+        "195": 339,
+        "196": 327,
+        "197": 327,
+        "198": 318,
+        "199": 316,
+        "200": 288,
+        "201": 269,
+        "202": 241,
+        "203": 212,
+        "204": 194,
+        "205": 166,
+        "206": 151,
+        "207": 136,
+        "208": 130,
+        "209": 132,
+        "210": 129,
+        "211": 124,
+        "212": 114,
+        "213": 109,
+        "214": 104,
+        "215": 82,
+        "216": 70,
+        "217": 69,
+        "218": 77,
+        "219": 80,
+        "220": 76,
+        "221": 77,
+        "222": 78,
+        "223": 73,
+        "224": 65,
+        "225": 66,
+        "226": 68,
+        "227": 59,
+        "228": 54,
+        "229": 48,
+        "230": 44,
+        "231": 47,
+        "232": 50,
+        "233": 55,
+        "234": 54,
+        "235": 56,
+        "236": 53,
+        "237": 51,
+        "238": 45,
+        "239": 48,
+        "240": 50,
+        "241": 50,
+        "242": 48,
+        "243": 48,
+        "244": 45,
+        "245": 43,
+        "246": 46,
+        "247": 45,
+        "248": 42,
+        "249": 35,
+        "250": 33,
+        "251": 31,
+        "252": 35,
+        "253": 33,
+        "254": 35,
+        "255": 28,
+        "256": 26,
+        "257": 24,
+        "258": 24,
+        "259": 20,
+        "260": 20,
+        "261": 17,
+        "262": 18,
+        "263": 20,
+        "264": 20,
+        "265": 18,
+        "266": 13,
+        "267": 12,
+        "268": 13,
+        "269": 8,
+        "270": 12,
+        "271": 12,
+        "272": 14,
+        "273": 16,
+        "274": 16,
+        "275": 16,
+        "276": 16,
+        "277": 16,
+        "278": 18,
+        "279": 16,
+        "280": 16,
+        "281": 16,
+        "282": 16,
+        "283": 22,
+        "284": 20,
+        "285": 21,
+        "286": 20,
+        "287": 20,
+        "288": 18,
+        "289": 16,
+        "290": 16,
+        "291": 16,
+        "292": 16,
+        "293": 16,
+        "294": 12,
+        "295": 12,
+        "296": 12,
+        "297": 12,
+        "298": 12,
+        "299": 6,
+        "300": 4,
+        "301": 3,
+        "318": 4,
+        "319": 4,
+        "320": 4,
+        "321": 4,
+        "322": 4,
+        "323": 4,
+        "324": 4,
+        "325": 4,
+        "326": 4,
+        "327": 4
+      },
+      "command": [
+        "pipeline.exe",
+        "--mode",
+        "hybrid",
+        "--workers",
+        "8",
+        "--keys",
+        "1",
+        "--rate",
+        "40000",
+        "--seconds",
+        "30.0",
+        "--slo-ms",
+        "10",
+        "--device",
+        "1",
+        "--batch",
+        "64",
+        "--gpu-min",
+        "64",
+        "--gpu-dispatch",
+        "caller"
+      ],
+      "timestamp_utc": "2026-09-05T15:57:52.992136+00:00",
+      "telemetry": [
+        {
+          "timestamp_utc": "2026-09-05T15:57:53.171982+00:00",
+          "system_cpu_times": {
+            "total_s": 11865072.3125,
+            "idle_s": 8731610.828125
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "97",
+              "memory.used": "8563",
+              "power.draw": "248.00",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "8",
+              "power.draw": "9.52",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": null
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:54.354353+00:00",
+          "system_cpu_times": {
+            "total_s": 11865091.078125,
+            "idle_s": 8731619.140625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "97",
+              "memory.used": "8737",
+              "power.draw": "239.68",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "21",
+              "memory.used": "99",
+              "power.draw": "22.45",
+              "clocks.gr": "1807",
+              "temperature.gpu": "30"
+            }
+          ],
+          "system_cpu_percent": 55.703580349708574
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:55.536419+00:00",
+          "system_cpu_times": {
+            "total_s": 11865110.078125,
+            "idle_s": 8731624.84375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "94",
+              "memory.used": "8812",
+              "power.draw": "248.78",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "24",
+              "memory.used": "99",
+              "power.draw": "34.75",
+              "clocks.gr": "1807",
+              "temperature.gpu": "30"
+            }
+          ],
+          "system_cpu_percent": 69.98355263157895
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:56.731133+00:00",
+          "system_cpu_times": {
+            "total_s": 11865129.078125,
+            "idle_s": 8731631.390625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "92",
+              "memory.used": "8769",
+              "power.draw": "258.66",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "39",
+              "memory.used": "99",
+              "power.draw": "34.91",
+              "clocks.gr": "1807",
+              "temperature.gpu": "30"
+            }
+          ],
+          "system_cpu_percent": 65.54276315789474
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:57.915208+00:00",
+          "system_cpu_times": {
+            "total_s": 11865148.078125,
+            "idle_s": 8731639.15625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "90",
+              "memory.used": "8769",
+              "power.draw": "260.15",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "35",
+              "memory.used": "99",
+              "power.draw": "35.22",
+              "clocks.gr": "1807",
+              "temperature.gpu": "30"
+            }
+          ],
+          "system_cpu_percent": 59.12828947368421
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:59.096125+00:00",
+          "system_cpu_times": {
+            "total_s": 11865167.078125,
+            "idle_s": 8731647.140625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "90",
+              "memory.used": "8775",
+              "power.draw": "255.73",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "38",
+              "memory.used": "99",
+              "power.draw": "35.16",
+              "clocks.gr": "1807",
+              "temperature.gpu": "30"
+            }
+          ],
+          "system_cpu_percent": 57.97697368421053
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:00.266442+00:00",
+          "system_cpu_times": {
+            "total_s": 11865185.8125,
+            "idle_s": 8731657.71875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "98",
+              "memory.used": "8733",
+              "power.draw": "267.27",
+              "clocks.gr": "2835",
+              "temperature.gpu": "70"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "35",
+              "memory.used": "99",
+              "power.draw": "34.69",
+              "clocks.gr": "1732",
+              "temperature.gpu": "30"
+            }
+          ],
+          "system_cpu_percent": 43.53628023352794
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:01.447883+00:00",
+          "system_cpu_times": {
+            "total_s": 11865204.578125,
+            "idle_s": 8731666.015625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "94",
+              "memory.used": "8775",
+              "power.draw": "265.86",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "41",
+              "memory.used": "99",
+              "power.draw": "33.45",
+              "clocks.gr": "1695",
+              "temperature.gpu": "30"
+            }
+          ],
+          "system_cpu_percent": 55.78684429641965
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:02.631705+00:00",
+          "system_cpu_times": {
+            "total_s": 11865223.578125,
+            "idle_s": 8731673.609375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "96",
+              "memory.used": "8732",
+              "power.draw": "267.10",
+              "clocks.gr": "2835",
+              "temperature.gpu": "70"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "37",
+              "memory.used": "99",
+              "power.draw": "35.48",
+              "clocks.gr": "1830",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 60.0328947368421
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:03.809873+00:00",
+          "system_cpu_times": {
+            "total_s": 11865242.328125,
+            "idle_s": 8731684.796875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "90",
+              "memory.used": "8732",
+              "power.draw": "257.49",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "35",
+              "memory.used": "99",
+              "power.draw": "36.35",
+              "clocks.gr": "1852",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 40.333333333333336
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:04.990832+00:00",
+          "system_cpu_times": {
+            "total_s": 11865261.328125,
+            "idle_s": 8731693.9375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "93",
+              "memory.used": "8618",
+              "power.draw": "254.57",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "35",
+              "memory.used": "99",
+              "power.draw": "35.03",
+              "clocks.gr": "1717",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 51.891447368421055
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:06.169152+00:00",
+          "system_cpu_times": {
+            "total_s": 11865280.078125,
+            "idle_s": 8731699.0625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "92",
+              "memory.used": "8618",
+              "power.draw": "256.86",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "41",
+              "memory.used": "99",
+              "power.draw": "33.55",
+              "clocks.gr": "1732",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 72.66666666666667
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:07.351676+00:00",
+          "system_cpu_times": {
+            "total_s": 11865299.078125,
+            "idle_s": 8731705.25
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "90",
+              "memory.used": "8618",
+              "power.draw": "257.20",
+              "clocks.gr": "2820",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "42",
+              "memory.used": "99",
+              "power.draw": "33.82",
+              "clocks.gr": "1747",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 67.4342105263158
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:08.536874+00:00",
+          "system_cpu_times": {
+            "total_s": 11865318.078125,
+            "idle_s": 8731714.0
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "92",
+              "memory.used": "8618",
+              "power.draw": "256.88",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "39",
+              "memory.used": "99",
+              "power.draw": "34.04",
+              "clocks.gr": "1755",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 53.94736842105263
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:09.728313+00:00",
+          "system_cpu_times": {
+            "total_s": 11865337.078125,
+            "idle_s": 8731724.25
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "91",
+              "memory.used": "8618",
+              "power.draw": "256.74",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "34",
+              "memory.used": "99",
+              "power.draw": "34.48",
+              "clocks.gr": "1800",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 46.05263157894737
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:10.924828+00:00",
+          "system_cpu_times": {
+            "total_s": 11865356.328125,
+            "idle_s": 8731732.78125
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "93",
+              "memory.used": "8618",
+              "power.draw": "260.57",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "33",
+              "memory.used": "99",
+              "power.draw": "35.11",
+              "clocks.gr": "1800",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 55.68181818181818
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:12.100794+00:00",
+          "system_cpu_times": {
+            "total_s": 11865375.078125,
+            "idle_s": 8731740.015625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "91",
+              "memory.used": "8744",
+              "power.draw": "253.77",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "39",
+              "memory.used": "99",
+              "power.draw": "34.89",
+              "clocks.gr": "1755",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 61.416666666666664
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:13.278053+00:00",
+          "system_cpu_times": {
+            "total_s": 11865393.828125,
+            "idle_s": 8731750.03125
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "87",
+              "memory.used": "8786",
+              "power.draw": "255.57",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "37",
+              "memory.used": "99",
+              "power.draw": "34.58",
+              "clocks.gr": "1770",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 46.583333333333336
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:14.461053+00:00",
+          "system_cpu_times": {
+            "total_s": 11865412.828125,
+            "idle_s": 8731756.125
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "94",
+              "memory.used": "8732",
+              "power.draw": "251.99",
+              "clocks.gr": "2820",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "39",
+              "memory.used": "99",
+              "power.draw": "34.14",
+              "clocks.gr": "1762",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 67.92763157894737
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:15.704536+00:00",
+          "system_cpu_times": {
+            "total_s": 11865432.828125,
+            "idle_s": 8731762.09375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "95",
+              "memory.used": "8743",
+              "power.draw": "260.18",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "39",
+              "memory.used": "99",
+              "power.draw": "36.08",
+              "clocks.gr": "1852",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 70.15625
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:16.884064+00:00",
+          "system_cpu_times": {
+            "total_s": 11865451.578125,
+            "idle_s": 8731770.640625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "95",
+              "memory.used": "8767",
+              "power.draw": "254.93",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "40",
+              "memory.used": "99",
+              "power.draw": "36.42",
+              "clocks.gr": "1807",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 54.416666666666664
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:18.065925+00:00",
+          "system_cpu_times": {
+            "total_s": 11865470.578125,
+            "idle_s": 8731780.5
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "97",
+              "memory.used": "8756",
+              "power.draw": "252.95",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "39",
+              "memory.used": "99",
+              "power.draw": "35.12",
+              "clocks.gr": "1762",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 48.108552631578945
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:19.234866+00:00",
+          "system_cpu_times": {
+            "total_s": 11865489.203125,
+            "idle_s": 8731789.96875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "97",
+              "memory.used": "8734",
+              "power.draw": "250.46",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "41",
+              "memory.used": "99",
+              "power.draw": "33.61",
+              "clocks.gr": "1702",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 49.16107382550336
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:20.403025+00:00",
+          "system_cpu_times": {
+            "total_s": 11865507.828125,
+            "idle_s": 8731800.921875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "96",
+              "memory.used": "8737",
+              "power.draw": "253.14",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "38",
+              "memory.used": "99",
+              "power.draw": "33.00",
+              "clocks.gr": "1740",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 41.191275167785236
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:21.583777+00:00",
+          "system_cpu_times": {
+            "total_s": 11865526.828125,
+            "idle_s": 8731807.734375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "89",
+              "memory.used": "8750",
+              "power.draw": "254.93",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "41",
+              "memory.used": "99",
+              "power.draw": "33.65",
+              "clocks.gr": "1740",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 64.14473684210526
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:22.793852+00:00",
+          "system_cpu_times": {
+            "total_s": 11865546.078125,
+            "idle_s": 8731818.75
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "97",
+              "memory.used": "8761",
+              "power.draw": "253.85",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "40",
+              "memory.used": "99",
+              "power.draw": "34.77",
+              "clocks.gr": "1785",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 42.77597402597402
+        }
+      ],
+      "preflight_telemetry": [
+        {
+          "timestamp_utc": "2026-09-05T15:57:50.645865+00:00",
+          "system_cpu_times": {
+            "total_s": 11865031.828125,
+            "idle_s": 8731593.90625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8583",
+              "power.draw": "251.50",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.58",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": null
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:51.812355+00:00",
+          "system_cpu_times": {
+            "total_s": 11865050.328125,
+            "idle_s": 8731602.25
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "97",
+              "memory.used": "8578",
+              "power.draw": "249.36",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.57",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 54.898648648648646
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:57:52.992136+00:00",
+          "system_cpu_times": {
+            "total_s": 11865069.328125,
+            "idle_s": 8731609.609375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "97",
+              "memory.used": "8562",
+              "power.draw": "248.00",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.52",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 61.266447368421055
+        }
+      ],
+      "preflight_quiet": true
+    },
+    {
+      "schema": 1,
+      "mode": "cpu",
+      "openssl": "OpenSSL 3.5.8 25 Aug 2026",
+      "native_version": "0.3.0-preview",
+      "gpu_dispatch": "caller",
+      "workers": 8,
+      "keys": 16,
+      "device": 1,
+      "payload_bytes": 512,
+      "max_batch": 64,
+      "gpu_min_batch": 64,
+      "queue_capacity": 8192,
+      "max_wait_ms": 1,
+      "slo_ms": 10,
+      "offered_rate": 40000,
+      "duration_s": 30,
+      "elapsed_s": 30.013659,
+      "process_cpu_s": 77.625,
+      "peak_rss_bytes": 28618752,
+      "queue_high_water": 670,
+      "offered": 1200000,
+      "rejected": 0,
+      "expired": 502075,
+      "failed": 0,
+      "verified": 697925,
+      "within_slo": 489109,
+      "late": 208816,
+      "goodput_rps": 16296.2136673,
+      "cpu_items": 697925,
+      "gpu_items": 0,
+      "cpu_batches": 69132,
+      "gpu_batches": 0,
+      "prepare_worker_s": 1.189144,
+      "sign_worker_s": 31.6746117,
+      "verify_worker_s": 63.0740465,
+      "queue_request_s": 3639.31402626,
+      "latency_p50_ms": 8.1478,
+      "latency_p95_ms": 12.6576,
+      "latency_p99_ms": 14.3074,
+      "latency_max_ms": 24.8503,
+      "batch_histogram": {
+        "1": 11169,
+        "2": 3207,
+        "3": 4552,
+        "4": 6801,
+        "5": 10541,
+        "6": 3163,
+        "7": 588,
+        "8": 436,
+        "9": 503,
+        "10": 488,
+        "11": 591,
+        "12": 700,
+        "13": 961,
+        "14": 1343,
+        "15": 1938,
+        "16": 2604,
+        "17": 3032,
+        "18": 1909,
+        "19": 963,
+        "20": 511,
+        "21": 537,
+        "22": 689,
+        "23": 1059,
+        "24": 2532,
+        "25": 8315
+      },
+      "latency_histogram_100us": {
+        "3": 19,
+        "4": 268,
+        "5": 713,
+        "6": 1487,
+        "7": 2102,
+        "8": 3431,
+        "9": 3263,
+        "10": 3904,
+        "11": 4574,
+        "12": 5649,
+        "13": 5389,
+        "14": 5993,
+        "15": 6187,
+        "16": 6711,
+        "17": 6184,
+        "18": 6220,
+        "19": 6088,
+        "20": 7614,
+        "21": 5900,
+        "22": 5267,
+        "23": 4842,
+        "24": 4918,
+        "25": 4147,
+        "26": 3705,
+        "27": 2690,
+        "28": 2300,
+        "29": 1966,
+        "30": 2034,
+        "31": 1790,
+        "32": 1908,
+        "33": 1835,
+        "34": 1943,
+        "35": 1964,
+        "36": 2100,
+        "37": 2140,
+        "38": 2175,
+        "39": 2283,
+        "40": 2483,
+        "41": 2542,
+        "42": 2615,
+        "43": 2670,
+        "44": 2937,
+        "45": 2987,
+        "46": 3105,
+        "47": 3093,
+        "48": 3437,
+        "49": 3562,
+        "50": 3767,
+        "51": 3733,
+        "52": 4192,
+        "53": 4358,
+        "54": 4625,
+        "55": 4660,
+        "56": 5033,
+        "57": 5212,
+        "58": 5421,
+        "59": 5396,
+        "60": 5702,
+        "61": 5861,
+        "62": 5994,
+        "63": 5953,
+        "64": 6190,
+        "65": 6334,
+        "66": 6443,
+        "67": 6349,
+        "68": 6532,
+        "69": 6647,
+        "70": 6752,
+        "71": 6634,
+        "72": 6753,
+        "73": 6854,
+        "74": 6966,
+        "75": 6838,
+        "76": 6938,
+        "77": 7045,
+        "78": 7118,
+        "79": 7014,
+        "80": 7105,
+        "81": 7203,
+        "82": 7282,
+        "83": 7185,
+        "84": 7246,
+        "85": 7377,
+        "86": 7425,
+        "87": 7330,
+        "88": 7400,
+        "89": 7526,
+        "90": 7569,
+        "91": 7501,
+        "92": 7569,
+        "93": 7680,
+        "94": 7769,
+        "95": 7663,
+        "96": 7693,
+        "97": 8058,
+        "98": 8000,
+        "99": 8071,
+        "100": 10310,
+        "101": 10144,
+        "102": 8144,
+        "103": 7774,
+        "104": 7651,
+        "105": 7633,
+        "106": 7519,
+        "107": 7324,
+        "108": 7305,
+        "109": 7289,
+        "110": 7199,
+        "111": 6997,
+        "112": 6977,
+        "113": 6901,
+        "114": 6711,
+        "115": 6408,
+        "116": 6302,
+        "117": 6020,
+        "118": 5712,
+        "119": 5300,
+        "120": 5097,
+        "121": 4753,
+        "122": 4434,
+        "123": 4164,
+        "124": 4051,
+        "125": 3784,
+        "126": 3495,
+        "127": 3214,
+        "128": 3047,
+        "129": 2776,
+        "130": 2472,
+        "131": 2168,
+        "132": 1918,
+        "133": 1689,
+        "134": 1557,
+        "135": 1344,
+        "136": 1244,
+        "137": 1060,
+        "138": 996,
+        "139": 815,
+        "140": 796,
+        "141": 673,
+        "142": 635,
+        "143": 531,
+        "144": 509,
+        "145": 433,
+        "146": 423,
+        "147": 379,
+        "148": 354,
+        "149": 299,
+        "150": 288,
+        "151": 254,
+        "152": 246,
+        "153": 210,
+        "154": 199,
+        "155": 182,
+        "156": 195,
+        "157": 149,
+        "158": 147,
+        "159": 135,
+        "160": 153,
+        "161": 109,
+        "162": 119,
+        "163": 104,
+        "164": 122,
+        "165": 80,
+        "166": 87,
+        "167": 83,
+        "168": 98,
+        "169": 67,
+        "170": 73,
+        "171": 65,
+        "172": 80,
+        "173": 54,
+        "174": 59,
+        "175": 44,
+        "176": 61,
+        "177": 44,
+        "178": 44,
+        "179": 36,
+        "180": 44,
+        "181": 31,
+        "182": 34,
+        "183": 26,
+        "184": 33,
+        "185": 22,
+        "186": 25,
+        "187": 19,
+        "188": 24,
+        "189": 16,
+        "190": 21,
+        "191": 12,
+        "192": 18,
+        "193": 13,
+        "194": 17,
+        "195": 9,
+        "196": 14,
+        "197": 10,
+        "198": 10,
+        "199": 7,
+        "200": 11,
+        "201": 4,
+        "202": 5,
+        "203": 6,
+        "204": 8,
+        "205": 3,
+        "206": 4,
+        "207": 4,
+        "208": 6,
+        "209": 2,
+        "210": 3,
+        "211": 3,
+        "212": 4,
+        "213": 2,
+        "214": 2,
+        "215": 2,
+        "216": 4,
+        "217": 2,
+        "218": 2,
+        "219": 1,
+        "220": 4,
+        "221": 1,
+        "222": 1,
+        "223": 1,
+        "224": 2,
+        "225": 1,
+        "226": 1,
+        "227": 1,
+        "228": 2,
+        "229": 1,
+        "230": 1,
+        "231": 1,
+        "232": 2,
+        "233": 1,
+        "234": 1,
+        "236": 1,
+        "240": 1,
+        "244": 1,
+        "248": 1
+      },
+      "command": [
+        "pipeline.exe",
+        "--mode",
+        "cpu",
+        "--workers",
+        "8",
+        "--keys",
+        "16",
+        "--rate",
+        "40000",
+        "--seconds",
+        "30.0",
+        "--slo-ms",
+        "10",
+        "--device",
+        "1",
+        "--batch",
+        "64",
+        "--gpu-min",
+        "64",
+        "--gpu-dispatch",
+        "caller"
+      ],
+      "timestamp_utc": "2026-09-05T15:58:27.422802+00:00",
+      "telemetry": [
+        {
+          "timestamp_utc": "2026-09-05T15:58:27.602301+00:00",
+          "system_cpu_times": {
+            "total_s": 11865623.078125,
+            "idle_s": 8731861.15625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8575",
+              "power.draw": "252.28",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "13.44",
+              "clocks.gr": "367",
+              "temperature.gpu": "30"
+            }
+          ],
+          "system_cpu_percent": null
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:28.788379+00:00",
+          "system_cpu_times": {
+            "total_s": 11865642.078125,
+            "idle_s": 8731868.765625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8572",
+              "power.draw": "251.35",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "10.54",
+              "clocks.gr": "225",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 59.95065789473684
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:29.966338+00:00",
+          "system_cpu_times": {
+            "total_s": 11865660.828125,
+            "idle_s": 8731875.3125
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "90",
+              "memory.used": "8573",
+              "power.draw": "249.95",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.78",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 65.08333333333333
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:31.166702+00:00",
+          "system_cpu_times": {
+            "total_s": 11865680.078125,
+            "idle_s": 8731883.84375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "97",
+              "memory.used": "8574",
+              "power.draw": "251.68",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.65",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 55.68181818181818
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:32.342161+00:00",
+          "system_cpu_times": {
+            "total_s": 11865698.828125,
+            "idle_s": 8731889.21875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8575",
+              "power.draw": "253.27",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.62",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 71.33333333333333
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:33.523673+00:00",
+          "system_cpu_times": {
+            "total_s": 11865717.828125,
+            "idle_s": 8731894.390625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "97",
+              "memory.used": "8582",
+              "power.draw": "250.97",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.59",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 72.77960526315789
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:34.713418+00:00",
+          "system_cpu_times": {
+            "total_s": 11865736.828125,
+            "idle_s": 8731904.359375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "93",
+              "memory.used": "8623",
+              "power.draw": "249.85",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.61",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 47.5328947368421
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:35.895963+00:00",
+          "system_cpu_times": {
+            "total_s": 11865755.828125,
+            "idle_s": 8731911.375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "89",
+              "memory.used": "8595",
+              "power.draw": "261.73",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.61",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 63.07565789473684
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:37.084941+00:00",
+          "system_cpu_times": {
+            "total_s": 11865774.828125,
+            "idle_s": 8731919.71875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "95",
+              "memory.used": "8603",
+              "power.draw": "256.18",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.59",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 56.08552631578947
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:38.277039+00:00",
+          "system_cpu_times": {
+            "total_s": 11865793.828125,
+            "idle_s": 8731932.671875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "97",
+              "memory.used": "8592",
+              "power.draw": "253.53",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.61",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 31.825657894736842
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:39.456406+00:00",
+          "system_cpu_times": {
+            "total_s": 11865812.828125,
+            "idle_s": 8731945.0625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8592",
+              "power.draw": "255.59",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.62",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 34.786184210526315
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:40.644570+00:00",
+          "system_cpu_times": {
+            "total_s": 11865831.828125,
+            "idle_s": 8731953.625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "94",
+              "memory.used": "8592",
+              "power.draw": "255.69",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.69",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 54.93421052631579
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:41.834018+00:00",
+          "system_cpu_times": {
+            "total_s": 11865850.828125,
+            "idle_s": 8731957.34375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "97",
+              "memory.used": "8593",
+              "power.draw": "259.46",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.68",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 80.42763157894737
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:43.017291+00:00",
+          "system_cpu_times": {
+            "total_s": 11865869.828125,
+            "idle_s": 8731960.25
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "96",
+              "memory.used": "8600",
+              "power.draw": "262.15",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.74",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 84.70394736842105
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:44.208437+00:00",
+          "system_cpu_times": {
+            "total_s": 11865888.828125,
+            "idle_s": 8731968.59375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "97",
+              "memory.used": "8608",
+              "power.draw": "259.70",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.60",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 56.08552631578947
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:45.506060+00:00",
+          "system_cpu_times": {
+            "total_s": 11865909.578125,
+            "idle_s": 8731976.640625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8649",
+              "power.draw": "252.81",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.55",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 61.21987951807229
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:46.693533+00:00",
+          "system_cpu_times": {
+            "total_s": 11865928.578125,
+            "idle_s": 8731980.734375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "96",
+              "memory.used": "8650",
+              "power.draw": "250.81",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.70",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 78.45394736842105
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:47.900233+00:00",
+          "system_cpu_times": {
+            "total_s": 11865947.828125,
+            "idle_s": 8731987.265625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "94",
+              "memory.used": "8668",
+              "power.draw": "250.20",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.57",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 66.07142857142857
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:49.081214+00:00",
+          "system_cpu_times": {
+            "total_s": 11865966.828125,
+            "idle_s": 8731990.765625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "94",
+              "memory.used": "8668",
+              "power.draw": "253.98",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.79",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 81.57894736842105
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:50.284903+00:00",
+          "system_cpu_times": {
+            "total_s": 11865986.078125,
+            "idle_s": 8731992.21875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "95",
+              "memory.used": "8743",
+              "power.draw": "254.45",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.57",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 92.4512987012987
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:51.409487+00:00",
+          "system_cpu_times": {
+            "total_s": 11866004.078125,
+            "idle_s": 8731996.3125
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "95",
+              "memory.used": "8764",
+              "power.draw": "253.24",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.67",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 77.25694444444444
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:52.649280+00:00",
+          "system_cpu_times": {
+            "total_s": 11866023.828125,
+            "idle_s": 8731999.765625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "100",
+              "memory.used": "8755",
+              "power.draw": "248.03",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.78",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 82.51582278481013
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:53.881724+00:00",
+          "system_cpu_times": {
+            "total_s": 11866043.578125,
+            "idle_s": 8732002.765625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8742",
+              "power.draw": "260.00",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.69",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 84.81012658227849
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:55.066015+00:00",
+          "system_cpu_times": {
+            "total_s": 11866062.578125,
+            "idle_s": 8732009.0
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8699",
+              "power.draw": "266.42",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.84",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 67.1875
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:56.268182+00:00",
+          "system_cpu_times": {
+            "total_s": 11866081.828125,
+            "idle_s": 8732011.171875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8709",
+              "power.draw": "260.34",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.81",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 88.71753246753246
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:57.452560+00:00",
+          "system_cpu_times": {
+            "total_s": 11866100.828125,
+            "idle_s": 8732018.9375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8693",
+              "power.draw": "262.84",
+              "clocks.gr": "2835",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.66",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 59.12828947368421
+        }
+      ],
+      "preflight_telemetry": [
+        {
+          "timestamp_utc": "2026-09-05T15:58:23.932767+00:00",
+          "system_cpu_times": {
+            "total_s": 11865564.328125,
+            "idle_s": 8731825.59375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "98",
+              "memory.used": "8597",
+              "power.draw": "247.13",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "35",
+              "memory.used": "0",
+              "power.draw": "35.89",
+              "clocks.gr": "1852",
+              "temperature.gpu": "32"
+            }
+          ],
+          "system_cpu_percent": null
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:25.095241+00:00",
+          "system_cpu_times": {
+            "total_s": 11865583.078125,
+            "idle_s": 8731836.328125
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8593",
+              "power.draw": "249.35",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P0",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "35.17",
+              "clocks.gr": "1852",
+              "temperature.gpu": "32"
+            }
+          ],
+          "system_cpu_percent": 42.75
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:26.259364+00:00",
+          "system_cpu_times": {
+            "total_s": 11865601.578125,
+            "idle_s": 8731847.515625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "89",
+              "memory.used": "8613",
+              "power.draw": "255.61",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P5",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "17.59",
+              "clocks.gr": "585",
+              "temperature.gpu": "30"
+            }
+          ],
+          "system_cpu_percent": 39.527027027027025
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:27.422802+00:00",
+          "system_cpu_times": {
+            "total_s": 11865620.328125,
+            "idle_s": 8731860.0
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8575",
+              "power.draw": "252.28",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "13.44",
+              "clocks.gr": "367",
+              "temperature.gpu": "30"
+            }
+          ],
+          "system_cpu_percent": 33.416666666666664
+        }
+      ],
+      "preflight_quiet": true
+    },
+    {
+      "schema": 1,
+      "mode": "hybrid",
+      "openssl": "OpenSSL 3.5.8 25 Aug 2026",
+      "native_version": "0.3.0-preview",
+      "gpu_dispatch": "caller",
+      "workers": 8,
+      "keys": 16,
+      "device": 1,
+      "payload_bytes": 512,
+      "max_batch": 64,
+      "gpu_min_batch": 64,
+      "queue_capacity": 8192,
+      "max_wait_ms": 1,
+      "slo_ms": 10,
+      "offered_rate": 40000,
+      "duration_s": 30,
+      "elapsed_s": 30.0013192,
+      "process_cpu_s": 115.796875,
+      "peak_rss_bytes": 253796352,
+      "queue_high_water": 717,
+      "offered": 1200000,
+      "rejected": 0,
+      "expired": 280599,
+      "failed": 0,
+      "verified": 919401,
+      "within_slo": 804853,
+      "late": 114548,
+      "goodput_rps": 26827.2536496,
+      "cpu_items": 919401,
+      "gpu_items": 0,
+      "cpu_batches": 186971,
+      "gpu_batches": 0,
+      "prepare_worker_s": 1.6613129,
+      "sign_worker_s": 37.7159661,
+      "verify_worker_s": 75.0897903,
+      "queue_request_s": 2754.84012798,
+      "latency_p50_ms": 2.3559,
+      "latency_p95_ms": 11.6079,
+      "latency_p99_ms": 13.2209,
+      "latency_max_ms": 57.8721,
+      "batch_histogram": {
+        "1": 35696,
+        "2": 13348,
+        "3": 27479,
+        "4": 34715,
+        "5": 44668,
+        "6": 12809,
+        "7": 1045,
+        "8": 522,
+        "9": 469,
+        "10": 432,
+        "11": 320,
+        "12": 390,
+        "13": 467,
+        "14": 682,
+        "15": 958,
+        "16": 1362,
+        "17": 1889,
+        "18": 1320,
+        "19": 683,
+        "20": 312,
+        "21": 262,
+        "22": 365,
+        "23": 524,
+        "24": 1519,
+        "25": 4735
+      },
+      "latency_histogram_100us": {
+        "3": 64,
+        "4": 1036,
+        "5": 4551,
+        "6": 8833,
+        "7": 12558,
+        "8": 16772,
+        "9": 16459,
+        "10": 21472,
+        "11": 26392,
+        "12": 28427,
+        "13": 27595,
+        "14": 32678,
+        "15": 35279,
+        "16": 33269,
+        "17": 29787,
+        "18": 31335,
+        "19": 32256,
+        "20": 37295,
+        "21": 26427,
+        "22": 23923,
+        "23": 23640,
+        "24": 22536,
+        "25": 19004,
+        "26": 16710,
+        "27": 12406,
+        "28": 8694,
+        "29": 7524,
+        "30": 6931,
+        "31": 5429,
+        "32": 4199,
+        "33": 3848,
+        "34": 3513,
+        "35": 3313,
+        "36": 2874,
+        "37": 2472,
+        "38": 2199,
+        "39": 2175,
+        "40": 2152,
+        "41": 2101,
+        "42": 2015,
+        "43": 2087,
+        "44": 2119,
+        "45": 2132,
+        "46": 2124,
+        "47": 2227,
+        "48": 2286,
+        "49": 2345,
+        "50": 2367,
+        "51": 2574,
+        "52": 2659,
+        "53": 2756,
+        "54": 2788,
+        "55": 3004,
+        "56": 3055,
+        "57": 3180,
+        "58": 3237,
+        "59": 3369,
+        "60": 3393,
+        "61": 3515,
+        "62": 3541,
+        "63": 3645,
+        "64": 3665,
+        "65": 3758,
+        "66": 3744,
+        "67": 3806,
+        "68": 3772,
+        "69": 3880,
+        "70": 3850,
+        "71": 3903,
+        "72": 3862,
+        "73": 3969,
+        "74": 3923,
+        "75": 3986,
+        "76": 3920,
+        "77": 4022,
+        "78": 3963,
+        "79": 4036,
+        "80": 3977,
+        "81": 4095,
+        "82": 4006,
+        "83": 4112,
+        "84": 4035,
+        "85": 4175,
+        "86": 4069,
+        "87": 4158,
+        "88": 4099,
+        "89": 4240,
+        "90": 4126,
+        "91": 4242,
+        "92": 4183,
+        "93": 4306,
+        "94": 4236,
+        "95": 4357,
+        "96": 4311,
+        "97": 4586,
+        "98": 4379,
+        "99": 4553,
+        "100": 5827,
+        "101": 5869,
+        "102": 4412,
+        "103": 4379,
+        "104": 4184,
+        "105": 4239,
+        "106": 4081,
+        "107": 4123,
+        "108": 3998,
+        "109": 4094,
+        "110": 3944,
+        "111": 3985,
+        "112": 3834,
+        "113": 3908,
+        "114": 3724,
+        "115": 3687,
+        "116": 3509,
+        "117": 3469,
+        "118": 3169,
+        "119": 3034,
+        "120": 2857,
+        "121": 2741,
+        "122": 2450,
+        "123": 2382,
+        "124": 2222,
+        "125": 2078,
+        "126": 1872,
+        "127": 1765,
+        "128": 1613,
+        "129": 1398,
+        "130": 1256,
+        "131": 1053,
+        "132": 910,
+        "133": 792,
+        "134": 718,
+        "135": 673,
+        "136": 560,
+        "137": 474,
+        "138": 428,
+        "139": 389,
+        "140": 332,
+        "141": 290,
+        "142": 268,
+        "143": 240,
+        "144": 206,
+        "145": 178,
+        "146": 181,
+        "147": 176,
+        "148": 136,
+        "149": 124,
+        "150": 139,
+        "151": 124,
+        "152": 103,
+        "153": 94,
+        "154": 105,
+        "155": 94,
+        "156": 81,
+        "157": 75,
+        "158": 78,
+        "159": 79,
+        "160": 69,
+        "161": 64,
+        "162": 62,
+        "163": 71,
+        "164": 50,
+        "165": 55,
+        "166": 47,
+        "167": 61,
+        "168": 42,
+        "169": 39,
+        "170": 39,
+        "171": 38,
+        "172": 32,
+        "173": 31,
+        "174": 29,
+        "175": 26,
+        "176": 27,
+        "177": 29,
+        "178": 24,
+        "179": 20,
+        "180": 21,
+        "181": 23,
+        "182": 21,
+        "183": 16,
+        "184": 17,
+        "185": 21,
+        "186": 18,
+        "187": 14,
+        "188": 14,
+        "189": 13,
+        "190": 12,
+        "191": 10,
+        "192": 7,
+        "193": 12,
+        "194": 12,
+        "195": 8,
+        "196": 6,
+        "197": 10,
+        "198": 10,
+        "199": 7,
+        "200": 4,
+        "201": 7,
+        "202": 10,
+        "203": 6,
+        "204": 4,
+        "205": 6,
+        "206": 9,
+        "207": 5,
+        "208": 3,
+        "209": 5,
+        "210": 6,
+        "211": 4,
+        "212": 3,
+        "213": 5,
+        "214": 6,
+        "215": 5,
+        "216": 2,
+        "217": 4,
+        "218": 4,
+        "219": 5,
+        "220": 1,
+        "221": 4,
+        "222": 4,
+        "223": 4,
+        "224": 1,
+        "225": 5,
+        "226": 2,
+        "227": 4,
+        "228": 1,
+        "229": 3,
+        "230": 2,
+        "231": 3,
+        "232": 1,
+        "233": 3,
+        "234": 1,
+        "235": 3,
+        "236": 1,
+        "237": 1,
+        "239": 3,
+        "240": 1,
+        "241": 1,
+        "243": 3,
+        "244": 1,
+        "245": 1,
+        "247": 3,
+        "249": 1,
+        "251": 3,
+        "253": 1,
+        "255": 2,
+        "257": 1,
+        "259": 2,
+        "263": 2,
+        "267": 2,
+        "271": 2,
+        "275": 1,
+        "279": 1,
+        "283": 1,
+        "287": 1,
+        "291": 1,
+        "295": 1,
+        "299": 1,
+        "303": 1,
+        "307": 1,
+        "311": 1,
+        "315": 1,
+        "319": 1,
+        "323": 1,
+        "327": 1,
+        "331": 1,
+        "335": 1,
+        "339": 1,
+        "343": 1,
+        "350": 1,
+        "354": 1,
+        "358": 1,
+        "362": 1,
+        "366": 1,
+        "370": 1,
+        "374": 1,
+        "378": 1,
+        "382": 1,
+        "386": 1,
+        "514": 1,
+        "518": 1,
+        "522": 1,
+        "526": 1,
+        "530": 1,
+        "534": 1,
+        "538": 1,
+        "542": 1,
+        "546": 1,
+        "550": 1,
+        "554": 1,
+        "558": 1,
+        "562": 1,
+        "566": 1,
+        "570": 1,
+        "574": 1,
+        "578": 1
+      },
+      "command": [
+        "pipeline.exe",
+        "--mode",
+        "hybrid",
+        "--workers",
+        "8",
+        "--keys",
+        "16",
+        "--rate",
+        "40000",
+        "--seconds",
+        "30.0",
+        "--slo-ms",
+        "10",
+        "--device",
+        "1",
+        "--batch",
+        "64",
+        "--gpu-min",
+        "64",
+        "--gpu-dispatch",
+        "caller"
+      ],
+      "timestamp_utc": "2026-09-05T15:59:00.250365+00:00",
+      "telemetry": [
+        {
+          "timestamp_utc": "2026-09-05T15:59:00.437180+00:00",
+          "system_cpu_times": {
+            "total_s": 11866148.578125,
+            "idle_s": 8732043.921875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "97",
+              "memory.used": "8684",
+              "power.draw": "266.31",
+              "clocks.gr": "2820",
+              "temperature.gpu": "70"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "8",
+              "power.draw": "9.82",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": null
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:01.628616+00:00",
+          "system_cpu_times": {
+            "total_s": 11866167.578125,
+            "idle_s": 8732049.546875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "98",
+              "memory.used": "8850",
+              "power.draw": "268.62",
+              "clocks.gr": "2805",
+              "temperature.gpu": "70"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "8",
+              "memory.used": "99",
+              "power.draw": "21.02",
+              "clocks.gr": "1807",
+              "temperature.gpu": "30"
+            }
+          ],
+          "system_cpu_percent": 70.39473684210526
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:02.892606+00:00",
+          "system_cpu_times": {
+            "total_s": 11866187.828125,
+            "idle_s": 8732053.71875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "97",
+              "memory.used": "8842",
+              "power.draw": "265.48",
+              "clocks.gr": "2820",
+              "temperature.gpu": "70"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "33.75",
+              "clocks.gr": "1807",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 79.39814814814815
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:04.088632+00:00",
+          "system_cpu_times": {
+            "total_s": 11866206.828125,
+            "idle_s": 8732054.875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "96",
+              "memory.used": "8847",
+              "power.draw": "261.32",
+              "clocks.gr": "2820",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "33.74",
+              "clocks.gr": "1807",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 93.91447368421052
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:05.274126+00:00",
+          "system_cpu_times": {
+            "total_s": 11866225.828125,
+            "idle_s": 8732059.921875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "95",
+              "memory.used": "8844",
+              "power.draw": "256.41",
+              "clocks.gr": "2820",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "33.69",
+              "clocks.gr": "1807",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 73.4375
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:06.481890+00:00",
+          "system_cpu_times": {
+            "total_s": 11866245.078125,
+            "idle_s": 8732063.0
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "97",
+              "memory.used": "8844",
+              "power.draw": "253.62",
+              "clocks.gr": "2820",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P2",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "33.74",
+              "clocks.gr": "1807",
+              "temperature.gpu": "31"
+            }
+          ],
+          "system_cpu_percent": 84.00974025974025
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:07.675482+00:00",
+          "system_cpu_times": {
+            "total_s": 11866264.328125,
+            "idle_s": 8732071.875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "96",
+              "memory.used": "8844",
+              "power.draw": "242.08",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "29.11",
+              "clocks.gr": "315",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 53.896103896103895
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:08.882067+00:00",
+          "system_cpu_times": {
+            "total_s": 11866283.578125,
+            "idle_s": 8732074.890625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "97",
+              "memory.used": "8872",
+              "power.draw": "252.58",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "17.72",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 84.33441558441558
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:10.344022+00:00",
+          "system_cpu_times": {
+            "total_s": 11866307.078125,
+            "idle_s": 8732088.078125
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "11",
+              "memory.used": "8857",
+              "power.draw": "210.62",
+              "clocks.gr": "2850",
+              "temperature.gpu": "55"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "9.60",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 43.88297872340426
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:11.547110+00:00",
+          "system_cpu_times": {
+            "total_s": 11866326.328125,
+            "idle_s": 8732092.3125
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "81",
+              "memory.used": "9007",
+              "power.draw": "119.85",
+              "clocks.gr": "2835",
+              "temperature.gpu": "59"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "9.41",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 78.00324675324676
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:12.737120+00:00",
+          "system_cpu_times": {
+            "total_s": 11866345.328125,
+            "idle_s": 8732098.859375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "86",
+              "memory.used": "8808",
+              "power.draw": "236.17",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "9.61",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 65.54276315789474
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:13.923863+00:00",
+          "system_cpu_times": {
+            "total_s": 11866364.328125,
+            "idle_s": 8732103.140625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "99",
+              "memory.used": "8811",
+              "power.draw": "240.15",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "9.88",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 77.46710526315789
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:15.112187+00:00",
+          "system_cpu_times": {
+            "total_s": 11866383.328125,
+            "idle_s": 8732105.125
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "99",
+              "memory.used": "8814",
+              "power.draw": "241.77",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "9.73",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 89.55592105263158
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:16.304938+00:00",
+          "system_cpu_times": {
+            "total_s": 11866402.328125,
+            "idle_s": 8732106.890625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "89",
+              "memory.used": "8817",
+              "power.draw": "241.47",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "9.66",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 90.70723684210526
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:17.483711+00:00",
+          "system_cpu_times": {
+            "total_s": 11866421.328125,
+            "idle_s": 8732115.328125
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "98",
+              "memory.used": "8826",
+              "power.draw": "238.47",
+              "clocks.gr": "2835",
+              "temperature.gpu": "68"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "9.58",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 55.5921052631579
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:18.757798+00:00",
+          "system_cpu_times": {
+            "total_s": 11866441.578125,
+            "idle_s": 8732116.84375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "60",
+              "memory.used": "8830",
+              "power.draw": "236.70",
+              "clocks.gr": "2835",
+              "temperature.gpu": "60"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "9.69",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 92.51543209876543
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:19.859643+00:00",
+          "system_cpu_times": {
+            "total_s": 11866459.328125,
+            "idle_s": 8732118.140625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "81",
+              "memory.used": "8924",
+              "power.draw": "183.70",
+              "clocks.gr": "2835",
+              "temperature.gpu": "63"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "9.78",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 92.69366197183099
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:21.083734+00:00",
+          "system_cpu_times": {
+            "total_s": 11866478.828125,
+            "idle_s": 8732122.140625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "98",
+              "memory.used": "8914",
+              "power.draw": "230.04",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "9.69",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 79.48717948717949
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:22.269608+00:00",
+          "system_cpu_times": {
+            "total_s": 11866497.828125,
+            "idle_s": 8732124.984375
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "99",
+              "memory.used": "8904",
+              "power.draw": "228.89",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "9.62",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 85.03289473684211
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:23.453208+00:00",
+          "system_cpu_times": {
+            "total_s": 11866516.828125,
+            "idle_s": 8732129.40625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "99",
+              "memory.used": "8910",
+              "power.draw": "248.08",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "9.62",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 76.72697368421052
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:24.659561+00:00",
+          "system_cpu_times": {
+            "total_s": 11866536.078125,
+            "idle_s": 8732135.53125
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "97",
+              "memory.used": "8881",
+              "power.draw": "249.87",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "9.80",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 68.18181818181819
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:25.858428+00:00",
+          "system_cpu_times": {
+            "total_s": 11866555.328125,
+            "idle_s": 8732139.90625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "96",
+              "memory.used": "8938",
+              "power.draw": "236.92",
+              "clocks.gr": "2835",
+              "temperature.gpu": "66"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "9.85",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 77.27272727272727
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:27.071233+00:00",
+          "system_cpu_times": {
+            "total_s": 11866574.578125,
+            "idle_s": 8732145.921875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "97",
+              "memory.used": "8910",
+              "power.draw": "243.58",
+              "clocks.gr": "2835",
+              "temperature.gpu": "66"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "9.69",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 68.75
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:28.253898+00:00",
+          "system_cpu_times": {
+            "total_s": 11866593.578125,
+            "idle_s": 8732152.015625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "97",
+              "memory.used": "8896",
+              "power.draw": "238.32",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "9.67",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 67.92763157894737
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:29.591886+00:00",
+          "system_cpu_times": {
+            "total_s": 11866615.078125,
+            "idle_s": 8732157.46875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "97",
+              "memory.used": "8901",
+              "power.draw": "242.50",
+              "clocks.gr": "2835",
+              "temperature.gpu": "66"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "9.55",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 74.63662790697674
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:30.799454+00:00",
+          "system_cpu_times": {
+            "total_s": 11866634.328125,
+            "idle_s": 8732163.265625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P2",
+              "utilization.gpu": "98",
+              "memory.used": "8895",
+              "power.draw": "251.78",
+              "clocks.gr": "2835",
+              "temperature.gpu": "67"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "99",
+              "power.draw": "9.67",
+              "clocks.gr": "210",
+              "temperature.gpu": "28"
+            }
+          ],
+          "system_cpu_percent": 69.88636363636364
+        }
+      ],
+      "preflight_telemetry": [
+        {
+          "timestamp_utc": "2026-09-05T15:58:57.898474+00:00",
+          "system_cpu_times": {
+            "total_s": 11866107.828125,
+            "idle_s": 8732022.6875
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "98",
+              "memory.used": "8697",
+              "power.draw": "265.71",
+              "clocks.gr": "2820",
+              "temperature.gpu": "69"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.66",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": null
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:58:59.081191+00:00",
+          "system_cpu_times": {
+            "total_s": 11866126.828125,
+            "idle_s": 8732032.40625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "94",
+              "memory.used": "8682",
+              "power.draw": "268.45",
+              "clocks.gr": "2820",
+              "temperature.gpu": "70"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.71",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 48.848684210526315
+        },
+        {
+          "timestamp_utc": "2026-09-05T15:59:00.250365+00:00",
+          "system_cpu_times": {
+            "total_s": 11866145.53125,
+            "idle_s": 8732042.640625
+          },
+          "gpus": [
+            {
+              "index": "0",
+              "name": "NVIDIA GeForce RTX 4070 Ti",
+              "display_active": "Enabled",
+              "pstate": "P0",
+              "utilization.gpu": "97",
+              "memory.used": "8691",
+              "power.draw": "266.31",
+              "clocks.gr": "2820",
+              "temperature.gpu": "70"
+            },
+            {
+              "index": "1",
+              "name": "NVIDIA GeForce RTX 3060",
+              "display_active": "Disabled",
+              "pstate": "P8",
+              "utilization.gpu": "0",
+              "memory.used": "0",
+              "power.draw": "9.82",
+              "clocks.gr": "210",
+              "temperature.gpu": "29"
+            }
+          ],
+          "system_cpu_percent": 45.27986633249791
+        }
+      ],
+      "preflight_quiet": true
+    }
+  ],
+  "complete": true
+}

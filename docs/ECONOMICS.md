@@ -50,6 +50,8 @@ python benchmarks/economics.py --scope primitive --hourly 1.99 --rate 110200 --b
 
 Use the [native pipeline measurements](PIPELINE_RESULTS.md) for the additional cost of CPU preparation, batching, signing and **verification of every signature before completion**. The harness records offered, rejected, expired, failed, late and within-SLO requests. Its denominator is `within_slo / elapsed_seconds`, including drain time, not raw signatures/s.
 
+The [RTX 3060 follow-up](RTX3060_PIPELINE.md) adds repeated 10 ms trials, longer one/sixteen-key checks and a separate 50 ms control on the owned card. It publishes cost coefficients per dollar of allocated hourly system cost, process CPU demand and observed host load. None of the six paired short-run settings met the 10 ms quality criterion in both modes and repeats. The sixteen-key hybrid run used CPU for every signature, showing why a hybrid label alone cannot justify paying for a GPU. Actual hardware allocation and wall-power inputs remain necessary to turn the coefficients into owned-system costs.
+
 ```text
 cost per million within-SLO requests = total hourly system cost × 1e6 / (3600 × goodput)
 break-even total hybrid/CPU hourly cost ratio = hybrid goodput / CPU goodput

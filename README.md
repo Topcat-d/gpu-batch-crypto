@@ -25,6 +25,8 @@ The v0.3 wrapper fixes repeated copying of the entire output buffer for every re
 
 Those are standalone library rates. The [native pipeline experiment](docs/PIPELINE_RESULTS.md) times record creation, hashing, queueing, signing and verification of every signature against a multi-worker OpenSSL CPU baseline. It retains missed deadlines and overload outcomes and **has not demonstrated a reliable hybrid cost advantage at the tested 10 ms target**. [Cost estimates](docs/ECONOMICS.md) distinguish primitive throughput from within-deadline goodput.
 
+The [RTX 3060 follow-up](docs/RTX3060_PIPELINE.md) adds 32 rows with selected-GPU idle checks, shared-host CPU/GPU telemetry, opposite run order and 10/50 ms deadline experiments. It records all-output verification, actual GPU use and cost-per-million coefficients. None of the six paired short-run settings met the 10 ms quality criterion in both modes and repeats; the sixteen-key hybrid run used CPU for every signature.
+
 For comparison, the preserved **v0.2, batch-256** full-window results were:
 
 | GPU | GPU signatures/s | Mean GPU call completion | CPU signatures/s | Paired GPU/CPU rate |

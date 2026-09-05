@@ -22,6 +22,7 @@ jobs:
       - run: python benchmarks/verify_p256_results.py --directory dispatch_results
       - run: python benchmarks/verify_pipeline.py
       - run: python benchmarks/report_pipeline.py --check
+      - run: python benchmarks/report_rtx3060.py --check
       - run: python benchmarks/report_p256.py --check
       - run: python benchmarks/verify_history.py
       - run: python benchmarks/report_batching.py --check

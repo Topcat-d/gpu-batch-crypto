@@ -2,6 +2,8 @@
 
 Version 0.3, September 5, 2026:
 
+- The RTX 3060 follow-up passed **29 tests** on device 1, including the four capture/preflight checks and all native CUDA tests. Its **32 new pipeline rows** offered 15,200,000 requests and independently verified 12,167,746 completions with zero verification/processing failures. Expired and late requests remain separate and prevent a blanket success claim. [Repeat results, telemetry and deadline quality](RTX3060_PIPELINE.md).
+
 - Twenty-three tests passed on each RTX GPU after adding bounded-iterable consumption, epoch-bound sign/seal/open (including empty and retired slots), independently verified signing and controlled corrupt/truncated/reordered/wrong-epoch output cases. Two additional CPU cost-model tests check unit conversion, idle allocation and invalid inputs.
 - The updated C consumer passed, including stale-epoch output sentinels and successful use of a replacement generation. CUDA Compute Sanitizer memcheck reported **0 errors** for that C consumer. This remains limited coverage.
 - Hosted Linux CI passed the Python CPU suite and a native C++ OpenSSL 3.5.8 build/self-test and small CPU pipeline run at source `b1ae0d8`. Subsequent CI also checks the new published capture arithmetic and provenance; CI never claims GPU execution.
