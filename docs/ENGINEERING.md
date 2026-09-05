@@ -45,18 +45,29 @@ Sparse or urgent signing should begin with the CPU path. CPU also won every samp
 
 ## The numbers that matter
 
-At **batch 256**, the public v0.2 full-window signer recorded the following. Ranges span two runs, each with seven timed calls. Ratios compare each GPU run with its paired CPU baseline, not opposite ends of independent ranges.
+Different measurements answer different adoption questions. The strongest
+business-facing result currently comes from CPU accounting; the highest GPU
+rate comes from a primitive call that excludes the rest of the service.
 
-| GPU | GPU signatures/s | Mean GPU call completion | CPU signatures/s | Paired GPU/CPU rate |
-|---|---:|---:|---:|---:|
-| RTX 4070 Ti | 224,742–229,039 | 1.12–1.14 ms | 41,218–44,130 | 5.09–5.56× |
-| RTX 3060 | 177,810–194,276 | 1.32–1.44 ms | 40,689–43,358 | 4.10–4.77× |
+| Question | Published observation | Boundary and evidence |
+|---|---|---|
+| Can prepared permissions reduce access overhead? | Fully used 32-resource books: **1.173×** conservative throughput versus an atomic CPU purchase; first-access p99 up to **18.11 ms versus 6.08 ms**. At 25% use: **1.008×**. | CPU signing, verification and durable local SQLite accounting; 28 cells and 35,840 simulated redemptions. No real payments or network delivery. [Access results](ACCESS_BOOK_RESULTS.md). |
+| Does GPU assistance help a native token service? | A 1,024-token wave with one acceptance check: **1.052×** conservative hybrid/CPU goodput and a **5.2%** incremental GPU-cost ceiling. With a separate issuer guard and recipient check, CPU wins both tested sizes. | Native four/eight-worker CPU controls, 100 cells and 9,839,257 verified tokens across screening/control. Claim policy, network, ledger and settlement excluded. [Ready waves](READY_WAVE_RESULTS.md), [verification control](VERIFICATION_CONTROL_RESULTS.md). |
+| What can the signing primitive do at large batches? | Batch 4,096 after the output-copy fix: **1,821,543 signatures/s, 2.25 ms** on RTX 4070 Ti; **1,364,320/s, 3.00 ms** on RTX 3060. | One before/after sweep per card, seven calls per cell; checks outside timing and no batch fill. v0.3 wrapper change around the same earlier native DLL. These are not guarded service rates. [Dispatch comparison](DISPATCH_RESULTS.md). |
+| What prior A100 evidence is available? | **110,200 P-256 signatures/s** and **399,446 AES-GCM seals/s** on 16-byte records, in 30-second runs. | Earlier persistent engine; sampled CPU checks, no request-latency distribution or validated batch optimum. L40S/RTX history and rejected runs remain visible. [Historical archive](HISTORICAL_BENCHMARKS.md). |
 
-The host was a Ryzen 7 7800X3D running Windows, CUDA 13.0.88 and MSVC 19.44. The CPU baseline uses one Python thread with cached OpenSSL keys. GPU timing covers the synchronous Python call, packing, transfers, execution, result construction and clearing. Key/table import, batch formation, queueing and independent oracle checks are excluded. This is an API-level comparison; an optimized native multi-core CPU baseline and a complete request-path comparison remain necessary.
+The current local host is a Ryzen 7 7800X3D on Windows; each capture records its
+actual toolchain, native fingerprint and timing boundary. Short runs on a shared
+host are workload evidence, not an exclusive-host capacity certification. The
+native multi-worker CPU comparisons are completed; a representative production
+request path, independent replication and actual deployment economics remain to
+be measured.
 
-Full-window first beat CPU at sampled batch 64 on both cards in both runs; batches 1 and 8 lost. Batch 256 was the most consistent mid-size point in these captures. At 1,024 and 4,096, variability changed the apparent optimum between repeats. The cause has not been isolated. The [full results](P256_RESULTS.md) preserve every run, raw samples, CPU/reference/comb/full-window comparisons, source commits, binary fingerprints and completion accounting.
-
-Earlier work is also published: A100 at **110,200 P-256 signatures/s** and **399,446 AES-GCM seals/s** on 16-byte records in clean 30-second runs, plus L40S scheduler latency and earlier RTX results. These use different executors. The [historical archive](HISTORICAL_BENCHMARKS.md) records settings, sampled correctness and rejected runs. It establishes prior work, not an A100 measurement of this new binary or a ranking against the current RTX results.
+The [older v0.2 backend sweeps](P256_RESULTS.md) remain published. Their
+batch-256 recommendation preceded the output-copy correction, which identified
+one source of large-batch overhead. Neither an older API crossover nor a newer
+primitive peak establishes a GPU's universal batch sweet spot. Online batch size
+depends on compatible arrivals, deadlines and the required verification work.
 
 ## Why CPU and GPU belong in the same design
 
@@ -64,7 +75,7 @@ The CPU handles authorization, message encoding, hashing, key policy, routing an
 
 Batching shares submission and synchronization costs and exposes independent work to the GPU. CPUs can also benefit from batching and cached keys. The useful comparison is therefore a tuned CPU service against a measured CPU–GPU service with the same semantics and checks.
 
-The collection delay can reverse an attractive library result. At 100,000 compatible arrivals/s, filling 256 items adds approximately **1.275 ms average wait** in a simple evenly spaced, no-timeout model. At 1,000 compatible arrivals/s, it adds **127.5 ms**, before the roughly 1.1 ms call. Aggregate traffic is insufficient: 100,000 requests/s spread evenly across 100 incompatible keys gives the latter rate per key. These are calculated illustrations, not measured request latency.
+The collection delay can reverse an attractive library result. At 100,000 compatible arrivals/s, filling 256 items adds approximately **1.275 ms average wait** in a simple evenly spaced, no-timeout model. At 1,000 compatible arrivals/s, it adds **127.5 ms**, before cryptographic execution. Aggregate traffic is insufficient: 100,000 requests/s spread evenly across 100 incompatible keys gives the latter rate per key. These are calculated illustrations, not measured request latency.
 
 The [systems design](SYSTEMS_DESIGN.md) lays out CPU and GPU responsibilities, size/timeout routing, key epochs, bounded queues, multi-device dispatch, bottleneck accounting and cost per successful operation. The separate native benchmark executes a bounded in-process CPU/hybrid pipeline. Its first three captures are qualified as shared-host diagnostic data after background GPU work was discovered. The [RTX 3060 follow-up](RTX3060_PIPELINE.md) adds explicit selected-device preflight, host telemetry, reversed-order repeats, longer key-distribution checks and a 50 ms deadline control. Its sixteen-key hybrid run signed entirely on CPU, an example of why actual routing and compatible traffic matter. A production network service remains outside this release.
 

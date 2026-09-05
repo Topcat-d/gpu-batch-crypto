@@ -145,10 +145,11 @@ packages carrying tests without their repository dependencies, and no explicit
 release/rollback procedure. Those findings are addressed by the install rules,
 Python distribution boundary, artifact gate and this runbook.
 
-The release-readiness judgment is **80/100, launchable with caveats**; this is a
-maintainer prioritization score, not a security certification. Evidence comprises
-source/wheel reconstruction and isolated adoption, native SDK installation and
-external consumption, public CI, and the [validation record](VALIDATION.md).
+The completed evidence supports a scoped technical-preview evaluation.
+Source/wheel reconstruction and isolated adoption, native SDK installation and
+external consumption, public CI, and the [validation record](VALIDATION.md)
+provide the basis for that decision. This was a maintainer review using an
+assisted workflow, not an independent audit or security certification.
 Linux CUDA acceptance, independent cryptographic review, constant-time/key
 isolation requirements and production workload recovery remain outside the
 completed evidence. [Production readiness](PRODUCTION_READINESS.md) identifies
