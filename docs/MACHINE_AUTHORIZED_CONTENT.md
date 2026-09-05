@@ -12,6 +12,12 @@ The expected publisher public key, expected content ID, trusted time, and conten
 
 ## Infrastructure hypothesis
 
+The [keys instead of clicks thesis](KEYS_INSTEAD_OF_CLICKS.md) explains how an
+approved buyer budget, scoped credential, delivery receipt and publisher ledger
+could support compensation without a referral click. It distinguishes access
+rights, signing keys and encryption keys, and defines the economic tests that
+this cryptographic example alone cannot answer.
+
 The [agent access design](AGENT_ACCESS_DESIGN.md) describes how an agent's ready
 planning waves and a publisher's grant service could use the CPU–GPU engine.
 It distinguishes established keys, fresh proofs, issuer authorization and

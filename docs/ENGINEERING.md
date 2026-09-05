@@ -8,6 +8,8 @@ Version 0.3 adds [atomic epoch binding and independently verified signing](PRODU
 
 ## The opportunity and the decision
 
+The [keys instead of clicks thesis](KEYS_INSTEAD_OF_CLICKS.md) connects machine consumption to publisher compensation: an approved buyer budget funds scoped access, a signed credential supports authorization, and a ledger records publisher accrual for settlement. It sets out the transaction, protocol compatibility requirements and falsifiable tests for demand, security and economics. The commercial hypothesis and the GPU performance hypothesis each need their own evidence.
+
 Applications may need large numbers of signed manifests, authorization grants, receipts or other records. If fresh signatures consume a meaningful share of their CPU budget, GPU assistance could increase available signing capacity or leave CPU resources for other work. That value depends on arrivals, key distribution, deadlines and the rest of the request path; the repository does not yet demonstrate a deployment cost saving.
 
 Machine-authorized content is one application. A publisher could bind licensed access terms and content identity to a signed grant, supporting machine consumption that produces no advertising click. The [content-grant example](MACHINE_AUTHORIZED_CONTENT.md) demonstrates those cryptographic bindings. Identity, payment accounting, enforcement, key release and distribution remain application responsibilities. The business case must also account for caching: content or a grant that can be signed once and reused does not need a new signature for every request.
@@ -16,7 +18,7 @@ Publishers, CDNs, storage systems and other infrastructure teams can evaluate th
 
 | Reader | Decision to make | Evidence available now |
 |---|---|---|
-| CEO / business leadership | Is fresh cryptographic work a real bottleneck, and could addressing it justify integration cost? | Primitive and within-SLO pipeline evidence, hardware inventory and explicit cost models; actual deployment cost savings and revenue effects remain unproven. |
+| CEO / business leadership | Will buyers pay for useful access, will publishers receive sustainable proceeds, and is acceleration worth its integration cost? | A scoped access thesis and validation plan, primitive and within-SLO pipeline evidence, hardware inventory and cost models; actual demand, payouts and deployment savings remain unproven. |
 | CTO / engineering | Does the code fit our stack, traffic, latency budget and CPU–GPU design? | C ABI, Python API, source-level architecture, per-backend batch sweeps and a [heterogeneous systems design](SYSTEMS_DESIGN.md). |
 | CSO / security leadership | Can we permit this key residency and execution model, and what assurance is still required? | Documented trust boundary, independent CPU comparisons and validation; secret-dependent GPU behavior and no independent audit. |
 

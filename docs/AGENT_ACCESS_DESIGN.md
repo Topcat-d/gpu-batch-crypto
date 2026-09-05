@@ -1,5 +1,11 @@
 # Preparing machine access with a heterogeneous CPU–GPU stack
 
+The [keys instead of clicks thesis](KEYS_INSTEAD_OF_CLICKS.md) supplies the
+business context: funded access credentials can connect machine consumption
+to publisher compensation. It separates settlement batching, access bundles
+and cryptographic batches. This note describes the proposed scheduling and
+authorization design for that last layer.
+
 An agent that knows several upcoming tool or content-access calls can prepare
 their authorization material while other independent work continues. Small or
 urgent signing jobs can finish on CPU. Larger groups of compatible, authorized
