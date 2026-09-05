@@ -7,6 +7,7 @@ generation, durable counters, rotation, and key storage belong to the caller.
 import ctypes as C
 import hashlib
 import threading
+from itertools import islice
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -31,9 +32,17 @@ def _key(key):
         raise ValueError("key must be 32 bytes")
 
 
+def _batch(items):
+    """Bound consumption of arbitrary iterables before validation/allocation."""
+    result = list(islice(items, MAX_BATCH + 1))
+    if len(result) > MAX_BATCH:
+        raise ValueError("batch exceeds 4096 items")
+    return result
+
+
 def _records(key, records, opening=False):
     _key(key)
-    records = list(records)
+    records = _batch(records)
     if len(records) > MAX_BATCH:
         raise ValueError("batch exceeds 4096 records")
     nonces = set()
@@ -61,7 +70,7 @@ def _digests(key, digests):
     _key(key)
     if not 1 <= int.from_bytes(key, "big") < ORDER:
         raise ValueError("invalid P-256 private scalar")
-    digests = list(digests)
+    digests = _batch(digests)
     if len(digests) > MAX_BATCH or any(
         not isinstance(h, bytes) or len(h) != 32 for h in digests
     ):
@@ -158,7 +167,7 @@ class Cpu:
 
 
 def _messages(messages):
-    messages = list(messages)
+    messages = _batch(messages)
     if len(messages) > MAX_BATCH or any(
         not isinstance(m, bytes) or len(m) > MAX_PAYLOAD for m in messages
     ):
@@ -320,7 +329,8 @@ class Cuda:
             )
             for s in status:
                 self._check(s)
-            return [output.raw[i * 64 : (i + 1) * 64] for i in range(len(digests))]
+            raw = output.raw
+            return [raw[i * 64 : (i + 1) * 64] for i in range(len(digests))]
         finally:
             C.memset(C.addressof(output), 0, C.sizeof(output))
 
@@ -344,7 +354,8 @@ class Cuda:
             )
             for s in status:
                 self._check(s)
-            return [output.raw[i * 32 : (i + 1) * 32] for i in range(len(messages))]
+            raw = output.raw
+            return [raw[i * 32 : (i + 1) * 32] for i in range(len(messages))]
         finally:
             for b in buffers + [output]:
                 C.memset(C.addressof(b), 0, C.sizeof(b))
@@ -568,7 +579,8 @@ class Runtime:
             self._cuda._check(rc)
             for s in status:
                 self._cuda._check(s)
-            return [out.raw[i * 64 : (i + 1) * 64] for i in range(len(digests))]
+            raw = out.raw
+            return [raw[i * 64 : (i + 1) * 64] for i in range(len(digests))]
 
     def sha256(self, messages):
         with self._lock:
