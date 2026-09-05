@@ -4,6 +4,23 @@ The existing captures can support **cost per primitive operation at an explicit 
 
 ## Hardware and price inventory
 
+The newer [ready-wave token measurements](READY_WAVE_RESULTS.md) use a
+standard ES256/EdDSA encoding and native CPU comparison. Their single-check
+ES256 candidate leaves about a **5.2% incremental GPU/CPU allocation ceiling**
+at the observed 50 ms quality gate. With the issuer's independent GPU output
+guard plus a separate consumer check, the [verification control](VERIFICATION_CONTROL_RESULTS.md)
+favors CPU at both tested sizes. The raw ratios and a model that adds common
+downstream work are published, so GPU selection can be based on the actual
+verification contract rather than a primitive peak.
+
+For scale only, an assumed **$1/hour** total crypto-service allocation and
+59,989 on-time tokens/s gives about **$0.00463 per million tokens**. This is
+arithmetic using the ready-wave CPU result, not a provider quote or a payment
+service bill. Permission checks, account transactions, network/egress,
+payment fees and settlement can therefore matter much more than shaving a
+small fraction off this signing-service cost. Publisher demand and net
+proceeds must be measured independently of cryptographic throughput.
+
 The maintainer identifies Runpod, Phala and Lambda as providers used during development. The public captures do not establish a reliable provider-to-run mapping or historical invoice. The inventory therefore preserves the actual GPU and marks pricing as a separate scenario. No new rental is needed for this arithmetic.
 
 | Documented hardware | Published evidence | Price input and missing information |

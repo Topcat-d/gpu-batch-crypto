@@ -74,6 +74,15 @@ was moved into this library. The public interoperability example is generic.
 
 ## Compatibility and cost are separate decisions
 
+The [measured ready-wave results](READY_WAVE_RESULTS.md) and
+[separate-verification control](VERIFICATION_CONTROL_RESULTS.md) now put a
+boundary on the GPU case. One acceptance check per token produced a narrow
+1.052× conservative ratio for 1,024 compatible tokens and eight workers. With
+the default issuer guard plus a separate consumer check, the CPU path was
+faster at both tested sizes. Start that guarded application on CPU. Evaluate
+GPU use against the actual verification placement, issuer/key distribution,
+deadline and full allocation cost before selecting it.
+
 The [ready-wave campaign](../benchmarks/READY_WAVE_CAMPAIGN.md) compares native
 CPU ES256, hybrid ES256 and native CPU Ed25519 under the same synthetic claims,
 batch shapes and public-key verification requirement. CPU ES256 uses normal

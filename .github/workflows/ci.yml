@@ -23,10 +23,13 @@ jobs:
       - run: python benchmarks/verify_pipeline.py
       - run: python benchmarks/report_pipeline.py --check
       - run: python benchmarks/report_rtx3060.py --check
+      - run: python benchmarks/verify_ready_wave.py
+      - run: python benchmarks/report_ready_wave.py --check
       - run: python benchmarks/report_p256.py --check
       - run: python benchmarks/verify_history.py
       - run: python benchmarks/report_batching.py --check
       - run: python examples/content_grant.py
+      - run: python examples/jws_grant.py
   native-cpu:
     runs-on: ubuntu-24.04
     timeout-minutes: 15

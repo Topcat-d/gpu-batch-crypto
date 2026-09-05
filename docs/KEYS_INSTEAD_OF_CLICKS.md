@@ -176,6 +176,16 @@ these business costs.
 
 ## Evidence today and the minimum next experiment
 
+The [ES256 interoperability demonstration](COMPATIBILITY.md) and
+[ready-wave measurements](READY_WAVE_RESULTS.md) now provide concrete evidence
+for the protocol-format and batching questions. A 1,024-token one-check wave
+had a narrow 1.052× conservative hybrid/CPU ratio; the
+[issuer-plus-consumer control](VERIFICATION_CONTROL_RESULTS.md) favored CPU at
+both tested sizes. The funded-access proposition can therefore be evaluated
+with a CPU-first service while keeping GPU acceleration optional and tied to
+the measured verification contract. Neither result establishes buyer demand
+or publisher payouts.
+
 The engine, ABI, Python bindings, public P-256 tables and
 [published GPU measurements](../README.md#measured-evidence) are inspectable
 today. The [native pipeline](PIPELINE_RESULTS.md) includes preparation, queueing

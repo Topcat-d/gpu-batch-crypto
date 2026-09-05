@@ -20,7 +20,7 @@ For each wave, CPU is the faster eligible four/eight-worker setting. Hybrid is t
 | 4096 / 1 | — | — | — | — | No: missing quality pass |
 | 4096 / 16 | — | — | — | — | No: missing quality pass |
 
-**1 wave/key settings meet the candidate rule.** These are finite-run bounds for this cryptographic service. Cost savings require the full allocated hybrid/CPU hourly-price ratio to be below the reported throughput ratio. They are not measured electricity bills, cloud savings or publisher revenue.
+**Candidate wave/key settings: 1.** These are finite-run bounds for this cryptographic service. Cost savings require the full allocated hybrid/CPU hourly-price ratio to be below the reported throughput ratio. They are not measured electricity bills, cloud savings or publisher revenue.
 
 If CPU host allocation costs C per hour and adding the GPU costs G, the break-even condition is `G/C < ratio - 1`. Count the CPU host once. Include device capital/rental, idle allocation, electricity and operational overhead in G; an unused owned card is not automatically free. For a mode with on-time goodput Q and total allocation H/hour, `cost per million = 1e6*H/(3600*Q)`. The [economics inventory](ECONOMICS.md) keeps provider scenarios and owned-hardware inputs separate.
 
@@ -45,6 +45,17 @@ The following is a **model**, not another measurement. Add the same fixed serial
 | Candidate wave / keys | +0 ms ratio | +1 ms ratio | +5 ms ratio | +20 ms ratio |
 |---|---:|---:|---:|---:|
 | 1024 / 1 | 1.052 | 1.049 | 1.039 | Quality fails |
+
+## Verification placement and stage costs
+
+This campaign performs one authoritative CPU signature check per token. A transaction service must finish that check before accepting access or accruing a charge. If the issuer uses the default `VerifiedSigner` and a separate recipient verifies again, both checks cost resources. The [separate-verification control](VERIFICATION_CONTROL_RESULTS.md) measures that deployment choice; do not apply the one-check cost ceiling to a two-check path.
+
+For the 1,024-token, eight-worker setting, the following means combine both repeats. Finish includes token encoding/decoding and CPU verification; these are serial phase wall times, including scheduling, not a pure cryptographic-operation breakdown.
+
+| Mode | Prepare ms/wave | Sign ms/wave | Finish ms/wave |
+|---|---:|---:|---:|
+| cpu-es256 | 0.616 | 4.575 | 12.356 |
+| hybrid-es256 | 0.693 | 1.648 | 13.604 |
 
 ## Both repeats, including failed settings
 

@@ -105,7 +105,7 @@ def generate(data):
         )
     text += [
         "",
-        f"**{len(candidates)} wave/key settings meet the candidate rule.** These are finite-run bounds for this cryptographic service. Cost savings require the full allocated hybrid/CPU hourly-price ratio to be below the reported throughput ratio. They are not measured electricity bills, cloud savings or publisher revenue.",
+        f"**Candidate wave/key settings: {len(candidates)}.** These are finite-run bounds for this cryptographic service. Cost savings require the full allocated hybrid/CPU hourly-price ratio to be below the reported throughput ratio. They are not measured electricity bills, cloud savings or publisher revenue.",
         "",
         "If CPU host allocation costs C per hour and adding the GPU costs G, the break-even condition is `G/C < ratio - 1`. Count the CPU host once. Include device capital/rental, idle allocation, electricity and operational overhead in G; an unused owned card is not automatically free. For a mode with on-time goodput Q and total allocation H/hour, `cost per million = 1e6*H/(3600*Q)`. The [economics inventory](ECONOMICS.md) keeps provider scenarios and owned-hardware inputs separate.",
         "",
@@ -153,6 +153,27 @@ def generate(data):
         text.append(f"| {wave} / {keys} | " + " | ".join(values) + " |")
     if not candidates:
         text.append("| No candidate in this capture | — | — | — | — |")
+    text += [
+        "",
+        "## Verification placement and stage costs",
+        "",
+        "This campaign performs one authoritative CPU signature check per token. A transaction service must finish that check before accepting access or accruing a charge. If the issuer uses the default `VerifiedSigner` and a separate recipient verifies again, both checks cost resources. The [separate-verification control](VERIFICATION_CONTROL_RESULTS.md) measures that deployment choice; do not apply the one-check cost ceiling to a two-check path.",
+        "",
+        "For the 1,024-token, eight-worker setting, the following means combine both repeats. Finish includes token encoding/decoding and CPU verification; these are serial phase wall times, including scheduling, not a pure cryptographic-operation breakdown.",
+        "",
+        "| Mode | Prepare ms/wave | Sign ms/wave | Finish ms/wave |",
+        "|---|---:|---:|---:|",
+    ]
+    for mode in ("cpu-es256", "hybrid-es256"):
+        selected = grouped[(mode, 1024, 1, 8)]
+        count = sum(r["waves"] for r in selected)
+        values = [
+            1000 * sum(r[field] for r in selected) / count
+            for field in ("prepare_s", "sign_s", "finish_s")
+        ]
+        text.append(
+            f"| {mode} | " + " | ".join(f"{value:.3f}" for value in values) + " |"
+        )
     text += [
         "",
         "## Both repeats, including failed settings",
@@ -221,6 +242,70 @@ def generate(data):
     }
 
 
+def generate_control(data):
+    if not data["complete"]:
+        raise ValueError("complete verification control required")
+    rows, meta = data["rows"], data["metadata"]
+    grouped = groups(rows)
+    total = sum(r["verified"] for r in rows)
+    extra = sum(r["gpu_guard_checks"] for r in rows)
+    text = [
+        "# Separate issuer and consumer verification: measured control",
+        "",
+        f"**{len(rows)} cells, {total:,} completed tokens, {extra:,} additional issuer-side GPU output checks.** Each token also passed the independent consumer check. The [control plan](../benchmarks/VERIFICATION_CONTROL.md) was committed before this separate measurement, after the original [ready-wave screening](READY_WAVE_RESULTS.md).",
+        "",
+        "CPU ES256 signs and performs one consumer verification. Hybrid ES256 additionally checks every GPU signature on CPU at the issuer before encoding, then performs the separate consumer verification. This represents the default guarded signer followed by a verifying recipient. CPU fallback needs no additional GPU fault guard. Both use the same claims and worker budgets.",
+        "",
+        "The same RTX 3060 and Ryzen 7 7800X3D host were used, with idle selected-GPU preflights and shared-host telemetry. Two repeats use opposite mode order; three seconds per cell. General JWT parsing/claim policy, network/TLS, account/payout services, key setup and warm-up remain outside timing.",
+        "",
+        "## Decision at the declared 50 ms budget",
+        "",
+        "The conservative ratio is slower hybrid repeat / faster eligible CPU repeat, using the better eligible four/eight-worker setting for each. A candidate requires ≥99% of tokens within 50 ms in both repeats and ratio >1.05.",
+        "",
+        "| Wave | CPU / hybrid workers | CPU upper / hybrid lower goodput/s | Ratio | Candidate? |",
+        "|---|---|---:|---:|---|",
+    ]
+    passed = 0
+    for wave in (256, 1024):
+        c = select(grouped, "cpu-es256", wave, 1)
+        h = select(grouped, "hybrid-es256", wave, 1, hybrid=True)
+        if not c or not h:
+            text.append(f"| {wave} | — | — | — | No matched quality pass |")
+        else:
+            cr, hr = max(rate(r) for r in c[1]), min(rate(r) for r in h[1])
+            ratio = hr / cr
+            passed += ratio > 1.05
+            text.append(
+                f"| {wave} | {c[0]} / {h[0]} | {cr:,.0f} / {hr:,.0f} | {ratio:.3f} | {'Yes, within measured scope' if ratio > 1.05 else 'No'} |"
+            )
+    text += [
+        "",
+        f"**Candidate settings in this control: {passed}.** Use this result for the two-check cryptographic path, not the earlier one-check ceiling. Additional common application costs must also be included before sizing a service. These shared-host, finite-run observations are not an exclusive-host capacity certification.",
+        "",
+        "## Every setting and both repeats",
+        "",
+        "| Wave | Mode | Workers | Tokens/s | p99 ms | Within 50 ms | Process CPU s | Both pass? |",
+        "|---|---|---:|---:|---:|---:|---:|---|",
+    ]
+    for (mode, wave, _, workers), values in sorted(
+        grouped.items(), key=lambda item: (item[0][1], item[0][3], item[0][0])
+    ):
+        percentages = [100 * r["within_50ms"] / r["verified"] for r in values]
+        text.append(
+            f"| {wave} | {mode} | {workers} | {span(values, 'throughput_rps')} | {span(values, 'p99_ms', digits=2)} | {min(percentages):.2f}–{max(percentages):.2f}% | {span(values, 'process_cpu_s', digits=2)} | {'Yes' if quality(values) else 'No'} |"
+        )
+    text += [
+        "",
+        "A single-check acceptance design is a different application contract: the designated receiver checks every token before authorization or monetary accrual, and failed output must recover without creating a charge. This control does not validate that ledger, networking or fault-recovery implementation. The library's guarded example remains appropriate when a caller needs independently checked signatures before releasing them.",
+        "",
+        "Existing Ed25519 consumers still require their own accepted protocol; ES256 interoperability does not change their contract. Both profiles retain the existing [GPU key-residency and side-channel constraints](PRODUCTION_READINESS.md).",
+        "",
+        f"Measured source commit: `{meta['commit']}`. [Raw capture](../benchmarks/ready_wave_results/rtx3060-verification-2026-09-05.json), [build fingerprints](../benchmarks/ready_wave_build.json), [checksum inventory](../benchmarks/ready_wave_results/SHA256SUMS). Run `python benchmarks/verify_ready_wave.py` and `python benchmarks/report_ready_wave.py --check` with the interop dependencies installed.",
+        "",
+    ]
+    return {ROOT / "docs/VERIFICATION_CONTROL_RESULTS.md": "\n".join(text)}
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
@@ -232,7 +317,15 @@ def main():
     )
     if not data["complete"]:
         raise ValueError("complete campaign required")
-    for path, content in generate(data).items():
+    outputs = generate(data)
+    control_path = (
+        ROOT / "benchmarks/ready_wave_results/rtx3060-verification-2026-09-05.json"
+    )
+    if control_path.exists():
+        outputs.update(
+            generate_control(json.loads(control_path.read_text(encoding="utf-8")))
+        )
+    for path, content in outputs.items():
         if args.check:
             if path.read_text(encoding="utf-8") != content:
                 raise ValueError(f"stale generated result: {path.name}")

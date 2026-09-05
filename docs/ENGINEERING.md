@@ -67,6 +67,16 @@ Keys are present in host and device memory, and GPU arithmetic/table accesses ha
 
 ## A bounded next evaluation
 
+The completed [ready-wave campaign](READY_WAVE_RESULTS.md) tests the proposed
+already-ready workload with native CPU ES256, CPU Ed25519 and hybrid ES256.
+Its one-check, 1,024-token case leaves about a 5.2% incremental GPU-cost ceiling
+against the faster eligible CPU repeat. The [separate issuer/consumer
+control](VERIFICATION_CONTROL_RESULTS.md) removes that advantage at both tested
+sizes. The practical default for a guarded issuer plus verifying recipient is
+CPU; a different verification contract needs its own explicit acceptance and
+failure-handling design. These are synthetic cryptographic service results,
+with application policy, network, accounts and settlement outside timing.
+
 Choose a representative workload, latency target, required verification policy and success criteria first. Compare an optimized native multi-core CPU service with the hybrid design under the same arrivals and key distribution. Measure correctly completed requests within the target, p50/p95/p99 latency, CPU/GPU resource use, rejected and late work, and total allocated cost. Exercise rotation, overload and failure handling.
 
 A positive decision requires an acceptable security model and a whole-system benefit at the required latency and cost. The current repository gives engineers code and evidence to investigate that decision; application economics and deployment readiness remain outcomes to establish.

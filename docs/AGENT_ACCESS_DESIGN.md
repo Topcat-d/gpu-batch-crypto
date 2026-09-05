@@ -225,6 +225,16 @@ state, key release and payment settlement remain outside this engine.
 
 ## What would establish the benefit
 
+The subsequent [ready-wave experiment](READY_WAVE_RESULTS.md) measured the
+already-ready signing portion of this design: standard ES256/EdDSA objects,
+native workers, wire encoding and CPU verification. The one-check ES256 case
+at 1,024 tokens had a narrow cost ceiling; a
+[separate issuer/consumer verification control](VERIFICATION_CONTROL_RESULTS.md)
+favored CPU. These runs do not simulate model reasoning, network delivery,
+cancellations or overlapping planning. They establish a more specific
+cryptographic workload result while leaving those application dimensions
+distinct.
+
 The [RTX 3060 pipeline campaign](RTX3060_PIPELINE.md) tested planned constant
 arrival rates on a shared host. Its sixteen-key hybrid case performed every
 signature on CPU; its deadline results did not establish a repeatable cost
