@@ -6,7 +6,69 @@ import math
 from pathlib import Path
 import subprocess
 
+from run_pipeline import quiet_gpus, system_cpu_percent
+
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def verify_telemetry(samples):
+    if not samples:
+        raise ValueError("missing telemetry")
+    previous = None
+    for sample in samples:
+        if "error" in sample:
+            raise ValueError("telemetry failed; measurement conditions incomplete")
+        counters = sample.get("system_cpu_times")
+        if counters is not None and (
+            not all(math.isfinite(counters[k]) for k in ("total_s", "idle_s"))
+            or not 0 <= counters["idle_s"] <= counters["total_s"]
+        ):
+            raise ValueError("invalid aggregate CPU counters")
+        expected = system_cpu_percent(previous, counters)
+        actual = sample.get("system_cpu_percent")
+        if (expected is None) != (actual is None) or (
+            expected is not None
+            and (
+                not math.isfinite(actual)
+                or not math.isclose(actual, expected, abs_tol=1e-7)
+            )
+        ):
+            raise ValueError("aggregate CPU utilization mismatch")
+        if not sample.get("gpus"):
+            raise ValueError("missing GPU observations")
+        previous = counters
+
+
+def verify_conditions(data):
+    meta = data["metadata"]
+    # Earlier diagnostic captures predate per-trial preflight and CPU counters.
+    if "preflight_scope" not in meta:
+        return
+    scope = meta["preflight_scope"]
+    if scope not in ("all-gpus", "target-gpu"):
+        raise ValueError("unknown preflight scope")
+    selected = meta["selected_device"]
+    if type(selected) is not int or selected < 0:
+        raise ValueError("invalid selected device")
+    device = selected if scope == "target-gpu" else None
+    if (
+        scope == "target-gpu"
+        and meta["contention_policy"] != "diagnostic"
+        and "shared CPU host" not in meta["contention_policy"]
+    ):
+        raise ValueError("target-GPU preflight must disclose shared CPU host")
+    for record in [meta, *data["rows"]]:
+        samples = record["preflight_telemetry"]
+        verify_telemetry(samples)
+        quiet = quiet_gpus(samples[-3:], device)
+        if record["preflight_quiet"] is not quiet:
+            raise ValueError("preflight result mismatch")
+        if not quiet and meta["contention_policy"] != "diagnostic":
+            raise ValueError("busy preflight without diagnostic qualification")
+    for row in data["rows"]:
+        if row["device"] != selected:
+            raise ValueError("capture device mismatch")
+        verify_telemetry(row["telemetry"])
 
 
 def verify_row(r):
@@ -128,6 +190,7 @@ def main():
         meta = data["metadata"]
         if data["complete"] is not True:
             raise ValueError("partial capture")
+        verify_conditions(data)
         for file, sha in meta["source_sha256"].items():
             key = meta["commit"], file
             if key not in blobs:
@@ -161,6 +224,7 @@ def main():
             cell = tuple(
                 row[k] for k in ("mode", "workers", "keys", "offered_rate", "max_batch")
             )
+            cell += (row.get("gpu_dispatch", "caller"),)
             if cell in cells:
                 raise ValueError("duplicate cell")
             cells.add(cell)
