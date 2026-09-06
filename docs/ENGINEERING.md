@@ -4,6 +4,13 @@
 
 The project is a technical preview with buildable code, interoperability tests and published measurements. It is ready for independent engineering evaluation. Production adoption still depends on workload fit, system-level performance and security review.
 
+The [agent-web research case](AGENT_WEB_RESEARCH.md) explains the wider design:
+independent services need verifiable permissions and accountable value exchange,
+while execution choices depend on the fresh compatible work that remains after
+reuse. The [protocol landscape](PROTOCOL_LANDSCAPE.md) maps actual integration
+requirements; the [workload model](../benchmarks/credential_workload_model.py)
+makes the batch-density assumptions inspectable without running a GPU.
+
 An adopter can start with [CPU only, guarded GPU signing, ES256 tokens or access
 books](GETTING_STARTED.md). The [component catalog](COMPONENTS.md) defines exact
 dependencies, entry points, output/failure contracts, ownership, relevant evidence

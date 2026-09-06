@@ -4,6 +4,14 @@ An independent **Apache-2.0 library for batch cryptography on NVIDIA GPUs**, wit
 
 **Technical preview, v0.3.** The strongest measured use case is signing many independent records when enough compatible work is ready together. This version adds atomic key-epoch checks, a signer that verifies every output on CPU before returning it, and native CPU/GPU pipeline measurements. Production security and deployment ROI remain explicit evaluation questions.
 
+**Research direction:** make verifiable machine access economical. An agent can
+carry scoped permission and payment authority while a publisher controls access
+on explicit terms. This library investigates the cost of the required cryptography.
+Read the [agent-web research case](docs/AGENT_WEB_RESEARCH.md),
+[current protocol landscape](docs/PROTOCOL_LANDSCAPE.md) and
+[runnable credential-workload model](benchmarks/credential_workload_model.py)
+for the argument, integration boundaries and falsifiable experiments.
+
 ## Choose what you need
 
 You can adopt the cryptographic library without the publisher/accounting example.
@@ -28,6 +36,10 @@ buyer, differentiation and joint-benefit questions for a commercial evaluation.
 [Release and rollback instructions](docs/RELEASING.md) explain artifact contents,
 checks and version pinning. [Contributing](CONTRIBUTING.md) maps proposed changes
 to the required correctness, packaging and benchmark evidence.
+
+[Optimization research](docs/OPTIMIZATION_RESEARCH.md) provides bounded tasks
+for profiling, CPU/GPU routing, memory transfers and verification costs, with
+explicit measurement and acceptance criteria.
 
 ## Application and business context
 

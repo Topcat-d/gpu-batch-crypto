@@ -12,6 +12,11 @@ This is a proposed application and a testable business hypothesis around the
 cryptography and measurements. Buyer demand, publisher revenue, payment
 settlement and a production access service remain to be demonstrated.
 
+The [agent-web research case](AGENT_WEB_RESEARCH.md) develops the engineering
+argument, with a dated protocol comparison and a runnable model of credential
+reuse, bundling, compatible-key density and batch-fill time. It identifies where
+this engine could contribute to existing systems and what would falsify that fit.
+
 The hypothesis now has a runnable [funded-access example](ACCESS_BOOK_DESIGN.md):
 one signed book can cover exact resources, while atomic per-resource redemptions
 connect reserved buyer units to publisher receivables. Small or uncertain work

@@ -74,6 +74,13 @@ was moved into this library. The public interoperability example is generic.
 
 ## Compatibility and cost are separate decisions
 
+Protocol requirements can also constrain signature behavior. AP2 v0.2's merchant
+Checkout JWT requires a non-deterministic signature; this GPU signer uses
+deterministic RFC6979 ECDSA. ES256 interoperability alone therefore does not
+establish AP2 checkout compatibility. See the dated
+[protocol review](PROTOCOL_LANDSCAPE.md#algorithm-names-are-not-the-complete-contract)
+and [AP2 specification](https://ap2-protocol.org/ap2/specification/).
+
 The [measured ready-wave results](READY_WAVE_RESULTS.md) and
 [separate-verification control](VERIFICATION_CONTROL_RESULTS.md) now put a
 boundary on the GPU case. One acceptance check per token produced a narrow

@@ -13,7 +13,7 @@ show the smallest complete examples.
 | [ES256 construction](#es256-construction) | Python wheel: `batchcrypto.jws.sign_es256` | Python core + trusted signing callback | Public preview encoder |
 | [Public P-256 tables](#public-p-256-tables) | `data/p256/` binaries + metadata + hashes | Reader implementing the documented format; generator uses cryptography | Public data format v1 |
 | [Access books](#access-books) | Source example: `examples/access_book/engine.py` | Python core, PyJWT 2.13.0, SQLite | Experimental application profile |
-| [Economic calculators](#economic-calculators) | Two standalone scripts in `benchmarks/` | Python standard library | Analysis tools; assumptions are inputs |
+| [Economics and workload calculators](#economic-calculators) | Three standalone scripts in `benchmarks/` | Python standard library | Analysis tools; assumptions are inputs |
 | [Benchmark harnesses](#benchmark-harnesses) | Source executables/scripts + raw captures | Depends on campaign; see below | Evaluation harnesses, not service APIs |
 
 **Public preview** means a documented consumer interface with relevant tests.
@@ -276,7 +276,7 @@ production ledger certification.
 **Purpose.** Convert explicit measured rates and cost assumptions into unit
 costs, contribution and break-even conditions.
 
-**Dependencies and installation.** Copy either script as a standalone file;
+**Dependencies and installation.** Copy the needed script as a standalone file;
 Python standard library only. No package install, CUDA, account credentials,
 network service or actual money is involved.
 
@@ -288,6 +288,13 @@ and a CLI taking hourly cost, rate, scope and optional utilization/bill lifetime
 Both return/print scenario data; invalid numeric inputs raise validation errors
 or cause a nonzero CLI exit. No automatic provider prices or provisioning.
 
+[`credential_workload_model.py`](../benchmarks/credential_workload_model.py)
+adds `evaluate` and a CLI for fresh-credential rates, compatible groups and
+analytical batch-fill conditions. Copy the adjacent scenario JSON to use its
+bundled examples, or supply `--scenarios`. It raises `ValueError` for invalid
+assumptions and emits JSON or Markdown. Its outputs are scenarios, not measured
+GPU speedups; the caller owns the actual reuse, key/privacy and arrival policy.
+
 **Application ownership.** Matched actual invoices, total cost allocation,
 correct timing denominator, realistic utilization, payment/payout/risk terms,
 publisher share, liabilities and fixed operating cost. A modeled positive
@@ -296,6 +303,7 @@ contribution is not measured revenue or proof of buyer demand.
 **Smallest examples.** [Analysis tool commands](GETTING_STARTED.md#use-data-and-analysis-tools).
 **Evidence:** [test_economics.py](../tests/test_economics.py),
 [test_access_business.py](../tests/test_access_business.py),
+[test_credential_workload.py](../tests/test_credential_workload.py),
 [cost inventory](ECONOMICS.md) and [access scenarios](ACCESS_BOOK_RESULTS.md).
 **Maturity:** transparent analysis tools with input-validation/accounting tests.
 
