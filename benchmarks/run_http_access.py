@@ -110,7 +110,8 @@ def host_cpu_ticks():
 def measure(scenario, mode, workers, args):
     with tempfile.TemporaryDirectory(prefix="http-bench-") as directory:
         with Fixture(directory, mode="gpu" if mode == "gpu-books" else "cpu", workers=workers,
-                     library=args.library, device=args.device, profile=getattr(args, "profile", False)) as app:
+                     library=args.library, device=args.device, profile=getattr(args, "profile", False),
+                     ledger_pool_size=getattr(args, "ledger_pool_size", 0)) as app:
             # Excluded warm-up exercises the selected signer, HTTP and ledger.
             warm = app.issue([["r31"]], request_id="warm")[0] if mode != "direct" else None
             app.access("r31", "warm-access", warm)
@@ -159,11 +160,20 @@ def measure(scenario, mode, workers, args):
             # wall cost/goodput denominator, separately from delivery latency.
             cleanup_errors = []
             if books and scenario["consume"] < scenario["size"]:
-                for book in books:
+                if getattr(args, "batch_cancel", False):
                     try:
-                        rpc(app.issuer_port, "/cancel", {"book": book["book"]}, app.buyer_secret)
+                        app.cancel_books(books, request_id="cleanup")
                     except Exception as exc:
                         cleanup_errors.append(type(exc).__name__)
+                else:
+                    for book in books:
+                        try:
+                            rpc(app.issuer_port, "/cancel", {"book": book["book"]}, app.buyer_secret)
+                        except Exception as exc:
+                            cleanup_errors.append(type(exc).__name__)
+            checkpoint_start = time.perf_counter()
+            checkpoint = app.ledger.checkpoint() if getattr(args, "final_checkpoint", False) else None
+            checkpoint_ms = (time.perf_counter() - checkpoint_start) * 1000
             end = time.perf_counter()
             cpu_seconds = time.process_time() - cpu_start
             host_end = host_cpu_ticks()
@@ -190,6 +200,7 @@ def measure(scenario, mode, workers, args):
                     "elapsed_seconds": elapsed, "delivery_seconds": delivery_end - start,
                     "preparation_wait_after_ready_ms": (prepared - ready) * 1000,
                     "cleanup_ms": (end - delivery_end) * 1000, "process_cpu_seconds": cpu_seconds,
+                    "checkpoint_ms": checkpoint_ms, "checkpoint": checkpoint,
                     "process_peak_rss_bytes_cumulative": peak_rss(),
                     "host_cpu_busy_percent": (100 * (1 - (host_end[0] - host_start[0]) / (host_end[1] - host_start[1]))
                                                if host_start and host_end and host_end[1] > host_start[1] else None),

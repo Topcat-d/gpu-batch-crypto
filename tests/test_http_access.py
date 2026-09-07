@@ -19,10 +19,13 @@ except ModuleNotFoundError as exc:
 
 @unittest.skipIf(Fixture is None, "install the interop extra")
 class HTTPAccessTests(unittest.TestCase):
+    ledger_pool_size = 0
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.now = 1000
-        self.app = Fixture(self.temp.name, clock=lambda: self.now, balance=100000)
+        self.app = Fixture(self.temp.name, clock=lambda: self.now, balance=100000,
+                           ledger_pool_size=self.ledger_pool_size)
 
     def tearDown(self):
         self.app.__exit__()
@@ -51,7 +54,9 @@ class HTTPAccessTests(unittest.TestCase):
         self.now += 3
         self.assertDenied(lambda: self.app.access("r1", "two", book))
         self.app.ledger.revoke(self.app.keys.kid)
-        self.app.ledger = Ledger(self.app.ledger.path, self.app.keys, self.app.catalog, clock=lambda: self.now)
+        self.app.ledger.close()
+        self.app.ledger = Ledger(self.app.ledger.path, self.app.keys, self.app.catalog,
+                                 clock=lambda: self.now, pool_size=self.ledger_pool_size)
         self.assertEqual(first, self.app.access("r0", "one", book))
         self.assertEqual(rpc(self.app.issuer_port, "/cancel", {"book": book["book"]}, self.app.buyer_secret), {"released": 1000})
         self.assertEqual(rpc(self.app.issuer_port, "/cancel", {"book": book["book"]}, self.app.buyer_secret), {"released": 0})
@@ -134,7 +139,7 @@ class HTTPAccessTests(unittest.TestCase):
     def test_guarded_gpu_ready_batch_and_key_rotation(self):
         with tempfile.TemporaryDirectory() as directory:
             with Fixture(directory, mode="gpu", library=os.environ["BC_LIBRARY"],
-                         device=int(os.environ.get("BC_DEVICE", "0"))) as app:
+                         device=int(os.environ.get("BC_DEVICE", "0")), ledger_pool_size=self.ledger_pool_size) as app:
                 books = app.issue([["r0"]] * 64)
                 self.assertEqual(app.keys.batches, [64])
                 with ThreadPoolExecutor(max_workers=4) as pool:
@@ -147,6 +152,79 @@ class HTTPAccessTests(unittest.TestCase):
                 app.access("r1", "fresh", fresh)
                 self.assertEqual(app.consumer.verifications, 65)
                 self.assertEqual(app.ledger.audit()["receipts"], 65)
+
+
+class PooledHTTPAccessTests(HTTPAccessTests):
+    """Run the complete existing recovery/security contract on pooled storage."""
+    ledger_pool_size = 4
+
+    def test_pool_exclusive_leases_rollback_and_close(self):
+        ledger = self.app.ledger
+        with ledger.connection(write=True) as db:
+            self.assertEqual(db.execute("PRAGMA synchronous").fetchone()[0], 2)
+            self.assertEqual(db.execute("PRAGMA journal_mode").fetchone()[0], "wal")
+            self.assertEqual(db.execute("PRAGMA foreign_keys").fetchone()[0], 1)
+            with self.assertRaises(RuntimeError):
+                ledger.close()
+        with self.assertRaises(RuntimeError):
+            with ledger.connection(write=True) as db:
+                db.execute("UPDATE accounts SET initial=initial+1,available=available+1 WHERE buyer='buyer'")
+                raise RuntimeError("abort this borrower")
+        self.assertEqual(ledger.audit()["accounts"][0]["initial"], 100000)
+        self.assertEqual(ledger._active, 0)
+        self.assertEqual(len(ledger._available), 4)
+        self.assertTrue(all(not db.in_transaction for db in ledger._available))
+        self.assertEqual(ledger.checkpoint()["busy"], 0)
+
+    def test_atomic_batch_cancel_recovery_conflict_and_scope(self):
+        books = self.app.issue([["r0", "r1"], ["r2", "r3"]])
+        self.app.access("r0", "consume", books[0])
+        original = self.app.ledger.audit()
+        self.assertDenied(lambda: self.app.cancel_books([books[0], {"book": "absent"}], request_id="bad"))
+        self.assertDenied(lambda: self.app.cancel_books([books[0], books[0]], request_id="duplicate"))
+        self.assertDenied(lambda: rpc(self.app.issuer_port, "/cancel-many", {"books": [books[0]["book"]], "request_id": "bad-buyer"}, self.app.other_secret))
+        self.assertEqual(original, self.app.ledger.audit())
+        self.app.drop_next("issuer", "/cancel-many")
+        first = self.app.cancel_books(books, request_id="release")
+        self.assertEqual(first, {"released": 3000, "books": 2})
+        self.assertEqual(first, self.app.cancel_books(books, request_id="release"))
+        self.assertDenied(lambda: self.app.cancel_books(books[:1], request_id="release"))
+        self.assertEqual(self.app.ledger.audit()["accounts"][0]["reserved"], 0)
+        self.assertEqual(self.app.ledger.audit()["publisher_accrued"], 1000)
+        self.assertDenied(lambda: self.app.access("r1", "new-after-cancel", books[0]))
+        self.app.access("r0", "consume", books[0])
+
+    def test_batch_cancel_statement_failure_rolls_back_all_books(self):
+        books = self.app.issue([["r0"], ["r1"]])
+        original = self.app.ledger.audit()
+        with self.app.ledger.connection(write=True) as db:
+            db.execute("CREATE TRIGGER fail_cancel BEFORE INSERT ON cancellations BEGIN SELECT RAISE(ABORT,'test'); END")
+        self.assertDenied(lambda: self.app.cancel_books(books, request_id="rollback"), 503)
+        self.assertEqual(original, self.app.ledger.audit())
+        with self.app.ledger.connection(write=True) as db:
+            db.execute("DROP TRIGGER fail_cancel")
+        self.app.cancel_books(books, request_id="rollback")
+        self.assertEqual(self.app.ledger.audit()["accounts"][0]["reserved"], 0)
+
+    def test_concurrent_cancel_and_spend_conserve_funds(self):
+        books = self.app.issue([["r0", "r1"]])
+        def spend():
+            try:
+                self.app.access("r0", "race", books[0])
+                return 1000
+            except RemoteError as exc:
+                self.assertEqual(exc.status, 400)
+                return 0
+        with ThreadPoolExecutor(max_workers=3) as pool:
+            purchase = pool.submit(spend)
+            cancels = [pool.submit(self.app.cancel_books, books, request_id="cancel-race") for _ in range(2)]
+            spent = purchase.result()
+            results = [f.result() for f in cancels]
+        self.assertEqual(results[0], results[1])
+        self.assertEqual(results[0]["released"] + spent, 2000)
+        audit = self.app.ledger.audit()
+        self.assertEqual(audit["accounts"][0]["reserved"], 0)
+        self.assertEqual(audit["publisher_accrued"], spent)
 
 
 if __name__ == "__main__":

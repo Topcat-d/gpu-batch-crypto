@@ -74,14 +74,15 @@ class Fixture(AbstractContextManager):
     """
 
     def __init__(self, directory, *, mode="cpu", workers=4, library=None, device=0,
-                 clock=time.time, balance=10**9, profile=False):
+                 clock=time.time, balance=10**9, profile=False, ledger_pool_size=0):
         self.timings = Timings(profile)
         self.keys = Keys(mode, workers=workers, library=library, device=device)
         self.consumer = Consumer(self.keys.pins)
         self.data = {f"r{i}": (f"Synthetic licensed document {i}. " * 40) for i in range(32)}
         self.catalog = {r: {"content": digest(body), "terms": digest("local simulated terms v1"), "units": 1000}
                         for r, body in self.data.items()}
-        self.ledger = Ledger(Path(directory) / "reference.sqlite", self.keys, self.catalog, clock=clock, timings=self.timings)
+        self.ledger = Ledger(Path(directory) / "reference.sqlite", self.keys, self.catalog, clock=clock,
+                             timings=self.timings, pool_size=ledger_pool_size)
         self.ledger.seed("buyer", balance)
         self.ledger.seed("other", balance)
         self.buyer_secret, self.other_secret, self.publisher_secret = [secrets.token_hex(32) for _ in range(3)]
@@ -179,6 +180,9 @@ class Fixture(AbstractContextManager):
             if path == "/cancel" and identity in ("buyer", "other"):
                 fields(payload, ("book",))
                 return self.ledger.cancel(identity, payload["book"])
+            if path == "/cancel-many" and identity in ("buyer", "other"):
+                fields(payload, ("request_id", "books"))
+                return self.ledger.cancel_many(identity, **payload)
             if path == "/spend" and identity == "publisher":
                 fields(payload, ("buyer", "request_id", "resource", "content", "terms", "max_units"), ("book", "token"))
                 return self.ledger.spend(**payload)
@@ -225,10 +229,15 @@ class Fixture(AbstractContextManager):
         with self.lock:
             self.drops.add((role, path))
 
+    def cancel_books(self, books, *, request_id):
+        return rpc(self.issuer_port, "/cancel-many", {"request_id": request_id,
+                   "books": [book["book"] for book in books]}, self.buyer_secret)
+
     def __exit__(self, *args):
         for server in self.servers:
             server.shutdown()
             server.server_close()
         for thread in self.threads:
             thread.join()
+        self.ledger.close()
         self.keys.close()

@@ -10,6 +10,7 @@ import json
 import re
 import secrets
 import sqlite3
+import threading
 import time
 
 from .timings import Timings
@@ -59,30 +60,105 @@ CREATE TABLE IF NOT EXISTS receipts(
  fingerprint TEXT NOT NULL, book TEXT, resource TEXT NOT NULL, units INTEGER NOT NULL,
  response TEXT NOT NULL, PRIMARY KEY(buyer,request_id), UNIQUE(book,resource));
 CREATE TABLE IF NOT EXISTS revoked(kid TEXT PRIMARY KEY);
+CREATE TABLE IF NOT EXISTS cancellations(
+ buyer TEXT NOT NULL REFERENCES accounts(buyer), request_id TEXT NOT NULL,
+ fingerprint TEXT NOT NULL, response TEXT NOT NULL, PRIMARY KEY(buyer,request_id));
 CREATE TABLE IF NOT EXISTS publisher(id TEXT PRIMARY KEY, accrued INTEGER NOT NULL CHECK(accrued>=0));
 INSERT OR IGNORE INTO publisher VALUES('publisher',0);
 """
 
 
 class Ledger:
-    def __init__(self, path, keys, catalog, *, clock=time.time, timings=None):
+    def __init__(self, path, keys, catalog, *, clock=time.time, timings=None, pool_size=0):
         self.path, self.keys, self.catalog, self.clock = str(path), keys, catalog, clock
         self.timings = timings or Timings()
+        integer(pool_size, 0, 16)
+        self.pool_size = pool_size
+        self._condition = threading.Condition()
+        self._available = []
+        self._active = 0
+        self._closed = False
         db = sqlite3.connect(self.path, isolation_level=None)
         try:
             db.execute("PRAGMA journal_mode=WAL")
             db.executescript(SCHEMA)
         finally:
             db.close()
+        try:
+            for _ in range(pool_size):
+                self._available.append(self._open())
+        except BaseException:
+            self.close()
+            raise
+
+    def _open(self):
+        with self.timings.phase("db.open"):
+            db = sqlite3.connect(self.path, timeout=10, isolation_level=None, check_same_thread=False)
+            try:
+                db.row_factory = sqlite3.Row
+                db.execute("PRAGMA foreign_keys=ON")
+                db.execute("PRAGMA synchronous=FULL")
+                return db
+            except BaseException:
+                db.close()
+                raise
+
+    @contextmanager
+    def _checkout(self):
+        # Each connection has one exclusive borrower. SQLite still provides
+        # transaction serialization; connections are never used concurrently.
+        with self.timings.phase("db.lease"):
+            with self._condition:
+                deadline = time.monotonic() + 10
+                while self.pool_size and not self._available and not self._closed:
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise TimeoutError("database pool exhausted")
+                    self._condition.wait(remaining)
+                if self._closed:
+                    raise RuntimeError("ledger is closed")
+                db = self._available.pop() if self.pool_size else None
+                self._active += 1
+            if db is None:
+                try:
+                    db = self._open()
+                except BaseException:
+                    with self._condition:
+                        self._active -= 1
+                        self._condition.notify_all()
+                    raise
+        reusable = True
+        try:
+            yield db
+        finally:
+            try:
+                if db.in_transaction:
+                    db.execute("ROLLBACK")
+            except BaseException:
+                reusable = False
+                raise
+            finally:
+                if not self.pool_size or not reusable:
+                    with self.timings.phase("db.close"):
+                        db.close()
+                with self._condition:
+                    self._active -= 1
+                    if self.pool_size and reusable and not self._closed:
+                        self._available.append(db)
+                    elif self.pool_size and reusable:
+                        with self.timings.phase("db.close"):
+                            db.close()
+                    # Quarantine a pool whose transaction state is unknown.
+                    if not reusable:
+                        self._closed = True
+                        for idle in self._available:
+                            idle.close()
+                        self._available.clear()
+                    self._condition.notify_all()
 
     @contextmanager
     def connection(self, *, write=False):
-        with self.timings.phase("db.open"):
-            db = sqlite3.connect(self.path, timeout=10, isolation_level=None)
-            db.row_factory = sqlite3.Row
-            db.execute("PRAGMA foreign_keys=ON")
-            db.execute("PRAGMA synchronous=FULL")
-        try:
+        with self._checkout() as db:
             with self.timings.phase("db.begin"):
                 db.execute("BEGIN IMMEDIATE" if write else "BEGIN")
             with self.timings.phase("db.body"):
@@ -90,13 +166,27 @@ class Ledger:
             if db.in_transaction:
                 with self.timings.phase("db.commit"):
                     db.execute("COMMIT")
-        except BaseException:
-            if db.in_transaction:
-                db.execute("ROLLBACK")
-            raise
-        finally:
-            with self.timings.phase("db.close"):
-                db.close()
+
+    def checkpoint(self):
+        """Quiescent owner drain, outside transactions; include it in cost."""
+        with self.timings.phase("db.checkpoint"):
+            with self._checkout() as db:
+                row = db.execute("PRAGMA wal_checkpoint(TRUNCATE)").fetchone()
+                if row[0] != 0:
+                    raise RuntimeError("checkpoint busy")
+                return {"busy": row[0], "log_frames": row[1], "checkpointed_frames": row[2]}
+
+    def close(self):
+        """Owner calls after HTTP workers finish. Closing leased state is denied."""
+        with self._condition:
+            if self._active:
+                raise RuntimeError("cannot close ledger with active transactions")
+            self._closed = True
+            for db in self._available:
+                with self.timings.phase("db.close"):
+                    db.close()
+            self._available.clear()
+            self._condition.notify_all()
 
     def seed(self, buyer, units):
         identifier(buyer)
@@ -237,6 +327,30 @@ class Ledger:
             db.execute("UPDATE accounts SET reserved=reserved-?,available=available+? WHERE buyer=?", (units, units, buyer))
             db.execute("UPDATE books SET remaining=0,closed=1 WHERE id=?", (book,))
             return {"released": units}
+
+    def cancel_many(self, buyer, request_id, books):
+        """One bounded atomic cancellation; exact retries recover original result."""
+        identifier(buyer)
+        identifier(request_id)
+        if not isinstance(books, list) or not 1 <= len(books) <= 256:
+            raise Denied("invalid cancellation batch")
+        books = sorted(identifier(book) for book in books)
+        if len(set(books)) != len(books):
+            raise Denied("duplicate book")
+        fp = digest(canonical(books))
+        with self.connection(write=True) as db:
+            prior = self.prior(db, "cancellations", buyer, request_id, fp)
+            if prior is not None:
+                return prior
+            rows = [db.execute("SELECT * FROM books WHERE id=? AND buyer=?", (book, buyer)).fetchone() for book in books]
+            if any(row is None for row in rows):
+                raise Denied("unknown book or wrong buyer")
+            units = sum(row["remaining"] for row in rows)
+            db.execute("UPDATE accounts SET reserved=reserved-?,available=available+? WHERE buyer=?", (units, units, buyer))
+            db.executemany("UPDATE books SET remaining=0,closed=1 WHERE id=?", [(book,) for book in books])
+            response = {"released": units, "books": len(books)}
+            db.execute("INSERT INTO cancellations VALUES(?,?,?,?)", (buyer, request_id, fp, canonical(response)))
+            return response
 
     def revoke(self, kid):
         with self.connection(write=True) as db:

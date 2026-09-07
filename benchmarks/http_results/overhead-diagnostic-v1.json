@@ -1,0 +1,4528 @@
+{
+  "schema": 1,
+  "purpose": "diagnostic only; overlapping phase scopes",
+  "complete": true,
+  "commit": "cd29e4c7ab976ea326504297943de9e1e06670fc",
+  "timestamp_utc": "2026-09-07T14:34:56.371264+00:00",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "gpus_before": [
+    {
+      "index": "0",
+      "uuid": "GPU-96d3e484-7b6e-2fc9-4395-8b3ea3083a25",
+      "name": "NVIDIA GeForce RTX 4070 Ti",
+      "utilization_percent": "23",
+      "memory_mib": "1448",
+      "power_w": "21.94"
+    },
+    {
+      "index": "1",
+      "uuid": "GPU-130bba5c-4480-7ba8-4ef5-c6789117f3e3",
+      "name": "NVIDIA GeForce RTX 3060",
+      "utilization_percent": "0",
+      "memory_mib": "0",
+      "power_w": "9.05"
+    }
+  ],
+  "sources": {
+    "benchmarks/HTTP_OVERHEAD_CAMPAIGN.md": "889e11d39d8e4231d207b7e766ae1c28eacd3c9b525eb09e2a29123f9edf80f3",
+    "benchmarks/profile_http_access.py": "cdd2a67218882ad8981d8ccb15e58046c1cf33216fdec363059b6f04244ad41c",
+    "benchmarks/run_http_access.py": "21ccf7eb013fc59b736c156545a2085ff8a2806aeff5e59f1e922a9a33bb1eca",
+    "examples/http_access/__init__.py": "ca9712f65bfc95961beb9c798fa1398767103d7fcb4c0e2231f26ba68902b9d1",
+    "examples/http_access/ledger.py": "ec96b5f3694fcc9d1d771e5a41d56479e73de032f798f5a95a6801c4afd643be",
+    "examples/http_access/service.py": "f60d9ef440349066b6ebde675a9df27767e64742f5898911ccedded0884d3cb9",
+    "examples/http_access/signing.py": "4b1e76a68e61dc968e013987973cd3ee825654e6b892a59f75545f927c1ce440",
+    "examples/http_access/timings.py": "358f52136b93fb3286f47c722934cfb9ad97c19287fa3a9b535a607b1c128adc"
+  },
+  "cells": [
+    {
+      "scenario": {
+        "name": "ready-full",
+        "books": 64,
+        "size": 4,
+        "consume": 4,
+        "planning_ms": 0
+      },
+      "mode": "direct",
+      "cpu_signing_workers": 4,
+      "clients": 4,
+      "slo_ms": 1000,
+      "attempted_accesses": 256,
+      "completed": 256,
+      "on_time": 130,
+      "late": 126,
+      "failed": 0,
+      "unused_planned_accesses": 0,
+      "elapsed_seconds": 2.037393300095573,
+      "delivery_seconds": 2.0373929000925273,
+      "preparation_wait_after_ready_ms": 0.0002998858690261841,
+      "cleanup_ms": 0.000400003045797348,
+      "process_cpu_seconds": 0.703125,
+      "process_peak_rss_bytes_cumulative": 45670400,
+      "host_cpu_busy_percent": 14.866156787762907,
+      "completed_per_second": 125.65075186415464,
+      "on_time_per_second": 63.80702243101603,
+      "first_access_ready_ms": 11.445800075307488,
+      "p95_ready_ms": 1863.4705001022667,
+      "p99_ready_ms": 2018.1448000948876,
+      "p99_request_ms": 99.54680013470352,
+      "signatures": 0,
+      "signing_batches": [],
+      "publisher_verifications": 0,
+      "http": {
+        "requests": 512,
+        "request_body_bytes": 112560,
+        "response_body_bytes": 476672,
+        "dropped_responses": 0
+      },
+      "service_timings": {
+        "buyer.access_rpc": {
+          "count": 256,
+          "total_ms": 8077.199100982398,
+          "p50_ms": 30.423799995332956,
+          "p95_ms": 63.02040000446141,
+          "max_ms": 119.01390017010272
+        },
+        "db.begin": {
+          "count": 256,
+          "total_ms": 1522.1047012601048,
+          "p50_ms": 0.007899943739175797,
+          "p95_ms": 29.275299981236458,
+          "max_ms": 72.53509992733598
+        },
+        "db.body": {
+          "count": 256,
+          "total_ms": 53.50659927353263,
+          "p50_ms": 0.08949986658990383,
+          "p95_ms": 0.6994998548179865,
+          "max_ms": 1.1406999547034502
+        },
+        "db.close": {
+          "count": 256,
+          "total_ms": 83.84800143539906,
+          "p50_ms": 0.067099928855896,
+          "p95_ms": 2.6231000665575266,
+          "max_ms": 3.0544998589903116
+        },
+        "db.commit": {
+          "count": 256,
+          "total_ms": 547.5358983967453,
+          "p50_ms": 1.702900044620037,
+          "p95_ms": 4.590900149196386,
+          "max_ms": 44.040200067684054
+        },
+        "db.open": {
+          "count": 256,
+          "total_ms": 1764.1178017947823,
+          "p50_ms": 5.01250009983778,
+          "p95_ms": 15.622799983248115,
+          "max_ms": 32.04369987361133
+        },
+        "publisher.spend_rpc": {
+          "count": 256,
+          "total_ms": 5837.875697063282,
+          "p50_ms": 18.54019984602928,
+          "p95_ms": 56.33649998344481,
+          "max_ms": 99.82030000537634
+        }
+      },
+      "audit_before": {
+        "accounts": [
+          {
+            "buyer": "buyer",
+            "initial": 1000000000,
+            "available": 999999000,
+            "reserved": 0,
+            "spent": 1000
+          },
+          {
+            "buyer": "other",
+            "initial": 1000000000,
+            "available": 1000000000,
+            "reserved": 0,
+            "spent": 0
+          }
+        ],
+        "receipts": 1,
+        "publisher_accrued": 1000,
+        "books": 0
+      },
+      "audit_after": {
+        "accounts": [
+          {
+            "buyer": "buyer",
+            "initial": 1000000000,
+            "available": 999743000,
+            "reserved": 0,
+            "spent": 257000
+          },
+          {
+            "buyer": "other",
+            "initial": 1000000000,
+            "available": 1000000000,
+            "reserved": 0,
+            "spent": 0
+          }
+        ],
+        "receipts": 257,
+        "publisher_accrued": 257000,
+        "books": 0
+      },
+      "reconciled": true,
+      "error": null,
+      "server_errors": [],
+      "cleanup_errors": [],
+      "cost_usd": null,
+      "cost_per_million_on_time": null,
+      "records": [
+        {
+          "status": "ok",
+          "receipt_id": "f2f8e2a2b1f4add5ee9d851d2a23e91f",
+          "ready_to_complete_ms": 11.445800075307488,
+          "plan_to_complete_ms": 11.524300090968609,
+          "request_ms": 11.288000037893653
+        },
+        {
+          "status": "ok",
+          "receipt_id": "6d6482b420d7dca06b4430f250fc519a",
+          "ready_to_complete_ms": 37.84910007379949,
+          "plan_to_complete_ms": 37.92760008946061,
+          "request_ms": 37.4275001231581
+        },
+        {
+          "status": "ok",
+          "receipt_id": "788656f24ae9fd938dc5bc7e193556f4",
+          "ready_to_complete_ms": 22.25110004656017,
+          "plan_to_complete_ms": 22.32960006222129,
+          "request_ms": 21.608100039884448
+        },
+        {
+          "status": "ok",
+          "receipt_id": "5d0f3e84cdeb3e93ab4fc8c36147e056",
+          "ready_to_complete_ms": 13.48829991184175,
+          "plan_to_complete_ms": 13.56679992750287,
+          "request_ms": 12.532399967312813
+        },
+        {
+          "status": "ok",
+          "receipt_id": "48197b0aa311170d4eedec58287b7b92",
+          "ready_to_complete_ms": 53.006399888545275,
+          "plan_to_complete_ms": 53.084899904206395,
+          "request_ms": 41.54809983447194
+        },
+        {
+          "status": "ok",
+          "receipt_id": "69c74484d707c0312cc87254ba659028",
+          "ready_to_complete_ms": 42.28749987669289,
+          "plan_to_complete_ms": 42.36599989235401,
+          "request_ms": 28.791199903935194
+        },
+        {
+          "status": "ok",
+          "receipt_id": "06713fa96603fe0b934f05810c3be5af",
+          "ready_to_complete_ms": 69.77210007607937,
+          "plan_to_complete_ms": 69.85060009174049,
+          "request_ms": 47.514399979263544
+        },
+        {
+          "status": "ok",
+          "receipt_id": "31b37565d09cccc19938a2881e0182e8",
+          "ready_to_complete_ms": 45.3923000022769,
+          "plan_to_complete_ms": 45.47080001793802,
+          "request_ms": 7.5344000943005085
+        },
+        {
+          "status": "ok",
+          "receipt_id": "45683f2a0e51bf52a54c44edb1998a0b",
+          "ready_to_complete_ms": 49.68519997783005,
+          "plan_to_complete_ms": 49.76369999349117,
+          "request_ms": 7.390900049358606
+        },
+        {
+          "status": "ok",
+          "receipt_id": "30a0499b13eda85731b8d0c51e1b0f7e",
+          "ready_to_complete_ms": 76.71239995397627,
+          "plan_to_complete_ms": 76.7908999696374,
+          "request_ms": 31.31349990144372
+        },
+        {
+          "status": "ok",
+          "receipt_id": "e37324979bff2b3b40cfced1d4d5182c",
+          "ready_to_complete_ms": 85.49520000815392,
+          "plan_to_complete_ms": 85.57370002381504,
+          "request_ms": 35.803599981591105
+        },
+        {
+          "status": "ok",
+          "receipt_id": "e277b2e729465a8542d6f621ce167510",
+          "ready_to_complete_ms": 73.3447999227792,
+          "plan_to_complete_ms": 73.42329993844032,
+          "request_ms": 20.327799953520298
+        },
+        {
+          "status": "ok",
+          "receipt_id": "204a93d6fd9216bad3beec641229be59",
+          "ready_to_complete_ms": 90.48960008658469,
+          "plan_to_complete_ms": 90.56810010224581,
+          "request_ms": 20.709400065243244
+        },
+        {
+          "status": "ok",
+          "receipt_id": "417547dcea8803d606e522f57e144089",
+          "ready_to_complete_ms": 101.28659987822175,
+          "plan_to_complete_ms": 101.36509989388287,
+          "request_ms": 27.93519990518689
+        },
+        {
+          "status": "ok",
+          "receipt_id": "82b5ea934ef36714d2bae757e9cbf877",
+          "ready_to_complete_ms": 109.30570005439222,
+          "plan_to_complete_ms": 109.38420007005334,
+          "request_ms": 32.584600150585175
+        },
+        {
+          "status": "ok",
+          "receipt_id": "c0182c5513241a484ed548dc3d67c05f",
+          "ready_to_complete_ms": 121.57190009020269,
+          "plan_to_complete_ms": 121.65040010586381,
+          "request_ms": 36.06569999828935
+        },
+        {
+          "status": "ok",
+          "receipt_id": "4d7f16646a46f9ad7c4faa5ac4186150",
+          "ready_to_complete_ms": 134.96279995888472,
+          "plan_to_complete_ms": 135.04129997454584,
+          "request_ms": 44.462200021371245
+        },
+        {
+          "status": "ok",
+          "receipt_id": "807f51f31f803a3f62c51103ecc09c91",
+          "ready_to_complete_ms": 114.83269999735057,
+          "plan_to_complete_ms": 114.9112000130117,
+          "request_ms": 13.53610004298389
+        },
+        {
+          "status": "ok",
+          "receipt_id": "3bbde723d710c0a539145d6e61667bb3",
+          "ready_to_complete_ms": 193.50609998218715,
+          "plan_to_complete_ms": 193.58459999784827,
+          "request_ms": 84.19029996730387
+        },
+        {
+          "status": "ok",
+          "receipt_id": "7f8d73cebb857248b4c304866b21a117",
+          "ready_to_complete_ms": 124.84589987434447,
+          "plan_to_complete_ms": 124.92439989000559,
+          "request_ms": 10.006299940869212
+        },
+        {
+          "status": "ok",
+          "receipt_id": "6bd01da3dfd00f247531ec850422fcaa",
+          "ready_to_complete_ms": 153.08790002018213,
+          "plan_to_complete_ms": 153.16640003584325,
+          "request_ms": 31.505299964919686
+        },
+        {
+          "status": "ok",
+          "receipt_id": "372c4b989badbe0d049f15443002b294",
+          "ready_to_complete_ms": 162.21309988759458,
+          "plan_to_complete_ms": 162.2915999032557,
+          "request_ms": 37.35999995842576
+        },
+        {
+          "status": "ok",
+          "receipt_id": "06013b2c669d36b3bd65a6886151886a",
+          "ready_to_complete_ms": 178.61049994826317,
+          "plan_to_complete_ms": 178.6889999639243,
+          "request_ms": 43.638600036501884
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a56f6d90c2144126221e0808c6afdd0e",
+          "ready_to_complete_ms": 188.0429999437183,
+          "plan_to_complete_ms": 188.12149995937943,
+          "request_ms": 34.94809987023473
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d5b4e508622d24d2cd6bef3e356c6ea9",
+          "ready_to_complete_ms": 182.1576999500394,
+          "plan_to_complete_ms": 182.2361999657005,
+          "request_ms": 19.937600009143353
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a505763a946047015e8c3596a2ab6fe9",
+          "ready_to_complete_ms": 185.62230002135038,
+          "plan_to_complete_ms": 185.7008000370115,
+          "request_ms": 7.005200022831559
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d2e90c968cfc11acd2f4a4d6dd6fc1b2",
+          "ready_to_complete_ms": 222.905799979344,
+          "plan_to_complete_ms": 222.98429999500513,
+          "request_ms": 40.74089997448027
+        },
+        {
+          "status": "ok",
+          "receipt_id": "c5e984454ce4c8d6ba2d0cc1c422191d",
+          "ready_to_complete_ms": 219.46899988688529,
+          "plan_to_complete_ms": 219.5474999025464,
+          "request_ms": 33.83979992941022
+        },
+        {
+          "status": "ok",
+          "receipt_id": "5f37f4ae2a14ba63c89108fdaaaaad02",
+          "ready_to_complete_ms": 209.23270005732775,
+          "plan_to_complete_ms": 209.31120007298887,
+          "request_ms": 21.183100063353777
+        },
+        {
+          "status": "ok",
+          "receipt_id": "07cd775b0f06ea8a7ed66966b997afb4",
+          "ready_to_complete_ms": 213.53690000250936,
+          "plan_to_complete_ms": 213.61540001817048,
+          "request_ms": 20.021700067445636
+        },
+        {
+          "status": "ok",
+          "receipt_id": "c43ff879cd5fe78bc9fd527b59712254",
+          "ready_to_complete_ms": 238.80590009503067,
+          "plan_to_complete_ms": 238.8844001106918,
+          "request_ms": 29.566200217232108
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a37d6dd10c22d0eec9dd63526e73a6c1",
+          "ready_to_complete_ms": 270.56919992901385,
+          "plan_to_complete_ms": 270.64769994467497,
+          "request_ms": 57.02489987015724
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0f99ad48a6efe7f206883654cb966873",
+          "ready_to_complete_ms": 242.86519992165267,
+          "plan_to_complete_ms": 242.9436999373138,
+          "request_ms": 23.39019998908043
+        },
+        {
+          "status": "ok",
+          "receipt_id": "4b3663ee67fd4aa6f72beab42091ee6e",
+          "ready_to_complete_ms": 226.9574999809265,
+          "plan_to_complete_ms": 227.03599999658763,
+          "request_ms": 4.0432000532746315
+        },
+        {
+          "status": "ok",
+          "receipt_id": "71586b76ec74acfa5baa4acdd8b93a31",
+          "ready_to_complete_ms": 274.66259989887476,
+          "plan_to_complete_ms": 274.7410999145359,
+          "request_ms": 47.69899998791516
+        },
+        {
+          "status": "ok",
+          "receipt_id": "6cc2b271d28bcfa59bb29b64f82e2ce8",
+          "ready_to_complete_ms": 254.25589992664754,
+          "plan_to_complete_ms": 254.33439994230866,
+          "request_ms": 15.44119999743998
+        },
+        {
+          "status": "ok",
+          "receipt_id": "5459a82133f14aaf68e8fe39f7a1f6fd",
+          "ready_to_complete_ms": 249.64719987474382,
+          "plan_to_complete_ms": 249.72569989040494,
+          "request_ms": 6.774999899789691
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f09181d997d64fcf0f3940376f7805c3",
+          "ready_to_complete_ms": 300.5222000647336,
+          "plan_to_complete_ms": 300.60070008039474,
+          "request_ms": 50.86720013059676
+        },
+        {
+          "status": "ok",
+          "receipt_id": "60221e04ba0463fe25dde6d606cb7dda",
+          "ready_to_complete_ms": 331.76660002209246,
+          "plan_to_complete_ms": 331.8451000377536,
+          "request_ms": 77.50459993258119
+        },
+        {
+          "status": "ok",
+          "receipt_id": "93a26ce7beff6a289843e16bd2f588ac",
+          "ready_to_complete_ms": 315.95110008493066,
+          "plan_to_complete_ms": 316.0296001005918,
+          "request_ms": 45.36860017105937
+        },
+        {
+          "status": "ok",
+          "receipt_id": "33a5e1ea28fe5b6b8e2d2c06ca47ae12",
+          "ready_to_complete_ms": 284.589400049299,
+          "plan_to_complete_ms": 284.6679000649601,
+          "request_ms": 9.917499963194132
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1608228b6311cf2482b6cd9e66665e18",
+          "ready_to_complete_ms": 347.92189998552203,
+          "plan_to_complete_ms": 348.00040000118315,
+          "request_ms": 63.32509987987578
+        },
+        {
+          "status": "ok",
+          "receipt_id": "783a041f3b3ddb0366d3910a78ca044c",
+          "ready_to_complete_ms": 305.2717000246048,
+          "plan_to_complete_ms": 305.3502000402659,
+          "request_ms": 4.740500124171376
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a0891304d3b61691b5fa4e5f328f7515",
+          "ready_to_complete_ms": 311.1199999693781,
+          "plan_to_complete_ms": 311.19849998503923,
+          "request_ms": 5.8420998975634575
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8918eb107142f2e3ebc6e1d6ba38b0b0",
+          "ready_to_complete_ms": 334.9369999486953,
+          "plan_to_complete_ms": 335.0154999643564,
+          "request_ms": 23.810100043192506
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2ad78de6693cfcb22c091495274424d9",
+          "ready_to_complete_ms": 322.3246999550611,
+          "plan_to_complete_ms": 322.4031999707222,
+          "request_ms": 6.3668000511825085
+        },
+        {
+          "status": "ok",
+          "receipt_id": "993b86ecbc2c56602dc9e2c944909e70",
+          "ready_to_complete_ms": 355.75270000845194,
+          "plan_to_complete_ms": 355.83120002411306,
+          "request_ms": 33.42079999856651
+        },
+        {
+          "status": "ok",
+          "receipt_id": "149aeeb9406fde2857e08c9e0071b829",
+          "ready_to_complete_ms": 353.24630001559854,
+          "plan_to_complete_ms": 353.32480003125966,
+          "request_ms": 21.470800042152405
+        },
+        {
+          "status": "ok",
+          "receipt_id": "c806896b683a43ede8af3c6ed4df2a31",
+          "ready_to_complete_ms": 341.71739988960326,
+          "plan_to_complete_ms": 341.7958999052644,
+          "request_ms": 6.774199893698096
+        },
+        {
+          "status": "ok",
+          "receipt_id": "cb371230450927e97508edf6edc910df",
+          "ready_to_complete_ms": 382.14179989881814,
+          "plan_to_complete_ms": 382.22029991447926,
+          "request_ms": 40.41759995743632
+        },
+        {
+          "status": "ok",
+          "receipt_id": "06dfb643e389552c693c3bcc22387b0a",
+          "ready_to_complete_ms": 392.5369998905808,
+          "plan_to_complete_ms": 392.6154999062419,
+          "request_ms": 44.60429982282221
+        },
+        {
+          "status": "ok",
+          "receipt_id": "14e762dfab700bcf2f4609b1aba52fac",
+          "ready_to_complete_ms": 362.9260000307113,
+          "plan_to_complete_ms": 363.0045000463724,
+          "request_ms": 9.672499960288405
+        },
+        {
+          "status": "ok",
+          "receipt_id": "fed40047184aadaad8338fe8fb989d7c",
+          "ready_to_complete_ms": 384.6893000882119,
+          "plan_to_complete_ms": 384.767800103873,
+          "request_ms": 28.927600011229515
+        },
+        {
+          "status": "ok",
+          "receipt_id": "3e53f983e70d2f5184bd99786650ace8",
+          "ready_to_complete_ms": 409.4483000226319,
+          "plan_to_complete_ms": 409.526800038293,
+          "request_ms": 46.5164000634104
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1d53b9a5671c9cbc3e79c39637f33c3d",
+          "ready_to_complete_ms": 389.56820010207593,
+          "plan_to_complete_ms": 389.64670011773705,
+          "request_ms": 7.415400119498372
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f0fe246c58bb1d3458c05b1f17a1dada",
+          "ready_to_complete_ms": 419.3021000828594,
+          "plan_to_complete_ms": 419.3806000985205,
+          "request_ms": 34.606900066137314
+        },
+        {
+          "status": "ok",
+          "receipt_id": "c98b8ccda6a46a4729628127ab745d27",
+          "ready_to_complete_ms": 412.4821999575943,
+          "plan_to_complete_ms": 412.5606999732554,
+          "request_ms": 22.90689991787076
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0e3a27a7d856c81be131bb732512c76b",
+          "ready_to_complete_ms": 424.85589999705553,
+          "plan_to_complete_ms": 424.93440001271665,
+          "request_ms": 32.309799920767546
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2fcd17b66f2ddb3c591359ce72f56faf",
+          "ready_to_complete_ms": 443.7355000991374,
+          "plan_to_complete_ms": 443.81400011479855,
+          "request_ms": 34.278100123628974
+        },
+        {
+          "status": "ok",
+          "receipt_id": "61150f463a828db2b257d8eabe6865ad",
+          "ready_to_complete_ms": 470.6095000728965,
+          "plan_to_complete_ms": 470.6880000885576,
+          "request_ms": 58.121100068092346
+        },
+        {
+          "status": "ok",
+          "receipt_id": "b9d997facac1b3042acca10f1dea7066",
+          "ready_to_complete_ms": 454.1607000865042,
+          "plan_to_complete_ms": 454.23920010216534,
+          "request_ms": 34.84760015271604
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a8b7a5524ee048c22847e88d060d8235",
+          "ready_to_complete_ms": 450.9151999372989,
+          "plan_to_complete_ms": 450.99369995296,
+          "request_ms": 26.047599967569113
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f4778a85612381c39638d3e41176a578",
+          "ready_to_complete_ms": 480.3289999254048,
+          "plan_to_complete_ms": 480.4074999410659,
+          "request_ms": 36.5837998688221
+        },
+        {
+          "status": "ok",
+          "receipt_id": "51f9f9225b377cae7de31e20e886a60c",
+          "ready_to_complete_ms": 475.8856000844389,
+          "plan_to_complete_ms": 475.96410010010004,
+          "request_ms": 24.96270020492375
+        },
+        {
+          "status": "ok",
+          "receipt_id": "431acd35e5098b17ad37907489620a4e",
+          "ready_to_complete_ms": 460.85950010456145,
+          "plan_to_complete_ms": 460.93800012022257,
+          "request_ms": 6.691300077363849
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a1b57e09393891a36bd8c437106ac611",
+          "ready_to_complete_ms": 499.3743998929858,
+          "plan_to_complete_ms": 499.45289990864694,
+          "request_ms": 38.508799858391285
+        },
+        {
+          "status": "ok",
+          "receipt_id": "b6ee7f859c131e1c8ca861c7c0c7ccc8",
+          "ready_to_complete_ms": 494.20819990336895,
+          "plan_to_complete_ms": 494.28669991903007,
+          "request_ms": 23.59009999781847
+        },
+        {
+          "status": "ok",
+          "receipt_id": "66d8f142fd78249ae312ebfd8f3032e6",
+          "ready_to_complete_ms": 517.847599927336,
+          "plan_to_complete_ms": 517.9260999429971,
+          "request_ms": 41.95500002242625
+        },
+        {
+          "status": "ok",
+          "receipt_id": "9dead98f06cb4c74f97d09fb65bbfe27",
+          "ready_to_complete_ms": 487.34900006093085,
+          "plan_to_complete_ms": 487.42750007659197,
+          "request_ms": 7.010500179603696
+        },
+        {
+          "status": "ok",
+          "receipt_id": "952aab39dcfd53bcc5085717b2c4a738",
+          "ready_to_complete_ms": 506.42280001193285,
+          "plan_to_complete_ms": 506.50130002759397,
+          "request_ms": 19.06690001487732
+        },
+        {
+          "status": "ok",
+          "receipt_id": "fc8fdb07ae4bffe0fa564407f8665fae",
+          "ready_to_complete_ms": 548.582199960947,
+          "plan_to_complete_ms": 548.6606999766082,
+          "request_ms": 54.368200013414025
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2d08fa46ed32a8c919e5ca7926ecb8ce",
+          "ready_to_complete_ms": 527.0879999734461,
+          "plan_to_complete_ms": 527.1664999891073,
+          "request_ms": 27.6959000620991
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f108d965967ba06bebd285d5ef2df288",
+          "ready_to_complete_ms": 564.009299967438,
+          "plan_to_complete_ms": 564.0877999830991,
+          "request_ms": 57.57969990372658
+        },
+        {
+          "status": "ok",
+          "receipt_id": "7855719b63fddec31ff63b348f1ccf76",
+          "ready_to_complete_ms": 536.8917998857796,
+          "plan_to_complete_ms": 536.9702999014407,
+          "request_ms": 19.033599877730012
+        },
+        {
+          "status": "ok",
+          "receipt_id": "3e7af725632afca12a62a2455a368250",
+          "ready_to_complete_ms": 551.9973000045866,
+          "plan_to_complete_ms": 552.0758000202477,
+          "request_ms": 24.902200093492866
+        },
+        {
+          "status": "ok",
+          "receipt_id": "db560fdea19164fe515e302b9b09e926",
+          "ready_to_complete_ms": 566.9307000935078,
+          "plan_to_complete_ms": 567.0092001091689,
+          "request_ms": 30.032800044864416
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ce5b2476f8a8bfae276784e8fc337fc1",
+          "ready_to_complete_ms": 580.2054000087082,
+          "plan_to_complete_ms": 580.2839000243694,
+          "request_ms": 31.612300081178546
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8daed2d6694fa73fc1c0f3cf912a5689",
+          "ready_to_complete_ms": 587.6640998758376,
+          "plan_to_complete_ms": 587.7425998914987,
+          "request_ms": 35.659399814903736
+        },
+        {
+          "status": "ok",
+          "receipt_id": "4d461e50b909f05d16b9ca664d7df357",
+          "ready_to_complete_ms": 594.3408000748605,
+          "plan_to_complete_ms": 594.4193000905216,
+          "request_ms": 30.321500031277537
+        },
+        {
+          "status": "ok",
+          "receipt_id": "b97ed2f428f36376e7e7b4400cf03554",
+          "ready_to_complete_ms": 584.157699951902,
+          "plan_to_complete_ms": 584.2361999675632,
+          "request_ms": 17.219000030308962
+        },
+        {
+          "status": "ok",
+          "receipt_id": "3827f9edeb915a88fffa3a6f61cbafea",
+          "ready_to_complete_ms": 601.4215000905097,
+          "plan_to_complete_ms": 601.5000001061708,
+          "request_ms": 21.20770001783967
+        },
+        {
+          "status": "ok",
+          "receipt_id": "641cc5d9d847cafb384abce2e091e4e1",
+          "ready_to_complete_ms": 615.9194000065327,
+          "plan_to_complete_ms": 615.9979000221938,
+          "request_ms": 31.755000120028853
+        },
+        {
+          "status": "ok",
+          "receipt_id": "5295d8d8d147e23c72a382e7b5099d33",
+          "ready_to_complete_ms": 643.330299993977,
+          "plan_to_complete_ms": 643.4088000096381,
+          "request_ms": 55.65500003285706
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2b0c00a912092b3daf627dfd93241bd1",
+          "ready_to_complete_ms": 626.4690000098199,
+          "plan_to_complete_ms": 626.547500025481,
+          "request_ms": 32.12020010687411
+        },
+        {
+          "status": "ok",
+          "receipt_id": "9e00099b7a27b06960e93e8deb91b7c4",
+          "ready_to_complete_ms": 631.3996000681072,
+          "plan_to_complete_ms": 631.4781000837684,
+          "request_ms": 29.96730012819171
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ff60997d788440be1c09d053bc420f97",
+          "ready_to_complete_ms": 665.2776000555605,
+          "plan_to_complete_ms": 665.3561000712216,
+          "request_ms": 49.34750008396804
+        },
+        {
+          "status": "ok",
+          "receipt_id": "72cd0159c996c12bd59cecbd78fc05b3",
+          "ready_to_complete_ms": 658.5613000206649,
+          "plan_to_complete_ms": 658.639800036326,
+          "request_ms": 32.08600007928908
+        },
+        {
+          "status": "ok",
+          "receipt_id": "5a692e18e223b31bcb670e46615c00ee",
+          "ready_to_complete_ms": 672.266700072214,
+          "plan_to_complete_ms": 672.3452000878751,
+          "request_ms": 40.85960006341338
+        },
+        {
+          "status": "ok",
+          "receipt_id": "6cd3a77760fd47ae7033737de4aed75c",
+          "ready_to_complete_ms": 647.1247000154108,
+          "plan_to_complete_ms": 647.2032000310719,
+          "request_ms": 3.7845000624656677
+        },
+        {
+          "status": "ok",
+          "receipt_id": "36da895d8067307b5dad44734d4698e2",
+          "ready_to_complete_ms": 703.7204999942333,
+          "plan_to_complete_ms": 703.7990000098944,
+          "request_ms": 56.58970004878938
+        },
+        {
+          "status": "ok",
+          "receipt_id": "e95a504150079d555f897cbae7250e3d",
+          "ready_to_complete_ms": 679.9391000531614,
+          "plan_to_complete_ms": 680.0176000688225,
+          "request_ms": 21.369799971580505
+        },
+        {
+          "status": "ok",
+          "receipt_id": "7789c1704f8e2fbc1213d83ab274c5f9",
+          "ready_to_complete_ms": 692.9677000734955,
+          "plan_to_complete_ms": 693.0462000891566,
+          "request_ms": 27.680400060489774
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ac8f2482d25bdbdc69a74e25e9fbf440",
+          "ready_to_complete_ms": 719.7123998776078,
+          "plan_to_complete_ms": 719.7908998932689,
+          "request_ms": 47.43459983728826
+        },
+        {
+          "status": "ok",
+          "receipt_id": "04fc752c2f0a84f69ce6ac40c64d8acf",
+          "ready_to_complete_ms": 687.7524999435991,
+          "plan_to_complete_ms": 687.8309999592602,
+          "request_ms": 7.804800057783723
+        },
+        {
+          "status": "ok",
+          "receipt_id": "82e874d80f90fa7ae6c294e5f3d167fd",
+          "ready_to_complete_ms": 708.1581000238657,
+          "plan_to_complete_ms": 708.2366000395268,
+          "request_ms": 20.39720001630485
+        },
+        {
+          "status": "ok",
+          "receipt_id": "e92d69a42c5e3d2264176715f5f0912b",
+          "ready_to_complete_ms": 734.9050000775605,
+          "plan_to_complete_ms": 734.9835000932217,
+          "request_ms": 41.93060006946325
+        },
+        {
+          "status": "ok",
+          "receipt_id": "51c57a5fdb0ea4a4be411b2a06233de1",
+          "ready_to_complete_ms": 723.7305000890046,
+          "plan_to_complete_ms": 723.8090001046658,
+          "request_ms": 19.996799994260073
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0eac03ad80152a93c7caa4e77add49e5",
+          "ready_to_complete_ms": 716.3609999697655,
+          "plan_to_complete_ms": 716.4394999854267,
+          "request_ms": 8.194199996069074
+        },
+        {
+          "status": "ok",
+          "receipt_id": "268e7dabdef96ff3463766946f4e67dc",
+          "ready_to_complete_ms": 750.4531999584287,
+          "plan_to_complete_ms": 750.5316999740899,
+          "request_ms": 34.08490004949272
+        },
+        {
+          "status": "ok",
+          "receipt_id": "50a9ad37094b768a0fb83922b367882c",
+          "ready_to_complete_ms": 743.7473998870701,
+          "plan_to_complete_ms": 743.8258999027312,
+          "request_ms": 24.024999933317304
+        },
+        {
+          "status": "ok",
+          "receipt_id": "79a06fadc6ce88578ed8d8ffce1af63c",
+          "ready_to_complete_ms": 765.5424999538809,
+          "plan_to_complete_ms": 765.620999969542,
+          "request_ms": 41.80620005354285
+        },
+        {
+          "status": "ok",
+          "receipt_id": "9bf40a39140213d2e7dc1aedefcfe34f",
+          "ready_to_complete_ms": 758.7109999731183,
+          "plan_to_complete_ms": 758.7894999887794,
+          "request_ms": 23.795600049197674
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ea8c92499631c71b613e4470864b387e",
+          "ready_to_complete_ms": 782.8869000077248,
+          "plan_to_complete_ms": 782.9654000233859,
+          "request_ms": 39.131199941039085
+        },
+        {
+          "status": "ok",
+          "receipt_id": "627b0033378f6149d66f8c27c8ce65a9",
+          "ready_to_complete_ms": 774.1294000297785,
+          "plan_to_complete_ms": 774.2079000454396,
+          "request_ms": 23.666799999773502
+        },
+        {
+          "status": "ok",
+          "receipt_id": "b4040affedb33dca76042dfd2a117065",
+          "ready_to_complete_ms": 770.2568999957293,
+          "plan_to_complete_ms": 770.3354000113904,
+          "request_ms": 11.539600091055036
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2bdbec9d17a05f3019b547b939b23c0c",
+          "ready_to_complete_ms": 800.4572000354528,
+          "plan_to_complete_ms": 800.535700051114,
+          "request_ms": 34.9051000084728
+        },
+        {
+          "status": "ok",
+          "receipt_id": "368aca67562bd9572d1b3f0e70afd24b",
+          "ready_to_complete_ms": 811.0756000969559,
+          "plan_to_complete_ms": 811.154100112617,
+          "request_ms": 40.810300037264824
+        },
+        {
+          "status": "ok",
+          "receipt_id": "61f2037c96014f6a03f73e7f500fa516",
+          "ready_to_complete_ms": 826.5108000487089,
+          "plan_to_complete_ms": 826.58930006437,
+          "request_ms": 52.375599974766374
+        },
+        {
+          "status": "ok",
+          "receipt_id": "78873e40e3c8313a6ed50e118f396077",
+          "ready_to_complete_ms": 844.3241000641137,
+          "plan_to_complete_ms": 844.4026000797749,
+          "request_ms": 61.42759998328984
+        },
+        {
+          "status": "ok",
+          "receipt_id": "33a11f5487f2f3339da1208792627b8b",
+          "ready_to_complete_ms": 807.5997999403626,
+          "plan_to_complete_ms": 807.6782999560237,
+          "request_ms": 7.132000057026744
+        },
+        {
+          "status": "ok",
+          "receipt_id": "9d06102aa933a5bfc4649cbd5f873f02",
+          "ready_to_complete_ms": 814.4904999062419,
+          "plan_to_complete_ms": 814.568999921903,
+          "request_ms": 6.884099915623665
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1f9a38ccf8614d06d7c17b036448e9f9",
+          "ready_to_complete_ms": 830.0936999730766,
+          "plan_to_complete_ms": 830.1721999887377,
+          "request_ms": 19.006199901923537
+        },
+        {
+          "status": "ok",
+          "receipt_id": "08bd3afd420fd0a2a1ef3840c262ff1d",
+          "ready_to_complete_ms": 861.2909999210387,
+          "plan_to_complete_ms": 861.3694999366999,
+          "request_ms": 46.79439985193312
+        },
+        {
+          "status": "ok",
+          "receipt_id": "81294332dc27161936a184baf63c0bc8",
+          "ready_to_complete_ms": 871.906999964267,
+          "plan_to_complete_ms": 871.9854999799281,
+          "request_ms": 45.385600067675114
+        },
+        {
+          "status": "ok",
+          "receipt_id": "bd8f71a0fe4a192dc8bfe5aa7e137f15",
+          "ready_to_complete_ms": 887.7030999865383,
+          "plan_to_complete_ms": 887.7816000021994,
+          "request_ms": 57.60210007429123
+        },
+        {
+          "status": "ok",
+          "receipt_id": "52ad21e0b2e77ef4d59d7286baca144d",
+          "ready_to_complete_ms": 882.0481000002474,
+          "plan_to_complete_ms": 882.1266000159085,
+          "request_ms": 37.71260008215904
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a75472c66610ce674db18376d3c7e35d",
+          "ready_to_complete_ms": 903.8603999651968,
+          "plan_to_complete_ms": 903.938899980858,
+          "request_ms": 42.55830007605255
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0058ef0cd9b4a746ebb4dfaca7a57a05",
+          "ready_to_complete_ms": 897.1998998895288,
+          "plan_to_complete_ms": 897.2783999051899,
+          "request_ms": 25.2832998521626
+        },
+        {
+          "status": "ok",
+          "receipt_id": "bb7eb0963c0734bda21a985f1d79af2e",
+          "ready_to_complete_ms": 934.5297999680042,
+          "plan_to_complete_ms": 934.6082999836653,
+          "request_ms": 52.47569992206991
+        },
+        {
+          "status": "ok",
+          "receipt_id": "79f843d3a5e25cb3630f7f9191b93471",
+          "ready_to_complete_ms": 915.3972999192774,
+          "plan_to_complete_ms": 915.4757999349385,
+          "request_ms": 27.684599859640002
+        },
+        {
+          "status": "ok",
+          "receipt_id": "fa6d149dc642668b8b124474523a51ae",
+          "ready_to_complete_ms": 927.0434000063688,
+          "plan_to_complete_ms": 927.1219000220299,
+          "request_ms": 29.836799949407578
+        },
+        {
+          "status": "ok",
+          "receipt_id": "4c9d4b2fc57025fc94afcc3e17b91866",
+          "ready_to_complete_ms": 918.4087000321597,
+          "plan_to_complete_ms": 918.4872000478208,
+          "request_ms": 14.533000066876411
+        },
+        {
+          "status": "ok",
+          "receipt_id": "debadace877fd15ad243f65a4a14e7a8",
+          "ready_to_complete_ms": 949.8503000941128,
+          "plan_to_complete_ms": 949.9288001097739,
+          "request_ms": 34.44330021739006
+        },
+        {
+          "status": "ok",
+          "receipt_id": "e82eceb4c6482888af2f01af28886401",
+          "ready_to_complete_ms": 940.5199000611901,
+          "plan_to_complete_ms": 940.5984000768512,
+          "request_ms": 22.104799980297685
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0cab2acf5301ffb091b0adf262555bbd",
+          "ready_to_complete_ms": 965.0836999062449,
+          "plan_to_complete_ms": 965.162199921906,
+          "request_ms": 38.03389985114336
+        },
+        {
+          "status": "ok",
+          "receipt_id": "160a64f3b3726b17ae7aee85cdc27df4",
+          "ready_to_complete_ms": 958.1516999751329,
+          "plan_to_complete_ms": 958.2301999907941,
+          "request_ms": 23.608200019225478
+        },
+        {
+          "status": "ok",
+          "receipt_id": "11982790dd24783e7c37cdbfc8933597",
+          "ready_to_complete_ms": 974.7597998939455,
+          "plan_to_complete_ms": 974.8382999096066,
+          "request_ms": 34.23379990272224
+        },
+        {
+          "status": "ok",
+          "receipt_id": "9544b4e4f13c73e68c82ff540a75fa77",
+          "ready_to_complete_ms": 980.4694999475032,
+          "plan_to_complete_ms": 980.5479999631643,
+          "request_ms": 30.610099900513887
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1fe8695633e245d36bd07b0d25d587ad",
+          "ready_to_complete_ms": 1004.0503998752683,
+          "plan_to_complete_ms": 1004.1288998909295,
+          "request_ms": 45.89209984987974
+        },
+        {
+          "status": "ok",
+          "receipt_id": "4ed1fc30cd2b9650fe5e319d306d1161",
+          "ready_to_complete_ms": 988.6868000030518,
+          "plan_to_complete_ms": 988.7653000187129,
+          "request_ms": 23.59299990348518
+        },
+        {
+          "status": "ok",
+          "receipt_id": "da950cee5a3e49db8a1767f22a697fef",
+          "ready_to_complete_ms": 1011.8476999923587,
+          "plan_to_complete_ms": 1011.9262000080198,
+          "request_ms": 37.07579988986254
+        },
+        {
+          "status": "ok",
+          "receipt_id": "31b1716ace74a1d8615fef2e7d2fc4d0",
+          "ready_to_complete_ms": 995.7526999060065,
+          "plan_to_complete_ms": 995.8311999216676,
+          "request_ms": 15.274399891495705
+        },
+        {
+          "status": "ok",
+          "receipt_id": "bb7bcf62dcb55569785d7b2ce9d60f9a",
+          "ready_to_complete_ms": 1025.7927998900414,
+          "plan_to_complete_ms": 1025.8712999057025,
+          "request_ms": 37.098699947819114
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a060284c330a7498bda389342b847790",
+          "ready_to_complete_ms": 1042.6262998953462,
+          "plan_to_complete_ms": 1042.7047999110073,
+          "request_ms": 46.86599993146956
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1bb20f1b4e797be52771a1b5961b7028",
+          "ready_to_complete_ms": 1015.7751000951976,
+          "plan_to_complete_ms": 1015.8536001108587,
+          "request_ms": 11.7123001255095
+        },
+        {
+          "status": "ok",
+          "receipt_id": "734517097375537445b47c768f964394",
+          "ready_to_complete_ms": 1030.4032999556512,
+          "plan_to_complete_ms": 1030.4817999713123,
+          "request_ms": 18.54509999975562
+        },
+        {
+          "status": "ok",
+          "receipt_id": "522ec9c9535a1c0f1f019455a9643adb",
+          "ready_to_complete_ms": 1057.459499919787,
+          "plan_to_complete_ms": 1057.5379999354482,
+          "request_ms": 41.6782998945564
+        },
+        {
+          "status": "ok",
+          "receipt_id": "fff5a0c9853651c9fb899a9f342903f0",
+          "ready_to_complete_ms": 1052.3403999395669,
+          "plan_to_complete_ms": 1052.418899955228,
+          "request_ms": 26.537699857726693
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a0683fd1aeaea20790c55be062281ca0",
+          "ready_to_complete_ms": 1037.2770000249147,
+          "plan_to_complete_ms": 1037.3555000405759,
+          "request_ms": 6.8660001270473
+        },
+        {
+          "status": "ok",
+          "receipt_id": "291db1391cabd7ef0163d106895e892f",
+          "ready_to_complete_ms": 1045.5994999501854,
+          "plan_to_complete_ms": 1045.6779999658465,
+          "request_ms": 8.314899867400527
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f439b3d43b7e2941a7a2cf83e368a3b3",
+          "ready_to_complete_ms": 1076.3379000127316,
+          "plan_to_complete_ms": 1076.4164000283927,
+          "request_ms": 33.70289993472397
+        },
+        {
+          "status": "ok",
+          "receipt_id": "af737e0402a9568732a5f8ce789be2b9",
+          "ready_to_complete_ms": 1079.0087000932544,
+          "plan_to_complete_ms": 1079.0872001089156,
+          "request_ms": 33.40190020389855
+        },
+        {
+          "status": "ok",
+          "receipt_id": "37066ec18d90a04771311bea73c6c129",
+          "ready_to_complete_ms": 1087.6829999033362,
+          "plan_to_complete_ms": 1087.7614999189973,
+          "request_ms": 35.336699802428484
+        },
+        {
+          "status": "ok",
+          "receipt_id": "016f04ca495b72b73ba2cf792707c1c1",
+          "ready_to_complete_ms": 1103.8812000770122,
+          "plan_to_complete_ms": 1103.9597000926733,
+          "request_ms": 46.4111000765115
+        },
+        {
+          "status": "ok",
+          "receipt_id": "623238bf1d7d4a092889ec5d05961e11",
+          "ready_to_complete_ms": 1083.2362999208272,
+          "plan_to_complete_ms": 1083.3147999364883,
+          "request_ms": 6.884200032800436
+        },
+        {
+          "status": "ok",
+          "receipt_id": "53954807aff2cb958bf4e7ecd1adb46d",
+          "ready_to_complete_ms": 1110.1987999863923,
+          "plan_to_complete_ms": 1110.2773000020534,
+          "request_ms": 31.177900033071637
+        },
+        {
+          "status": "ok",
+          "receipt_id": "87d76acb48de134b4938098829a4b4d4",
+          "ready_to_complete_ms": 1138.372699962929,
+          "plan_to_complete_ms": 1138.45119997859,
+          "request_ms": 55.129599990323186
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2c1578bcd1677b385f2448f7254f2258",
+          "ready_to_complete_ms": 1094.4890000391752,
+          "plan_to_complete_ms": 1094.5675000548363,
+          "request_ms": 6.795400055125356
+        },
+        {
+          "status": "ok",
+          "receipt_id": "cbedbe12294a745022808a2fa39c371c",
+          "ready_to_complete_ms": 1150.7665999233723,
+          "plan_to_complete_ms": 1150.8450999390334,
+          "request_ms": 56.270299945026636
+        },
+        {
+          "status": "ok",
+          "receipt_id": "fcc4692d46f187097afd6a890fd04147",
+          "ready_to_complete_ms": 1166.9288999401033,
+          "plan_to_complete_ms": 1167.0073999557644,
+          "request_ms": 63.036999898031354
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f56235eb0439a60a4b88a6f739bb05d9",
+          "ready_to_complete_ms": 1120.124900015071,
+          "plan_to_complete_ms": 1120.2034000307322,
+          "request_ms": 9.91769996471703
+        },
+        {
+          "status": "ok",
+          "receipt_id": "48f6ea532ba384f73408c5aa5804f0ad",
+          "ready_to_complete_ms": 1154.7373000066727,
+          "plan_to_complete_ms": 1154.8158000223339,
+          "request_ms": 34.606599947437644
+        },
+        {
+          "status": "ok",
+          "receipt_id": "986f5596bd80e16a803d822c2fa55bb2",
+          "ready_to_complete_ms": 1146.4986999053508,
+          "plan_to_complete_ms": 1146.577199921012,
+          "request_ms": 8.116899989545345
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d7d1437f21a5726639a09976f1d53f5c",
+          "ready_to_complete_ms": 1171.0902000777423,
+          "plan_to_complete_ms": 1171.1687000934035,
+          "request_ms": 24.5856000110507
+        },
+        {
+          "status": "ok",
+          "receipt_id": "366fc4f95d97339911da7fa94b780a5a",
+          "ready_to_complete_ms": 1177.3486000020057,
+          "plan_to_complete_ms": 1177.4271000176668,
+          "request_ms": 26.57310012727976
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2e5eac36055da6f763d148df9b8f4f1f",
+          "ready_to_complete_ms": 1190.5108999926597,
+          "plan_to_complete_ms": 1190.5894000083208,
+          "request_ms": 35.76770005747676
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0c2a75a34a6939762af07c98ff5bf59d",
+          "ready_to_complete_ms": 1197.7015999145806,
+          "plan_to_complete_ms": 1197.7800999302417,
+          "request_ms": 30.76240001246333
+        },
+        {
+          "status": "ok",
+          "receipt_id": "519b54cfcc21a8312de7b9e8bfc21a97",
+          "ready_to_complete_ms": 1207.4980998877436,
+          "plan_to_complete_ms": 1207.5765999034047,
+          "request_ms": 36.39649995602667
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a30eea94f5dedad380604381c8d032fd",
+          "ready_to_complete_ms": 1185.372899984941,
+          "plan_to_complete_ms": 1185.451400000602,
+          "request_ms": 8.013000013306737
+        },
+        {
+          "status": "ok",
+          "receipt_id": "e92ed3c3d5486503e01f43e1298f7592",
+          "ready_to_complete_ms": 1244.8706000577658,
+          "plan_to_complete_ms": 1244.949100073427,
+          "request_ms": 59.49210003018379
+        },
+        {
+          "status": "ok",
+          "receipt_id": "3b2dfe6bd4e4b7accea1d98788dc431b",
+          "ready_to_complete_ms": 1291.0714000463486,
+          "plan_to_complete_ms": 1291.1499000620097,
+          "request_ms": 100.54960008710623
+        },
+        {
+          "status": "ok",
+          "receipt_id": "bc003aeaac01ba17bdb97ac850d709e5",
+          "ready_to_complete_ms": 1217.2153999563307,
+          "plan_to_complete_ms": 1217.2938999719918,
+          "request_ms": 19.505599979311228
+        },
+        {
+          "status": "ok",
+          "receipt_id": "77783f3a526843b54892a1d6239d8ce1",
+          "ready_to_complete_ms": 1275.9666999336332,
+          "plan_to_complete_ms": 1276.0451999492943,
+          "request_ms": 68.45739996060729
+        },
+        {
+          "status": "ok",
+          "receipt_id": "70b32b2eaffb65d5378aa91c35ccc778",
+          "ready_to_complete_ms": 1227.3691000882536,
+          "plan_to_complete_ms": 1227.4476001039147,
+          "request_ms": 10.147400200366974
+        },
+        {
+          "status": "ok",
+          "receipt_id": "5cc3297ac435804f1d306c94a7111ee2",
+          "ready_to_complete_ms": 1250.64089987427,
+          "plan_to_complete_ms": 1250.719399889931,
+          "request_ms": 23.266199976205826
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d824b964f5df95cd68fee1d2099c288d",
+          "ready_to_complete_ms": 1259.400200098753,
+          "plan_to_complete_ms": 1259.478700114414,
+          "request_ms": 14.518900075927377
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0c5e0db3795acea1b06d2c3df2b92efd",
+          "ready_to_complete_ms": 1306.2887000851333,
+          "plan_to_complete_ms": 1306.3672001007944,
+          "request_ms": 55.64010003581643
+        },
+        {
+          "status": "ok",
+          "receipt_id": "4ab5eaae5ee92853278bbabb95a3aee9",
+          "ready_to_complete_ms": 1279.7342999838293,
+          "plan_to_complete_ms": 1279.8127999994904,
+          "request_ms": 20.32770006917417
+        },
+        {
+          "status": "ok",
+          "receipt_id": "bfe65f8b94a273f57b8fc62ca8c18665",
+          "ready_to_complete_ms": 1315.0806999765337,
+          "plan_to_complete_ms": 1315.1591999921948,
+          "request_ms": 39.10799999721348
+        },
+        {
+          "status": "ok",
+          "receipt_id": "59d051474985a8d83a42f2ad99208e40",
+          "ready_to_complete_ms": 1287.1604000683874,
+          "plan_to_complete_ms": 1287.2389000840485,
+          "request_ms": 7.418400142341852
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d9e5eb64843f0a77f0f3c42c3ce9be53",
+          "ready_to_complete_ms": 1294.480900047347,
+          "plan_to_complete_ms": 1294.559400063008,
+          "request_ms": 7.314600050449371
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a4dbe94b66e69065cd876103ffc7f218",
+          "ready_to_complete_ms": 1297.6063000969589,
+          "plan_to_complete_ms": 1297.68480011262,
+          "request_ms": 6.524300202727318
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2c4c685740c69d7ae1247cbc1f4f5e47",
+          "ready_to_complete_ms": 1302.4228001013398,
+          "plan_to_complete_ms": 1302.501300117001,
+          "request_ms": 7.935600122436881
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d9d99e3a7750144c0db4616d7086f257",
+          "ready_to_complete_ms": 1330.951000098139,
+          "plan_to_complete_ms": 1331.0295001138002,
+          "request_ms": 33.338600071147084
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2f8dbd8280bfde44ad22c23b480d29ba",
+          "ready_to_complete_ms": 1309.558599954471,
+          "plan_to_complete_ms": 1309.637099970132,
+          "request_ms": 7.129899924620986
+        },
+        {
+          "status": "ok",
+          "receipt_id": "79ca782a9f4e0ff9714e3fb47b68336a",
+          "ready_to_complete_ms": 1342.2034999821335,
+          "plan_to_complete_ms": 1342.2819999977946,
+          "request_ms": 35.90549994260073
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8ac2f8e890a360cb1a746ff2a3f2b85f",
+          "ready_to_complete_ms": 1322.0023000612855,
+          "plan_to_complete_ms": 1322.0808000769466,
+          "request_ms": 12.437600176781416
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d1b05ec2939f9877919626cd65e11b17",
+          "ready_to_complete_ms": 1353.5561000462621,
+          "plan_to_complete_ms": 1353.6346000619233,
+          "request_ms": 38.46519999206066
+        },
+        {
+          "status": "ok",
+          "receipt_id": "b69a2db48565804d97983cdab77d41f8",
+          "ready_to_complete_ms": 1369.9020000640303,
+          "plan_to_complete_ms": 1369.9805000796914,
+          "request_ms": 47.89230017922819
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8c92acf74e2620c6385bb3d78fc15056",
+          "ready_to_complete_ms": 1375.4326000344008,
+          "plan_to_complete_ms": 1375.511100050062,
+          "request_ms": 44.471200089901686
+        },
+        {
+          "status": "ok",
+          "receipt_id": "52cf59fd6c20425f17673a5bf0fc1241",
+          "ready_to_complete_ms": 1385.4890998918563,
+          "plan_to_complete_ms": 1385.5675999075174,
+          "request_ms": 43.276399839669466
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8ffa82fa91ebed73389d6e496584dfe9",
+          "ready_to_complete_ms": 1392.7448000758886,
+          "plan_to_complete_ms": 1392.8233000915498,
+          "request_ms": 39.17970019392669
+        },
+        {
+          "status": "ok",
+          "receipt_id": "7eb09f6beafae60bf8347d289891a4df",
+          "ready_to_complete_ms": 1378.5792000126094,
+          "plan_to_complete_ms": 1378.6577000282705,
+          "request_ms": 8.667800109833479
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d382f12931d39a97ba6755f9e748b988",
+          "ready_to_complete_ms": 1410.0571000017226,
+          "plan_to_complete_ms": 1410.1356000173837,
+          "request_ms": 34.61470012553036
+        },
+        {
+          "status": "ok",
+          "receipt_id": "e20cf370ed638cb72669bf07aeef6294",
+          "ready_to_complete_ms": 1424.580599879846,
+          "plan_to_complete_ms": 1424.659099895507,
+          "request_ms": 45.99579982459545
+        },
+        {
+          "status": "ok",
+          "receipt_id": "97cbdefc379070a2969b84e8c0a922f1",
+          "ready_to_complete_ms": 1415.9311999101192,
+          "plan_to_complete_ms": 1416.0096999257803,
+          "request_ms": 30.431099934503436
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a2eb624795fc0ab5cdf2a5eafe551485",
+          "ready_to_complete_ms": 1400.298099964857,
+          "plan_to_complete_ms": 1400.3765999805182,
+          "request_ms": 7.544700056314468
+        },
+        {
+          "status": "ok",
+          "receipt_id": "7faa0a9926a7b0efbaad29484b957ee0",
+          "ready_to_complete_ms": 1432.1973999030888,
+          "plan_to_complete_ms": 1432.27589991875,
+          "request_ms": 31.89249988645315
+        },
+        {
+          "status": "ok",
+          "receipt_id": "738b3a5cb95dbd8b96460b6c739b16bc",
+          "ready_to_complete_ms": 1496.9619999174029,
+          "plan_to_complete_ms": 1497.040499933064,
+          "request_ms": 86.89549984410405
+        },
+        {
+          "status": "ok",
+          "receipt_id": "04352a1bcab02293eca966cd84a1aaa2",
+          "ready_to_complete_ms": 1434.8931999411434,
+          "plan_to_complete_ms": 1434.9716999568045,
+          "request_ms": 18.954999977722764
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ec8c30cc2a392fc887f64c6b1656a48d",
+          "ready_to_complete_ms": 1447.0526000950485,
+          "plan_to_complete_ms": 1447.1311001107097,
+          "request_ms": 22.463400149717927
+        },
+        {
+          "status": "ok",
+          "receipt_id": "6133d4dc243290c7218223c604e3990f",
+          "ready_to_complete_ms": 1439.5614000968635,
+          "plan_to_complete_ms": 1439.6399001125246,
+          "request_ms": 7.35500012524426
+        },
+        {
+          "status": "ok",
+          "receipt_id": "b187617fa2b3fa92ee50a677af3eba6d",
+          "ready_to_complete_ms": 1482.037799898535,
+          "plan_to_complete_ms": 1482.1162999141961,
+          "request_ms": 47.13770002126694
+        },
+        {
+          "status": "ok",
+          "receipt_id": "91207d682b45ce19f43e49516da07c8c",
+          "ready_to_complete_ms": 1461.6145000327379,
+          "plan_to_complete_ms": 1461.693000048399,
+          "request_ms": 22.04479998908937
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0155d6a9808b3bc1b61a4a8b8875c0e5",
+          "ready_to_complete_ms": 1466.7569999583066,
+          "plan_to_complete_ms": 1466.8354999739677,
+          "request_ms": 19.698299933224916
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f4c6662cdb82cfed57e32db67872fc7e",
+          "ready_to_complete_ms": 1477.269999915734,
+          "plan_to_complete_ms": 1477.348499931395,
+          "request_ms": 15.647399937734008
+        },
+        {
+          "status": "ok",
+          "receipt_id": "380856b41eb8b3ae5090bc73d602cbed",
+          "ready_to_complete_ms": 1473.7074999138713,
+          "plan_to_complete_ms": 1473.7859999295324,
+          "request_ms": 6.94440002553165
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2b3abb0cab23a686e89766abcf7aeab9",
+          "ready_to_complete_ms": 1508.3979000337422,
+          "plan_to_complete_ms": 1508.4764000494033,
+          "request_ms": 34.68300006352365
+        },
+        {
+          "status": "ok",
+          "receipt_id": "3915d51add29fb6f3c18146451d8d1d7",
+          "ready_to_complete_ms": 1502.519499976188,
+          "plan_to_complete_ms": 1502.597999991849,
+          "request_ms": 25.24319989606738
+        },
+        {
+          "status": "ok",
+          "receipt_id": "aafbd38fbe8dcf8eee3e75f2cc895f03",
+          "ready_to_complete_ms": 1524.6723000891507,
+          "plan_to_complete_ms": 1524.7508001048118,
+          "request_ms": 42.626900132745504
+        },
+        {
+          "status": "ok",
+          "receipt_id": "88e69fca5b97ee02af3ceb5608ac1bf8",
+          "ready_to_complete_ms": 1535.6570000294596,
+          "plan_to_complete_ms": 1535.7355000451207,
+          "request_ms": 38.68310013785958
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a8e1f2027f88015b7b025e7a02995e20",
+          "ready_to_complete_ms": 1531.7848999984562,
+          "plan_to_complete_ms": 1531.8634000141174,
+          "request_ms": 29.258100083097816
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1970e88a723d4a4e5ed63c16699fbbe5",
+          "ready_to_complete_ms": 1515.3155999723822,
+          "plan_to_complete_ms": 1515.3940999880433,
+          "request_ms": 6.9049999583512545
+        },
+        {
+          "status": "ok",
+          "receipt_id": "e713198c194a98e4baa59943e4922221",
+          "ready_to_complete_ms": 1548.16780006513,
+          "plan_to_complete_ms": 1548.2463000807911,
+          "request_ms": 32.84470015205443
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f00f666184ccac9c93f4332ea945ff64",
+          "ready_to_complete_ms": 1540.1538000442088,
+          "plan_to_complete_ms": 1540.2323000598699,
+          "request_ms": 15.471500111743808
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f2c3a2dfffe53499544074357381198b",
+          "ready_to_complete_ms": 1575.9233999997377,
+          "plan_to_complete_ms": 1576.0019000153989,
+          "request_ms": 44.131499947980046
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0d01d7732c62e9d07581bfffcca9fb5a",
+          "ready_to_complete_ms": 1604.4830000028014,
+          "plan_to_complete_ms": 1604.5615000184625,
+          "request_ms": 68.81510000675917
+        },
+        {
+          "status": "ok",
+          "receipt_id": "7caa2e94f364ec51ad510a6141d7a433",
+          "ready_to_complete_ms": 1578.3456999342889,
+          "plan_to_complete_ms": 1578.42419994995,
+          "request_ms": 38.185999961569905
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0958b3f481fd0d4b77b9424d31bd2299",
+          "ready_to_complete_ms": 1558.098099892959,
+          "plan_to_complete_ms": 1558.1765999086201,
+          "request_ms": 9.919399861246347
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2992e3d10d58759e401263ad27415dde",
+          "ready_to_complete_ms": 1587.3408999759704,
+          "plan_to_complete_ms": 1587.4193999916315,
+          "request_ms": 29.237099923193455
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f77cddd9738b038c1ff7990c8c8df144",
+          "ready_to_complete_ms": 1608.690100023523,
+          "plan_to_complete_ms": 1608.768600039184,
+          "request_ms": 32.75420004501939
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d6a2b7c438be9a6a0a99e51f3d4db9b7",
+          "ready_to_complete_ms": 1619.676599977538,
+          "plan_to_complete_ms": 1619.755099993199,
+          "request_ms": 41.324299992993474
+        },
+        {
+          "status": "ok",
+          "receipt_id": "4d74104160028f5cb3928f1f0ca962ac",
+          "ready_to_complete_ms": 1594.3922998849303,
+          "plan_to_complete_ms": 1594.4707999005914,
+          "request_ms": 7.0442999713122845
+        },
+        {
+          "status": "ok",
+          "receipt_id": "346e9f052bce1e2bac387e6fe0fccf8e",
+          "ready_to_complete_ms": 1602.3277998901904,
+          "plan_to_complete_ms": 1602.4062999058515,
+          "request_ms": 7.928599836304784
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2c31935299a5e443a76c62e4ec7b7be8",
+          "ready_to_complete_ms": 1629.1062999516726,
+          "plan_to_complete_ms": 1629.1847999673337,
+          "request_ms": 26.772799901664257
+        },
+        {
+          "status": "ok",
+          "receipt_id": "31f8b9a98ec8ae8f09b7d86f03c58c07",
+          "ready_to_complete_ms": 1638.6458000633866,
+          "plan_to_complete_ms": 1638.7243000790477,
+          "request_ms": 34.154599998146296
+        },
+        {
+          "status": "ok",
+          "receipt_id": "02af48ad2765b1be865fa90c34870ae3",
+          "ready_to_complete_ms": 1649.5650000870228,
+          "plan_to_complete_ms": 1649.643500102684,
+          "request_ms": 40.866499999538064
+        },
+        {
+          "status": "ok",
+          "receipt_id": "cb5634fe066eb9ce9ed5068ed856332b",
+          "ready_to_complete_ms": 1664.4129999913275,
+          "plan_to_complete_ms": 1664.4915000069886,
+          "request_ms": 44.7261999361217
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ebd601401d594c1956f4598ab70176fd",
+          "ready_to_complete_ms": 1652.8896999079734,
+          "plan_to_complete_ms": 1652.9681999236345,
+          "request_ms": 23.771099979057908
+        },
+        {
+          "status": "ok",
+          "receipt_id": "5f71a02e229e4bca2a44f7205dd99d8f",
+          "ready_to_complete_ms": 1668.9955999609083,
+          "plan_to_complete_ms": 1669.0740999765694,
+          "request_ms": 30.341299949213862
+        },
+        {
+          "status": "ok",
+          "receipt_id": "5ca4075294da511b1ad3238fa4979fb8",
+          "ready_to_complete_ms": 1674.424400087446,
+          "plan_to_complete_ms": 1674.502900103107,
+          "request_ms": 24.848500033840537
+        },
+        {
+          "status": "ok",
+          "receipt_id": "b61961c2de63c06c8173a2cf251cd546",
+          "ready_to_complete_ms": 1695.3807999379933,
+          "plan_to_complete_ms": 1695.4592999536544,
+          "request_ms": 42.483799858018756
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f29cf38b8cd9b492f78ffdb6a1d836ee",
+          "ready_to_complete_ms": 1683.9062999933958,
+          "plan_to_complete_ms": 1683.984800009057,
+          "request_ms": 19.477100111544132
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1ff6c5247f871b0ce938eeff24085d84",
+          "ready_to_complete_ms": 1706.5987000241876,
+          "plan_to_complete_ms": 1706.6772000398487,
+          "request_ms": 37.59249998256564
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2e8dcee553cb0c47b726aaf8cea407cd",
+          "ready_to_complete_ms": 1717.848700005561,
+          "plan_to_complete_ms": 1717.9272000212222,
+          "request_ms": 43.41259994544089
+        },
+        {
+          "status": "ok",
+          "receipt_id": "33ef845646d7ea74653acc5ff91c0a11",
+          "ready_to_complete_ms": 1741.4714999031276,
+          "plan_to_complete_ms": 1741.5499999187887,
+          "request_ms": 57.55469994619489
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2572f325a444e0054b57212115848f49",
+          "ready_to_complete_ms": 1731.1172999907285,
+          "plan_to_complete_ms": 1731.1958000063896,
+          "request_ms": 35.72789998725057
+        },
+        {
+          "status": "ok",
+          "receipt_id": "cfa5e25ee2595374e837ceb3da8f0915",
+          "ready_to_complete_ms": 1756.5935000311583,
+          "plan_to_complete_ms": 1756.6720000468194,
+          "request_ms": 49.98390004038811
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ca556353acab4602c207b4be5a9553fb",
+          "ready_to_complete_ms": 1747.3623999394476,
+          "plan_to_complete_ms": 1747.4408999551088,
+          "request_ms": 29.504899866878986
+        },
+        {
+          "status": "ok",
+          "receipt_id": "59621b8ac8f325c29d97ad06a3eb884b",
+          "ready_to_complete_ms": 1761.0716000199318,
+          "plan_to_complete_ms": 1761.150100035593,
+          "request_ms": 29.94749997742474
+        },
+        {
+          "status": "ok",
+          "receipt_id": "26bddc78266c915a57d2562af88a330e",
+          "ready_to_complete_ms": 1771.8605999834836,
+          "plan_to_complete_ms": 1771.9390999991447,
+          "request_ms": 30.379599891602993
+        },
+        {
+          "status": "ok",
+          "receipt_id": "fac7de2080b7293f99dfdd5523619cf4",
+          "ready_to_complete_ms": 1778.5660999361426,
+          "plan_to_complete_ms": 1778.6445999518037,
+          "request_ms": 31.19329991750419
+        },
+        {
+          "status": "ok",
+          "receipt_id": "4c97f4182348562548b86080b1cdb415",
+          "ready_to_complete_ms": 1786.3584000151604,
+          "plan_to_complete_ms": 1786.4369000308216,
+          "request_ms": 29.755299910902977
+        },
+        {
+          "status": "ok",
+          "receipt_id": "dd5ae34e17ea75731e9a46dada9e0907",
+          "ready_to_complete_ms": 1791.521199978888,
+          "plan_to_complete_ms": 1791.5996999945492,
+          "request_ms": 30.440199887380004
+        },
+        {
+          "status": "ok",
+          "receipt_id": "79bba6ee4ea6d0358b673fe07d99a325",
+          "ready_to_complete_ms": 1783.0900000408292,
+          "plan_to_complete_ms": 1783.1685000564903,
+          "request_ms": 11.216999962925911
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1380299f3d8bda54bb5907713b3b9991",
+          "ready_to_complete_ms": 1807.1552000474185,
+          "plan_to_complete_ms": 1807.2337000630796,
+          "request_ms": 28.579900041222572
+        },
+        {
+          "status": "ok",
+          "receipt_id": "41d18b1ef914a67d14f1775014527cca",
+          "ready_to_complete_ms": 1835.2920000907034,
+          "plan_to_complete_ms": 1835.3705001063645,
+          "request_ms": 52.19499999657273
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d208c4b4a1ece8f4c307f3b1af3527d9",
+          "ready_to_complete_ms": 1817.7229000721127,
+          "plan_to_complete_ms": 1817.8014000877738,
+          "request_ms": 31.355099985376
+        },
+        {
+          "status": "ok",
+          "receipt_id": "28a3fc2846c56b5a6922f53d5a047829",
+          "ready_to_complete_ms": 1800.6195998750627,
+          "plan_to_complete_ms": 1800.6980998907238,
+          "request_ms": 9.087699931114912
+        },
+        {
+          "status": "ok",
+          "receipt_id": "cc34854f6b3077e9d671dbe42bd68a0c",
+          "ready_to_complete_ms": 1825.7744999136776,
+          "plan_to_complete_ms": 1825.8529999293387,
+          "request_ms": 25.14889999292791
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a163c2193e08961ad7ef77f3a42b76ed",
+          "ready_to_complete_ms": 1813.560999929905,
+          "plan_to_complete_ms": 1813.639499945566,
+          "request_ms": 6.397099932655692
+        },
+        {
+          "status": "ok",
+          "receipt_id": "14777c66789661c2d9893dd996a6b1d8",
+          "ready_to_complete_ms": 1821.4263999834657,
+          "plan_to_complete_ms": 1821.5048999991268,
+          "request_ms": 7.857300108298659
+        },
+        {
+          "status": "ok",
+          "receipt_id": "fd3257da8b1c3e52d6bbf064c386cdfc",
+          "ready_to_complete_ms": 1853.089400101453,
+          "plan_to_complete_ms": 1853.1679001171142,
+          "request_ms": 35.3606001008302
+        },
+        {
+          "status": "ok",
+          "receipt_id": "c43143df34cd596575bd70957050cc50",
+          "ready_to_complete_ms": 1893.4076000005007,
+          "plan_to_complete_ms": 1893.4861000161618,
+          "request_ms": 71.97399996221066
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ccd7083a3a6d84d383f25979802b6627",
+          "ready_to_complete_ms": 1878.7368999328464,
+          "plan_to_complete_ms": 1878.8153999485075,
+          "request_ms": 52.95659997500479
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1a243898e7f33f5de665fe7898e60ed1",
+          "ready_to_complete_ms": 1863.4705001022667,
+          "plan_to_complete_ms": 1863.5490001179278,
+          "request_ms": 28.169600060209632
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8adfc1fae9110cc7ca96ef54cf8cc381",
+          "ready_to_complete_ms": 1952.646000077948,
+          "plan_to_complete_ms": 1952.724500093609,
+          "request_ms": 99.54680013470352
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ab795b656c8a9160dc45d79253aae8b6",
+          "ready_to_complete_ms": 1883.354099933058,
+          "plan_to_complete_ms": 1883.4325999487191,
+          "request_ms": 19.876800011843443
+        },
+        {
+          "status": "ok",
+          "receipt_id": "04b62b372978abac9ab3be74064897ca",
+          "ready_to_complete_ms": 1978.1810999847949,
+          "plan_to_complete_ms": 1978.259600000456,
+          "request_ms": 99.4380998890847
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2c761a241c0ca2391e02a933ec00c4df",
+          "ready_to_complete_ms": 2002.3918999359012,
+          "plan_to_complete_ms": 2002.4703999515623,
+          "request_ms": 119.03029982931912
+        },
+        {
+          "status": "ok",
+          "receipt_id": "c288dc89f9706884428819ad39cc5a6c",
+          "ready_to_complete_ms": 1986.7179000284523,
+          "plan_to_complete_ms": 1986.7964000441134,
+          "request_ms": 93.30049995332956
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ace46625e35a6cd5e40e4e5273bd68c7",
+          "ready_to_complete_ms": 1982.8488999046385,
+          "plan_to_complete_ms": 1982.9273999202996,
+          "request_ms": 30.13259987346828
+        },
+        {
+          "status": "ok",
+          "receipt_id": "82002dac130a3e2d5fd9804308d96e3f",
+          "ready_to_complete_ms": 2018.1448000948876,
+          "plan_to_complete_ms": 2018.2233001105487,
+          "request_ms": 39.94950000196695
+        },
+        {
+          "status": "ok",
+          "receipt_id": "03257e8bcb90f4a65fe032294939c805",
+          "ready_to_complete_ms": 2022.9541000444442,
+          "plan_to_complete_ms": 2023.0326000601053,
+          "request_ms": 40.09629995562136
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0accdca9eb1b9e884256df5d4484b2a4",
+          "ready_to_complete_ms": 2007.7122999355197,
+          "plan_to_complete_ms": 2007.7907999511808,
+          "request_ms": 20.98799985833466
+        },
+        {
+          "status": "ok",
+          "receipt_id": "4aa3848b3e3e3366075f0970bec2a5d2",
+          "ready_to_complete_ms": 2037.0954000391066,
+          "plan_to_complete_ms": 2037.1739000547677,
+          "request_ms": 34.69160012900829
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "name": "ready-full",
+        "books": 64,
+        "size": 4,
+        "consume": 4,
+        "planning_ms": 0
+      },
+      "mode": "cpu-books",
+      "cpu_signing_workers": 4,
+      "clients": 4,
+      "slo_ms": 1000,
+      "attempted_accesses": 256,
+      "completed": 256,
+      "on_time": 129,
+      "late": 127,
+      "failed": 0,
+      "unused_planned_accesses": 0,
+      "elapsed_seconds": 2.016259500058368,
+      "delivery_seconds": 2.0162585000507534,
+      "preparation_wait_after_ready_ms": 35.464399959892035,
+      "cleanup_ms": 0.00100000761449337,
+      "process_cpu_seconds": 0.6875,
+      "process_peak_rss_bytes_cumulative": 47464448,
+      "host_cpu_busy_percent": 13.06873184898354,
+      "completed_per_second": 126.9677836571082,
+      "on_time_per_second": 63.97985973346468,
+      "first_access_ready_ms": 46.846200013533235,
+      "p95_ready_ms": 1915.7342999242246,
+      "p99_ready_ms": 1990.9043998923153,
+      "p99_request_ms": 88.98349991068244,
+      "signatures": 64,
+      "signing_batches": [
+        64
+      ],
+      "publisher_verifications": 64,
+      "http": {
+        "requests": 513,
+        "request_body_bytes": 396143,
+        "response_body_bytes": 575105,
+        "dropped_responses": 0
+      },
+      "service_timings": {
+        "buyer.access_rpc": {
+          "count": 256,
+          "total_ms": 7840.811499161646,
+          "p50_ms": 29.732700204476714,
+          "p95_ms": 64.34340006671846,
+          "max_ms": 105.67010007798672
+        },
+        "db.begin": {
+          "count": 258,
+          "total_ms": 1461.088398937136,
+          "p50_ms": 0.00919983722269535,
+          "p95_ms": 35.40439996868372,
+          "max_ms": 56.68039992451668
+        },
+        "db.body": {
+          "count": 258,
+          "total_ms": 91.17230027914047,
+          "p50_ms": 0.16200006939470768,
+          "p95_ms": 1.152500044554472,
+          "max_ms": 2.4513998068869114
+        },
+        "db.close": {
+          "count": 258,
+          "total_ms": 79.3096988927573,
+          "p50_ms": 0.0730000901967287,
+          "p95_ms": 2.854999853298068,
+          "max_ms": 3.4146998077630997
+        },
+        "db.commit": {
+          "count": 258,
+          "total_ms": 494.6045991964638,
+          "p50_ms": 1.7494999337941408,
+          "p95_ms": 4.430700093507767,
+          "max_ms": 9.451400022953749
+        },
+        "db.open": {
+          "count": 258,
+          "total_ms": 1851.3055010698736,
+          "p50_ms": 5.124200135469437,
+          "p95_ms": 15.422400087118149,
+          "max_ms": 62.19370011240244
+        },
+        "issue.sign": {
+          "count": 1,
+          "total_ms": 2.7784002013504505,
+          "p50_ms": 2.7784002013504505,
+          "p95_ms": 2.7784002013504505,
+          "max_ms": 2.7784002013504505
+        },
+        "publisher.spend_rpc": {
+          "count": 256,
+          "total_ms": 5590.49410186708,
+          "p50_ms": 17.64030009508133,
+          "p95_ms": 50.658500054851174,
+          "max_ms": 104.680199874565
+        },
+        "publisher.verify": {
+          "count": 256,
+          "total_ms": 14.915500301867723,
+          "p50_ms": 0.005800044164061546,
+          "p95_ms": 0.22920011542737484,
+          "max_ms": 1.6497999895364046
+        }
+      },
+      "audit_before": {
+        "accounts": [
+          {
+            "buyer": "buyer",
+            "initial": 1000000000,
+            "available": 999999000,
+            "reserved": 0,
+            "spent": 1000
+          },
+          {
+            "buyer": "other",
+            "initial": 1000000000,
+            "available": 1000000000,
+            "reserved": 0,
+            "spent": 0
+          }
+        ],
+        "receipts": 1,
+        "publisher_accrued": 1000,
+        "books": 1
+      },
+      "audit_after": {
+        "accounts": [
+          {
+            "buyer": "buyer",
+            "initial": 1000000000,
+            "available": 999743000,
+            "reserved": 0,
+            "spent": 257000
+          },
+          {
+            "buyer": "other",
+            "initial": 1000000000,
+            "available": 1000000000,
+            "reserved": 0,
+            "spent": 0
+          }
+        ],
+        "receipts": 257,
+        "publisher_accrued": 257000,
+        "books": 65
+      },
+      "reconciled": true,
+      "error": null,
+      "server_errors": [],
+      "cleanup_errors": [],
+      "cost_usd": null,
+      "cost_per_million_on_time": null,
+      "records": [
+        {
+          "status": "ok",
+          "receipt_id": "9d410c4f8c9af5cae6def952088264f7",
+          "ready_to_complete_ms": 53.59499994665384,
+          "plan_to_complete_ms": 53.874599980190396,
+          "request_ms": 17.988999839872122
+        },
+        {
+          "status": "ok",
+          "receipt_id": "bf32fcf68d1f7b6320af150e37366f93",
+          "ready_to_complete_ms": 46.846200013533235,
+          "plan_to_complete_ms": 47.12580004706979,
+          "request_ms": 10.996799916028976
+        },
+        {
+          "status": "ok",
+          "receipt_id": "4f58780ddb52f1af2abd6910f3cc4c3b",
+          "ready_to_complete_ms": 100.64999992027879,
+          "plan_to_complete_ms": 100.92959995381534,
+          "request_ms": 64.57819999195635
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1a0cb0fd16af42c492ab28949cc24adf",
+          "ready_to_complete_ms": 85.3770999237895,
+          "plan_to_complete_ms": 85.65669995732605,
+          "request_ms": 48.756100004538894
+        },
+        {
+          "status": "ok",
+          "receipt_id": "63408eb0172318a82ede946d04b19a86",
+          "ready_to_complete_ms": 74.01080010458827,
+          "plan_to_complete_ms": 74.29040013812482,
+          "request_ms": 27.158800046890974
+        },
+        {
+          "status": "ok",
+          "receipt_id": "55222ef05bd99c094e416e6ca4c0e167",
+          "ready_to_complete_ms": 61.01080006919801,
+          "plan_to_complete_ms": 61.290400102734566,
+          "request_ms": 7.405300159007311
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f909743275abbe26b9913b053edb9a9f",
+          "ready_to_complete_ms": 68.5618999414146,
+          "plan_to_complete_ms": 68.84149997495115,
+          "request_ms": 7.545700063928962
+        },
+        {
+          "status": "ok",
+          "receipt_id": "978f7a978d2edd78d15bfdf884448e8a",
+          "ready_to_complete_ms": 116.36530002579093,
+          "plan_to_complete_ms": 116.64490005932748,
+          "request_ms": 47.79669991694391
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8303498a9389fb48ce3e917791199c8a",
+          "ready_to_complete_ms": 80.80070000141859,
+          "plan_to_complete_ms": 81.08030003495514,
+          "request_ms": 6.784300087019801
+        },
+        {
+          "status": "ok",
+          "receipt_id": "57e23b6618cdf5130be1742c47094945",
+          "ready_to_complete_ms": 104.24649994820356,
+          "plan_to_complete_ms": 104.52609998174012,
+          "request_ms": 23.44030002132058
+        },
+        {
+          "status": "ok",
+          "receipt_id": "cc4bddff3c67d0bcc21ac631bd767256",
+          "ready_to_complete_ms": 92.44569996371865,
+          "plan_to_complete_ms": 92.7252999972552,
+          "request_ms": 7.061299867928028
+        },
+        {
+          "status": "ok",
+          "receipt_id": "9ebc7c42315e828911a9f6269807558e",
+          "ready_to_complete_ms": 120.19889988005161,
+          "plan_to_complete_ms": 120.47849991358817,
+          "request_ms": 27.747799875214696
+        },
+        {
+          "status": "ok",
+          "receipt_id": "bd304bd7bed9a14699d38bf42b99b68d",
+          "ready_to_complete_ms": 128.59850004315376,
+          "plan_to_complete_ms": 128.87810007669032,
+          "request_ms": 27.93979994021356
+        },
+        {
+          "status": "ok",
+          "receipt_id": "3d9f3aa16824cdc5a6462c86f50660f2",
+          "ready_to_complete_ms": 138.7286998797208,
+          "plan_to_complete_ms": 139.00829991325736,
+          "request_ms": 34.47529999539256
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d4f1a0b233923c0934233bdb4ac49006",
+          "ready_to_complete_ms": 146.56920009292662,
+          "plan_to_complete_ms": 146.84880012646317,
+          "request_ms": 30.19510000012815
+        },
+        {
+          "status": "ok",
+          "receipt_id": "12ad1e3f79ca12f01c0479a7a2df058b",
+          "ready_to_complete_ms": 132.14890006929636,
+          "plan_to_complete_ms": 132.4285001028329,
+          "request_ms": 11.941100005060434
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0fdf374bf44a06e6a5a9fe3523abb02d",
+          "ready_to_complete_ms": 142.3124000430107,
+          "plan_to_complete_ms": 142.59200007654727,
+          "request_ms": 13.70370015501976
+        },
+        {
+          "status": "ok",
+          "receipt_id": "77f014241bfe56e2360ea90c4f7904bd",
+          "ready_to_complete_ms": 153.7210000678897,
+          "plan_to_complete_ms": 154.00060010142624,
+          "request_ms": 21.566300187259912
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a301268b1496d3d39819ce83eb7ccbad",
+          "ready_to_complete_ms": 193.34060000255704,
+          "plan_to_complete_ms": 193.6202000360936,
+          "request_ms": 54.60339994169772
+        },
+        {
+          "status": "ok",
+          "receipt_id": "99fc606bccb446db7382317097c29ef5",
+          "ready_to_complete_ms": 176.87169997952878,
+          "plan_to_complete_ms": 177.15130001306534,
+          "request_ms": 34.55380001105368
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2ae5efe0571a91889dada8178a49e3c1",
+          "ready_to_complete_ms": 171.99250007979572,
+          "plan_to_complete_ms": 172.27210011333227,
+          "request_ms": 25.415500160306692
+        },
+        {
+          "status": "ok",
+          "receipt_id": "66d7a6796d014bb250cb274f29468172",
+          "ready_to_complete_ms": 196.86769996769726,
+          "plan_to_complete_ms": 197.14730000123382,
+          "request_ms": 43.1381999514997
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1f48689a992d8863595c09535d836fa6",
+          "ready_to_complete_ms": 207.83760002814233,
+          "plan_to_complete_ms": 208.1172000616789,
+          "request_ms": 35.8391001354903
+        },
+        {
+          "status": "ok",
+          "receipt_id": "5bfc7c8a0a6ce0ca6f6e2719401db505",
+          "ready_to_complete_ms": 203.898899955675,
+          "plan_to_complete_ms": 204.17849998921156,
+          "request_ms": 27.01979991979897
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8fb87dd434e3e3d384a8098324744a38",
+          "ready_to_complete_ms": 222.91860007680953,
+          "plan_to_complete_ms": 223.19820011034608,
+          "request_ms": 29.570200014859438
+        },
+        {
+          "status": "ok",
+          "receipt_id": "b62aa82b12dd2a7c88830239b2da4a7b",
+          "ready_to_complete_ms": 239.87539997324347,
+          "plan_to_complete_ms": 240.15500000678003,
+          "request_ms": 42.99949994310737
+        },
+        {
+          "status": "ok",
+          "receipt_id": "398caa40e00780155845fddf0cb3d8d0",
+          "ready_to_complete_ms": 254.83660004101694,
+          "plan_to_complete_ms": 255.1162000745535,
+          "request_ms": 50.93080014921725
+        },
+        {
+          "status": "ok",
+          "receipt_id": "642014aa46aca6163fa2a53f43c74838",
+          "ready_to_complete_ms": 212.4401000328362,
+          "plan_to_complete_ms": 212.71970006637275,
+          "request_ms": 4.593000048771501
+        },
+        {
+          "status": "ok",
+          "receipt_id": "3763d23180210c1596e3f7cf6590a93d",
+          "ready_to_complete_ms": 244.09719998948276,
+          "plan_to_complete_ms": 244.3768000230193,
+          "request_ms": 31.650400022044778
+        },
+        {
+          "status": "ok",
+          "receipt_id": "3611fa2259402dde47baac72e485aa47",
+          "ready_to_complete_ms": 247.71300004795194,
+          "plan_to_complete_ms": 247.9926000814885,
+          "request_ms": 24.785500019788742
+        },
+        {
+          "status": "ok",
+          "receipt_id": "6539965a95e52c0dcae413e166e135b1",
+          "ready_to_complete_ms": 258.90760007314384,
+          "plan_to_complete_ms": 259.1872001066804,
+          "request_ms": 19.021900137886405
+        },
+        {
+          "status": "ok",
+          "receipt_id": "01b0f62c8ebf151a41285ca21ef7cba9",
+          "ready_to_complete_ms": 251.33219989947975,
+          "plan_to_complete_ms": 251.6117999330163,
+          "request_ms": 7.227699970826507
+        },
+        {
+          "status": "ok",
+          "receipt_id": "fbcde69fc325a7d844beea0aea1420a0",
+          "ready_to_complete_ms": 333.3145999349654,
+          "plan_to_complete_ms": 333.5941999685019,
+          "request_ms": 85.59479983523488
+        },
+        {
+          "status": "ok",
+          "receipt_id": "67db54a87cfd517800a70c526e7997cc",
+          "ready_to_complete_ms": 317.6410999149084,
+          "plan_to_complete_ms": 317.92069994844496,
+          "request_ms": 66.30319985561073
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f4f66030d6a19884e3764f790ded5bd9",
+          "ready_to_complete_ms": 262.0321998838335,
+          "plan_to_complete_ms": 262.3117999173701,
+          "request_ms": 7.185199996456504
+        },
+        {
+          "status": "ok",
+          "receipt_id": "7fcdd1d5904de40fbf6756acd1f46012",
+          "ready_to_complete_ms": 269.6537000592798,
+          "plan_to_complete_ms": 269.93330009281635,
+          "request_ms": 10.735800024122
+        },
+        {
+          "status": "ok",
+          "receipt_id": "eac127d6430b164804f10344170b026f",
+          "ready_to_complete_ms": 291.74620006233454,
+          "plan_to_complete_ms": 292.0258000958711,
+          "request_ms": 29.708400135859847
+        },
+        {
+          "status": "ok",
+          "receipt_id": "98dc348826978e415c4baa31fab53679",
+          "ready_to_complete_ms": 301.7666998784989,
+          "plan_to_complete_ms": 302.04629991203547,
+          "request_ms": 32.10629988461733
+        },
+        {
+          "status": "ok",
+          "receipt_id": "00fbc9f84ab4520e84d337fc4f7ec40a",
+          "ready_to_complete_ms": 336.8492000736296,
+          "plan_to_complete_ms": 337.12880010716617,
+          "request_ms": 45.0961000751704
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f9fe886bb48ab188f73191e10a4dcdba",
+          "ready_to_complete_ms": 321.52189989574254,
+          "plan_to_complete_ms": 321.8014999292791,
+          "request_ms": 19.74949985742569
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0d4f96318b3fc6e4326ffdcc5a00fe86",
+          "ready_to_complete_ms": 345.33159993588924,
+          "plan_to_complete_ms": 345.6111999694258,
+          "request_ms": 27.6806999463588
+        },
+        {
+          "status": "ok",
+          "receipt_id": "c054155c0055cd9349b28740b4f224fd",
+          "ready_to_complete_ms": 328.42839998193085,
+          "plan_to_complete_ms": 328.7080000154674,
+          "request_ms": 6.900599924847484
+        },
+        {
+          "status": "ok",
+          "receipt_id": "24c1ce42c6c0f52a538b81e6e23f7d4a",
+          "ready_to_complete_ms": 353.8955000694841,
+          "plan_to_complete_ms": 354.17510010302067,
+          "request_ms": 25.457900017499924
+        },
+        {
+          "status": "ok",
+          "receipt_id": "63fca4920cf0d74dfa4298d4a1314250",
+          "ready_to_complete_ms": 363.5885000694543,
+          "plan_to_complete_ms": 363.86810010299087,
+          "request_ms": 30.259900027886033
+        },
+        {
+          "status": "ok",
+          "receipt_id": "824e97a31776a8a41aff499ffb686f9f",
+          "ready_to_complete_ms": 370.81789993681014,
+          "plan_to_complete_ms": 371.0974999703467,
+          "request_ms": 33.95810001529753
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f1964f24ec14d45f77ff1cf465575a19",
+          "ready_to_complete_ms": 377.1100000012666,
+          "plan_to_complete_ms": 377.38960003480315,
+          "request_ms": 31.767399981617928
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2a0255ec5e46c061e3585365259d66ed",
+          "ready_to_complete_ms": 384.26789990626276,
+          "plan_to_complete_ms": 384.5474999397993,
+          "request_ms": 30.361499870195985
+        },
+        {
+          "status": "ok",
+          "receipt_id": "c6229d279b8e77e1f15b7f3a7e9f8ee1",
+          "ready_to_complete_ms": 395.06869995966554,
+          "plan_to_complete_ms": 395.3482999932021,
+          "request_ms": 31.468499917536974
+        },
+        {
+          "status": "ok",
+          "receipt_id": "25bdd1e44eecbf6937c3a499285dce19",
+          "ready_to_complete_ms": 399.9334000982344,
+          "plan_to_complete_ms": 400.21300013177097,
+          "request_ms": 29.105600202456117
+        },
+        {
+          "status": "ok",
+          "receipt_id": "c1f6ad2cdec96ea0476613416e7102f6",
+          "ready_to_complete_ms": 407.84540004096925,
+          "plan_to_complete_ms": 408.1250000745058,
+          "request_ms": 30.72379995137453
+        },
+        {
+          "status": "ok",
+          "receipt_id": "84ff54f5ac1d4ddc1bcb7873542ca75e",
+          "ready_to_complete_ms": 391.42889995127916,
+          "plan_to_complete_ms": 391.7084999848157,
+          "request_ms": 7.149199955165386
+        },
+        {
+          "status": "ok",
+          "receipt_id": "e28598f27f228f6befdb6bc1011353c0",
+          "ready_to_complete_ms": 427.3691999260336,
+          "plan_to_complete_ms": 427.64879995957017,
+          "request_ms": 35.932299913838506
+        },
+        {
+          "status": "ok",
+          "receipt_id": "cc13ef1546e519ef485c6e7fb85b0bb1",
+          "ready_to_complete_ms": 416.35109996423125,
+          "plan_to_complete_ms": 416.6306999977678,
+          "request_ms": 21.270900033414364
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f2fb7c01050d9c874c7d23eade6a27e0",
+          "ready_to_complete_ms": 435.1049999240786,
+          "plan_to_complete_ms": 435.38459995761514,
+          "request_ms": 35.1585999596864
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2bc92a65a03f63ea3e74e693815c0e7e",
+          "ready_to_complete_ms": 430.3979999385774,
+          "plan_to_complete_ms": 430.67759997211397,
+          "request_ms": 22.540000034496188
+        },
+        {
+          "status": "ok",
+          "receipt_id": "663b8b481e6a763bf8b23b650c839bc9",
+          "ready_to_complete_ms": 445.932500064373,
+          "plan_to_complete_ms": 446.21210009790957,
+          "request_ms": 29.573700157925487
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2570cd3a63c2bf62c029715e9efd73c9",
+          "ready_to_complete_ms": 519.5865998975933,
+          "plan_to_complete_ms": 519.8661999311298,
+          "request_ms": 92.20610000193119
+        },
+        {
+          "status": "ok",
+          "receipt_id": "4404613260c3cdd7520c54cfa889f00a",
+          "ready_to_complete_ms": 463.05430005304515,
+          "plan_to_complete_ms": 463.3339000865817,
+          "request_ms": 32.64959994703531
+        },
+        {
+          "status": "ok",
+          "receipt_id": "c034a656dbd3d522bf624c18171e91c7",
+          "ready_to_complete_ms": 476.1284999549389,
+          "plan_to_complete_ms": 476.40809998847544,
+          "request_ms": 41.009899927303195
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a8c950f57c0206539b927a0025f321ea",
+          "ready_to_complete_ms": 481.9817999377847,
+          "plan_to_complete_ms": 482.2613999713212,
+          "request_ms": 36.03550000116229
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a55a6abed9103b65c51a9875c75778a2",
+          "ready_to_complete_ms": 504.06050006859004,
+          "plan_to_complete_ms": 504.3401001021266,
+          "request_ms": 40.997200179845095
+        },
+        {
+          "status": "ok",
+          "receipt_id": "3072d5407b3b3d636931261c998d7f08",
+          "ready_to_complete_ms": 493.43449994921684,
+          "plan_to_complete_ms": 493.7140999827534,
+          "request_ms": 17.29770004749298
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ba8a9a40bdc8e32d6c5ddfb1c0f6b01a",
+          "ready_to_complete_ms": 488.9944000169635,
+          "plan_to_complete_ms": 489.27400005050004,
+          "request_ms": 7.004200015217066
+        },
+        {
+          "status": "ok",
+          "receipt_id": "5eef65332db7df3a34e2cca2ba34690f",
+          "ready_to_complete_ms": 508.762399898842,
+          "plan_to_complete_ms": 509.04199993237853,
+          "request_ms": 19.761799834668636
+        },
+        {
+          "status": "ok",
+          "receipt_id": "9d44ec3d83c59f8f2b43f7ce85d8711e",
+          "ready_to_complete_ms": 501.1452999897301,
+          "plan_to_complete_ms": 501.4249000232667,
+          "request_ms": 7.703399984166026
+        },
+        {
+          "status": "ok",
+          "receipt_id": "25c3435f6caac5090e2af7b4f0d3360c",
+          "ready_to_complete_ms": 523.8514998927712,
+          "plan_to_complete_ms": 524.1310999263078,
+          "request_ms": 22.698199842125177
+        },
+        {
+          "status": "ok",
+          "receipt_id": "dcfdd1a99cf4e2dfd14817d416eae881",
+          "ready_to_complete_ms": 536.0723999328911,
+          "plan_to_complete_ms": 536.3519999664277,
+          "request_ms": 32.00399992056191
+        },
+        {
+          "status": "ok",
+          "receipt_id": "533faa94dfae32a1a63ac8ba326f8942",
+          "ready_to_complete_ms": 567.8214998915792,
+          "plan_to_complete_ms": 568.1010999251157,
+          "request_ms": 59.052799828350544
+        },
+        {
+          "status": "ok",
+          "receipt_id": "3dcfa8956c6375e078719cde7779c7ba",
+          "ready_to_complete_ms": 542.39990003407,
+          "plan_to_complete_ms": 542.6795000676066,
+          "request_ms": 22.79940014705062
+        },
+        {
+          "status": "ok",
+          "receipt_id": "7701861300a0df7e75315ed64de56d8a",
+          "ready_to_complete_ms": 559.3190998770297,
+          "plan_to_complete_ms": 559.5986999105662,
+          "request_ms": 35.45279987156391
+        },
+        {
+          "status": "ok",
+          "receipt_id": "563d1a49080cf986e7790ee8eba1116e",
+          "ready_to_complete_ms": 552.9956999234855,
+          "plan_to_complete_ms": 553.2752999570221,
+          "request_ms": 16.909699887037277
+        },
+        {
+          "status": "ok",
+          "receipt_id": "9355af243dabb693e4c59a51f2c29039",
+          "ready_to_complete_ms": 582.9125000163913,
+          "plan_to_complete_ms": 583.1921000499278,
+          "request_ms": 40.50430003553629
+        },
+        {
+          "status": "ok",
+          "receipt_id": "aaa318ff03a38cb19eb8cd11a9f4d2e1",
+          "ready_to_complete_ms": 570.9784999489784,
+          "plan_to_complete_ms": 571.258099982515,
+          "request_ms": 17.973599955439568
+        },
+        {
+          "status": "ok",
+          "receipt_id": "31ff7c5049d17d8bbff42358a6d9b795",
+          "ready_to_complete_ms": 599.0941999480128,
+          "plan_to_complete_ms": 599.3737999815494,
+          "request_ms": 39.76719989441335
+        },
+        {
+          "status": "ok",
+          "receipt_id": "4a42b329aa08a6d0659fc7b0582f697b",
+          "ready_to_complete_ms": 587.557699996978,
+          "plan_to_complete_ms": 587.8373000305146,
+          "request_ms": 19.723499892279506
+        },
+        {
+          "status": "ok",
+          "receipt_id": "9199fdf5aca6f8eb0c7b853d1805d33c",
+          "ready_to_complete_ms": 610.4085000697523,
+          "plan_to_complete_ms": 610.6881001032889,
+          "request_ms": 39.42270018160343
+        },
+        {
+          "status": "ok",
+          "receipt_id": "35038e126827935c5d0f278f8f015003",
+          "ready_to_complete_ms": 603.2352999318391,
+          "plan_to_complete_ms": 603.5148999653757,
+          "request_ms": 20.30820003710687
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a28d13b2d99bcb95de56ea2f5ac54fb3",
+          "ready_to_complete_ms": 594.75849987939,
+          "plan_to_complete_ms": 595.0380999129266,
+          "request_ms": 7.192099932581186
+        },
+        {
+          "status": "ok",
+          "receipt_id": "eb2399fcd1c57d5f28073940a8d1db5e",
+          "ready_to_complete_ms": 630.7629998773336,
+          "plan_to_complete_ms": 631.0425999108702,
+          "request_ms": 35.995799815282226
+        },
+        {
+          "status": "ok",
+          "receipt_id": "112d6e93064b262c54b9d289332f2d15",
+          "ready_to_complete_ms": 615.0001999922097,
+          "plan_to_complete_ms": 615.2798000257462,
+          "request_ms": 15.893700066953897
+        },
+        {
+          "status": "ok",
+          "receipt_id": "7c787fb31ced0860125bdb30f1909fba",
+          "ready_to_complete_ms": 639.0219000168145,
+          "plan_to_complete_ms": 639.301500050351,
+          "request_ms": 35.77790013514459
+        },
+        {
+          "status": "ok",
+          "receipt_id": "c261e62873c239535dd0485b81744e69",
+          "ready_to_complete_ms": 649.2506999056786,
+          "plan_to_complete_ms": 649.5302999392152,
+          "request_ms": 38.83139998652041
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0bee668441e8ac52f587a8953648769a",
+          "ready_to_complete_ms": 626.4821998775005,
+          "plan_to_complete_ms": 626.7617999110371,
+          "request_ms": 11.474399827420712
+        },
+        {
+          "status": "ok",
+          "receipt_id": "cae0f8916decb4566a87efd16d9b4257",
+          "ready_to_complete_ms": 669.5695000234991,
+          "plan_to_complete_ms": 669.8491000570357,
+          "request_ms": 43.07799995876849
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8c9ed9965e4455304c0f185ce3ca478b",
+          "ready_to_complete_ms": 661.5023999474943,
+          "plan_to_complete_ms": 661.7819999810308,
+          "request_ms": 30.728999990969896
+        },
+        {
+          "status": "ok",
+          "receipt_id": "524bcfdc98a82717e61a2628a4e99ee5",
+          "ready_to_complete_ms": 677.2960000671446,
+          "plan_to_complete_ms": 677.5756001006812,
+          "request_ms": 38.26080006547272
+        },
+        {
+          "status": "ok",
+          "receipt_id": "9e3d81b36c0eb6cdd84bd3d8c95e49cb",
+          "ready_to_complete_ms": 691.3749000523239,
+          "plan_to_complete_ms": 691.6545000858605,
+          "request_ms": 42.111200047656894
+        },
+        {
+          "status": "ok",
+          "receipt_id": "297678bafb29e3a7ec11d6fef540a25b",
+          "ready_to_complete_ms": 707.2697998955846,
+          "plan_to_complete_ms": 707.5493999291211,
+          "request_ms": 45.75919988565147
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d0411cfe6b5cccf6595496434b18ee90",
+          "ready_to_complete_ms": 680.6224000174552,
+          "plan_to_complete_ms": 680.9020000509918,
+          "request_ms": 11.038900120183825
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f2e9abc487d2990ed5c46f63d90ed6e1",
+          "ready_to_complete_ms": 684.7180998884141,
+          "plan_to_complete_ms": 684.9976999219507,
+          "request_ms": 7.410799851641059
+        },
+        {
+          "status": "ok",
+          "receipt_id": "bc9e5bdaadcfaf7b3666975c85087eaa",
+          "ready_to_complete_ms": 713.6574999894947,
+          "plan_to_complete_ms": 713.9371000230312,
+          "request_ms": 33.02800003439188
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0f6d0709db530358aeaaf79ca6bdbabc",
+          "ready_to_complete_ms": 752.6231000665575,
+          "plan_to_complete_ms": 752.9027001000941,
+          "request_ms": 67.89810000918806
+        },
+        {
+          "status": "ok",
+          "receipt_id": "e1e0926d2b90201db6242dae3b64e9ae",
+          "ready_to_complete_ms": 698.4872000757605,
+          "plan_to_complete_ms": 698.766800109297,
+          "request_ms": 7.100100163370371
+        },
+        {
+          "status": "ok",
+          "receipt_id": "051aa49a052f178745706668910a0f02",
+          "ready_to_complete_ms": 723.0597001034766,
+          "plan_to_complete_ms": 723.3393001370132,
+          "request_ms": 24.564400082454085
+        },
+        {
+          "status": "ok",
+          "receipt_id": "158d53433ffe62753d2381880879ef75",
+          "ready_to_complete_ms": 729.2681999970227,
+          "plan_to_complete_ms": 729.5478000305593,
+          "request_ms": 21.986499894410372
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a29d63b91535249c301baa459b203cd8",
+          "ready_to_complete_ms": 742.0846000313759,
+          "plan_to_complete_ms": 742.3642000649124,
+          "request_ms": 28.417000081390142
+        },
+        {
+          "status": "ok",
+          "receipt_id": "9b691020209eb1941a0c5277af159f0e",
+          "ready_to_complete_ms": 759.4536000397056,
+          "plan_to_complete_ms": 759.7332000732422,
+          "request_ms": 36.38679999858141
+        },
+        {
+          "status": "ok",
+          "receipt_id": "25efa075b76d39260ec0e4d270695cb9",
+          "ready_to_complete_ms": 737.1153000276536,
+          "plan_to_complete_ms": 737.3949000611901,
+          "request_ms": 7.839899975806475
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0cb48c0671fb39fadfe0c4c491af0a35",
+          "ready_to_complete_ms": 799.0500000305474,
+          "plan_to_complete_ms": 799.3296000640839,
+          "request_ms": 61.92720006220043
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8d988fabdf9d0fd3c412ef1f3ad2ca21",
+          "ready_to_complete_ms": 829.9845999572426,
+          "plan_to_complete_ms": 830.2641999907792,
+          "request_ms": 87.89269998669624
+        },
+        {
+          "status": "ok",
+          "receipt_id": "9e6f5a0972872b9881dac827e16c64cb",
+          "ready_to_complete_ms": 773.2027999591082,
+          "plan_to_complete_ms": 773.4823999926448,
+          "request_ms": 20.568900043144822
+        },
+        {
+          "status": "ok",
+          "receipt_id": "fc07d3ee1a01729ae970ca216287971c",
+          "ready_to_complete_ms": 790.8586000557989,
+          "plan_to_complete_ms": 791.1382000893354,
+          "request_ms": 31.394600169733167
+        },
+        {
+          "status": "ok",
+          "receipt_id": "7e405b6d33727fad9ddb5c0ff6aceab2",
+          "ready_to_complete_ms": 783.3434999920428,
+          "plan_to_complete_ms": 783.6231000255793,
+          "request_ms": 10.1326999720186
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d420e1ba0cbab4824825ec9da57d87ab",
+          "ready_to_complete_ms": 814.4334000535309,
+          "plan_to_complete_ms": 814.7130000870675,
+          "request_ms": 31.083700014278293
+        },
+        {
+          "status": "ok",
+          "receipt_id": "c01a6939e8707053fc35bebcb119fb9a",
+          "ready_to_complete_ms": 839.0454000327736,
+          "plan_to_complete_ms": 839.3250000663102,
+          "request_ms": 48.17910003475845
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1a07b5e609efe8d57ad84b506feb9539",
+          "ready_to_complete_ms": 806.5029000863433,
+          "plan_to_complete_ms": 806.7825001198798,
+          "request_ms": 7.440900197252631
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f9911d79c8413e2bac6383882c09b533",
+          "ready_to_complete_ms": 817.2319000586867,
+          "plan_to_complete_ms": 817.5115000922233,
+          "request_ms": 10.72120014578104
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a01e4913b29626c2da7578557879d892",
+          "ready_to_complete_ms": 823.2923001050949,
+          "plan_to_complete_ms": 823.5719001386315,
+          "request_ms": 8.85250000283122
+        },
+        {
+          "status": "ok",
+          "receipt_id": "9713ab405c56b9a6818d3ea6bebcd997",
+          "ready_to_complete_ms": 875.5604999605566,
+          "plan_to_complete_ms": 875.8400999940932,
+          "request_ms": 58.32189996726811
+        },
+        {
+          "status": "ok",
+          "receipt_id": "9aa5234c2e1dde3c53e49d2e8b2f1c3c",
+          "ready_to_complete_ms": 859.8054999019951,
+          "plan_to_complete_ms": 860.0850999355316,
+          "request_ms": 36.505499854683876
+        },
+        {
+          "status": "ok",
+          "receipt_id": "fa456203732d56a1c67ac7c1ae397a40",
+          "ready_to_complete_ms": 850.0139999669045,
+          "plan_to_complete_ms": 850.2936000004411,
+          "request_ms": 20.016100024804473
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1a5c068eed8b7cccaf735151abfd81dd",
+          "ready_to_complete_ms": 866.8482000939548,
+          "plan_to_complete_ms": 867.1278001274914,
+          "request_ms": 27.791700093075633
+        },
+        {
+          "status": "ok",
+          "receipt_id": "05f47dbce06289b48b4d6661667e9840",
+          "ready_to_complete_ms": 906.5920000430197,
+          "plan_to_complete_ms": 906.8716000765562,
+          "request_ms": 56.57100002281368
+        },
+        {
+          "status": "ok",
+          "receipt_id": "b30e6228a4cf8effd78e313c2de0d247",
+          "ready_to_complete_ms": 879.2149000801146,
+          "plan_to_complete_ms": 879.4945001136512,
+          "request_ms": 19.40180012024939
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a1e0fd1a6291affa45ac545fab6c1991",
+          "ready_to_complete_ms": 937.2268000151962,
+          "plan_to_complete_ms": 937.5064000487328,
+          "request_ms": 70.3698000870645
+        },
+        {
+          "status": "ok",
+          "receipt_id": "07c9829067ea06f084c2d879e545fd60",
+          "ready_to_complete_ms": 894.7999998927116,
+          "plan_to_complete_ms": 895.0795999262482,
+          "request_ms": 19.2262998316437
+        },
+        {
+          "status": "ok",
+          "receipt_id": "6bcc44938a4443785637fbc738ea29af",
+          "ready_to_complete_ms": 889.425199944526,
+          "plan_to_complete_ms": 889.7047999780625,
+          "request_ms": 10.203199926763773
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d699285b92aed8c06d1b60851ecad4ad",
+          "ready_to_complete_ms": 910.7951000332832,
+          "plan_to_complete_ms": 911.0747000668198,
+          "request_ms": 21.364100044593215
+        },
+        {
+          "status": "ok",
+          "receipt_id": "4a2d85fd40b6822f1a2723d6cd05e8e5",
+          "ready_to_complete_ms": 926.3838001061231,
+          "plan_to_complete_ms": 926.6634001396596,
+          "request_ms": 31.576500041410327
+        },
+        {
+          "status": "ok",
+          "receipt_id": "455c52282edd59e42fde44310c134893",
+          "ready_to_complete_ms": 941.0945998970419,
+          "plan_to_complete_ms": 941.3741999305785,
+          "request_ms": 34.49180000461638
+        },
+        {
+          "status": "ok",
+          "receipt_id": "eaa189fc724b51deb2a6d3bc5ce93ac6",
+          "ready_to_complete_ms": 921.590399928391,
+          "plan_to_complete_ms": 921.8699999619275,
+          "request_ms": 10.786499828100204
+        },
+        {
+          "status": "ok",
+          "receipt_id": "03206a0fd6c2539f6902778cc5f3c731",
+          "ready_to_complete_ms": 934.4438998959959,
+          "plan_to_complete_ms": 934.7234999295324,
+          "request_ms": 12.84639979712665
+        },
+        {
+          "status": "ok",
+          "receipt_id": "92741e2c9aa0afceac236a96e1470993",
+          "ready_to_complete_ms": 952.925099991262,
+          "plan_to_complete_ms": 953.2047000247985,
+          "request_ms": 26.53410006314516
+        },
+        {
+          "status": "ok",
+          "receipt_id": "69542b12bac222cc7e24ea847a47b086",
+          "ready_to_complete_ms": 958.119000075385,
+          "plan_to_complete_ms": 958.3986001089215,
+          "request_ms": 23.66730011999607
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8b5ac80730d302aa5bd5879a967747f0",
+          "ready_to_complete_ms": 1001.4678000006825,
+          "plan_to_complete_ms": 1001.747400034219,
+          "request_ms": 64.22970001585782
+        },
+        {
+          "status": "ok",
+          "receipt_id": "093177e49c2d4704312309dde0fc8c58",
+          "ready_to_complete_ms": 984.2236000113189,
+          "plan_to_complete_ms": 984.5032000448555,
+          "request_ms": 43.11820003204048
+        },
+        {
+          "status": "ok",
+          "receipt_id": "76b7960992c232790e74c6f3f32de0ba",
+          "ready_to_complete_ms": 974.5654999278486,
+          "plan_to_complete_ms": 974.8450999613851,
+          "request_ms": 21.629299968481064
+        },
+        {
+          "status": "ok",
+          "receipt_id": "45702d11e37f225bb374978db23bddb2",
+          "ready_to_complete_ms": 969.9935000389814,
+          "plan_to_complete_ms": 970.273100072518,
+          "request_ms": 11.8605000898242
+        },
+        {
+          "status": "ok",
+          "receipt_id": "450cf00b8ac6175e95384beda54e5b8b",
+          "ready_to_complete_ms": 988.8080998789519,
+          "plan_to_complete_ms": 989.0876999124885,
+          "request_ms": 18.807599786669016
+        },
+        {
+          "status": "ok",
+          "receipt_id": "6bb9889a5a3dfbb44d68b897373ebebd",
+          "ready_to_complete_ms": 1008.7582999840379,
+          "plan_to_complete_ms": 1009.0379000175744,
+          "request_ms": 34.185699885711074
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a8df4181f3997775e0344f5a24deba98",
+          "ready_to_complete_ms": 1021.8239000532776,
+          "plan_to_complete_ms": 1022.1035000868142,
+          "request_ms": 37.58969996124506
+        },
+        {
+          "status": "ok",
+          "receipt_id": "5685acec8700c2fa9d3638477c42750f",
+          "ready_to_complete_ms": 995.1283000409603,
+          "plan_to_complete_ms": 995.4079000744969,
+          "request_ms": 6.311200093477964
+        },
+        {
+          "status": "ok",
+          "receipt_id": "39af00616ba6fe8f43d6e598bb90beca",
+          "ready_to_complete_ms": 1031.2878000549972,
+          "plan_to_complete_ms": 1031.5674000885338,
+          "request_ms": 36.15069994702935
+        },
+        {
+          "status": "ok",
+          "receipt_id": "71ce9662f9b396fe3c8c3faf69dc6b47",
+          "ready_to_complete_ms": 1047.661199932918,
+          "plan_to_complete_ms": 1047.9407999664545,
+          "request_ms": 46.18259984999895
+        },
+        {
+          "status": "ok",
+          "receipt_id": "c1b00926edf92b689d737bb9873d1827",
+          "ready_to_complete_ms": 1066.1637000739574,
+          "plan_to_complete_ms": 1066.443300107494,
+          "request_ms": 57.39460000768304
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1ea7f58ef3f73e65718ac2f79e14603d",
+          "ready_to_complete_ms": 1052.410800009966,
+          "plan_to_complete_ms": 1052.6904000435024,
+          "request_ms": 30.576700111851096
+        },
+        {
+          "status": "ok",
+          "receipt_id": "9579c6cb709f2bd71ebc6c5aaf704c30",
+          "ready_to_complete_ms": 1060.083500109613,
+          "plan_to_complete_ms": 1060.3631001431495,
+          "request_ms": 28.784300200641155
+        },
+        {
+          "status": "ok",
+          "receipt_id": "4f3cca2c392a97f50766d1058a4cb7d5",
+          "ready_to_complete_ms": 1056.4172000158578,
+          "plan_to_complete_ms": 1056.6968000493944,
+          "request_ms": 8.740399964153767
+        },
+        {
+          "status": "ok",
+          "receipt_id": "b765e362f7075a4db4fc3bc2caff0d0c",
+          "ready_to_complete_ms": 1095.1213999651372,
+          "plan_to_complete_ms": 1095.4009999986738,
+          "request_ms": 42.70310001447797
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f23ec67b07472de2fdaa9c9cb378d1ab",
+          "ready_to_complete_ms": 1111.446199938655,
+          "plan_to_complete_ms": 1111.7257999721915,
+          "request_ms": 55.02099986188114
+        },
+        {
+          "status": "ok",
+          "receipt_id": "cc235cb7e6628467a8751634fa18caaf",
+          "ready_to_complete_ms": 1083.464700030163,
+          "plan_to_complete_ms": 1083.7443000636995,
+          "request_ms": 23.37249997071922
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8fb998a5ca05fd2ec03c08dcf5ecfc23",
+          "ready_to_complete_ms": 1127.0834999158978,
+          "plan_to_complete_ms": 1127.3630999494344,
+          "request_ms": 60.90719997882843
+        },
+        {
+          "status": "ok",
+          "receipt_id": "30c5b95a8fde713b04d9ea5c7687f066",
+          "ready_to_complete_ms": 1133.9239000808448,
+          "plan_to_complete_ms": 1134.2035001143813,
+          "request_ms": 50.45179999433458
+        },
+        {
+          "status": "ok",
+          "receipt_id": "83eb9c6c57fe5ed23fb1ce6dbe980085",
+          "ready_to_complete_ms": 1119.1324999090284,
+          "plan_to_complete_ms": 1119.412099942565,
+          "request_ms": 23.999499855563045
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8394c7cd773aba6c2e1966f3ebd2fcf6",
+          "ready_to_complete_ms": 1122.1904999110848,
+          "plan_to_complete_ms": 1122.4700999446213,
+          "request_ms": 10.733699891716242
+        },
+        {
+          "status": "ok",
+          "receipt_id": "da1d96ba11ee4b3a2cd2f008ad0ea213",
+          "ready_to_complete_ms": 1157.2690999601036,
+          "plan_to_complete_ms": 1157.5486999936402,
+          "request_ms": 38.12759998254478
+        },
+        {
+          "status": "ok",
+          "receipt_id": "9011deca6e1f723fc971e1fcb416e7fb",
+          "ready_to_complete_ms": 1204.1164999827743,
+          "plan_to_complete_ms": 1204.3961000163108,
+          "request_ms": 81.91860001534224
+        },
+        {
+          "status": "ok",
+          "receipt_id": "24f6aea5fcd092c2dca8152f7139995a",
+          "ready_to_complete_ms": 1150.2205000724643,
+          "plan_to_complete_ms": 1150.500100106001,
+          "request_ms": 23.123500170186162
+        },
+        {
+          "status": "ok",
+          "receipt_id": "184c56d3d8ff5e7ac27ea1ac897d7e12",
+          "ready_to_complete_ms": 1141.60030009225,
+          "plan_to_complete_ms": 1141.8799001257867,
+          "request_ms": 7.663400145247579
+        },
+        {
+          "status": "ok",
+          "receipt_id": "905eae4dfef379208e826cc38f023f8b",
+          "ready_to_complete_ms": 1173.927699914202,
+          "plan_to_complete_ms": 1174.2072999477386,
+          "request_ms": 32.320099882781506
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a05f3ab886911848d76a07038cf07577",
+          "ready_to_complete_ms": 1180.3454998880625,
+          "plan_to_complete_ms": 1180.625099921599,
+          "request_ms": 30.118599999696016
+        },
+        {
+          "status": "ok",
+          "receipt_id": "49cae7080f20a1624240d4734a66f967",
+          "ready_to_complete_ms": 1188.6368000414222,
+          "plan_to_complete_ms": 1188.9164000749588,
+          "request_ms": 31.35669999755919
+        },
+        {
+          "status": "ok",
+          "receipt_id": "df5c1706768fe8550632cc1568c8ed49",
+          "ready_to_complete_ms": 1192.562999902293,
+          "plan_to_complete_ms": 1192.8425999358296,
+          "request_ms": 18.627699930220842
+        },
+        {
+          "status": "ok",
+          "receipt_id": "bd62b5738d0dde8f33e863aa8bb7e018",
+          "ready_to_complete_ms": 1209.8469000775367,
+          "plan_to_complete_ms": 1210.1265001110733,
+          "request_ms": 29.492500005289912
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a7ce00edb1943ebc6dbd1eb427335049",
+          "ready_to_complete_ms": 1212.947600055486,
+          "plan_to_complete_ms": 1213.2272000890225,
+          "request_ms": 24.303500074893236
+        },
+        {
+          "status": "ok",
+          "receipt_id": "63ea3f7c75fc8ccc4d6247a53e4aa56e",
+          "ready_to_complete_ms": 1236.0127000138164,
+          "plan_to_complete_ms": 1236.292300047353,
+          "request_ms": 43.44190005213022
+        },
+        {
+          "status": "ok",
+          "receipt_id": "43bdf3c894099ee3970d3980e4a98f07",
+          "ready_to_complete_ms": 1225.0928999856114,
+          "plan_to_complete_ms": 1225.372500019148,
+          "request_ms": 20.964500028640032
+        },
+        {
+          "status": "ok",
+          "receipt_id": "e82eef9194e33262dd584828625234c2",
+          "ready_to_complete_ms": 1218.25319994241,
+          "plan_to_complete_ms": 1218.5327999759465,
+          "request_ms": 8.392899995669723
+        },
+        {
+          "status": "ok",
+          "receipt_id": "32dd2b462d4c199d3d1b42814f14b8ff",
+          "ready_to_complete_ms": 1240.639999974519,
+          "plan_to_complete_ms": 1240.9196000080556,
+          "request_ms": 27.68229995854199
+        },
+        {
+          "status": "ok",
+          "receipt_id": "84a389b70df3d7ddf5088bd16a703548",
+          "ready_to_complete_ms": 1267.322100000456,
+          "plan_to_complete_ms": 1267.6017000339925,
+          "request_ms": 49.06150000169873
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1d152800a6d798688f333fc7e11a78bd",
+          "ready_to_complete_ms": 1233.5031998809427,
+          "plan_to_complete_ms": 1233.7827999144793,
+          "request_ms": 8.400999940931797
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ce8d52497c76d61ea203ccfdc504b71e",
+          "ready_to_complete_ms": 1255.8259998913854,
+          "plan_to_complete_ms": 1256.105599924922,
+          "request_ms": 22.31529983691871
+        },
+        {
+          "status": "ok",
+          "receipt_id": "78ff3370d873d813cff2f19c70cb9da3",
+          "ready_to_complete_ms": 1250.7247999310493,
+          "plan_to_complete_ms": 1251.004399964586,
+          "request_ms": 14.70169983804226
+        },
+        {
+          "status": "ok",
+          "receipt_id": "31cb56f6f5be7c5075be9a8f57a018cb",
+          "ready_to_complete_ms": 1292.1837999019772,
+          "plan_to_complete_ms": 1292.4633999355137,
+          "request_ms": 51.52869992889464
+        },
+        {
+          "status": "ok",
+          "receipt_id": "6dd98a4e975a57bf71c1eebcd75b45c1",
+          "ready_to_complete_ms": 1273.7048999406397,
+          "plan_to_complete_ms": 1273.9844999741763,
+          "request_ms": 22.97209994867444
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1cca693d6d6f6fa661d67484c350ce46",
+          "ready_to_complete_ms": 1295.0691999867558,
+          "plan_to_complete_ms": 1295.3488000202924,
+          "request_ms": 39.23580003902316
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8c1b34d49294c7fc00abef1eeda7d80e",
+          "ready_to_complete_ms": 1298.5608999151736,
+          "plan_to_complete_ms": 1298.8404999487102,
+          "request_ms": 31.22589993290603
+        },
+        {
+          "status": "ok",
+          "receipt_id": "c5b7832df4d0a4739d22310d9ae0891b",
+          "ready_to_complete_ms": 1281.8002998828888,
+          "plan_to_complete_ms": 1282.0798999164253,
+          "request_ms": 8.086899993941188
+        },
+        {
+          "status": "ok",
+          "receipt_id": "e0f0a5bfaf14ab02c1f8c5adb0579798",
+          "ready_to_complete_ms": 1315.791100030765,
+          "plan_to_complete_ms": 1316.0707000643015,
+          "request_ms": 33.98209996521473
+        },
+        {
+          "status": "ok",
+          "receipt_id": "b184844325e115081f012e44b29d8c1e",
+          "ready_to_complete_ms": 1320.5428998917341,
+          "plan_to_complete_ms": 1320.8224999252707,
+          "request_ms": 28.347599785774946
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8e4c11f76b5375f7a2461c4136be14b1",
+          "ready_to_complete_ms": 1326.4490999281406,
+          "plan_to_complete_ms": 1326.7286999616772,
+          "request_ms": 31.36819996871054
+        },
+        {
+          "status": "ok",
+          "receipt_id": "5f13b5bfa9ceb40915a936332c755bd3",
+          "ready_to_complete_ms": 1329.9773000180721,
+          "plan_to_complete_ms": 1330.2569000516087,
+          "request_ms": 31.40560002066195
+        },
+        {
+          "status": "ok",
+          "receipt_id": "7a5d8c93f90b0652aadc79094858abe6",
+          "ready_to_complete_ms": 1347.5705001037568,
+          "plan_to_complete_ms": 1347.8501001372933,
+          "request_ms": 31.76460019312799
+        },
+        {
+          "status": "ok",
+          "receipt_id": "12f1ad885433eedb9eeda97882eff133",
+          "ready_to_complete_ms": 1361.7189000360668,
+          "plan_to_complete_ms": 1361.9985000696033,
+          "request_ms": 41.164099937304854
+        },
+        {
+          "status": "ok",
+          "receipt_id": "98c4ae49fd49d0ed698a39f700505e02",
+          "ready_to_complete_ms": 1358.245600014925,
+          "plan_to_complete_ms": 1358.5252000484616,
+          "request_ms": 31.78509999997914
+        },
+        {
+          "status": "ok",
+          "receipt_id": "45b10e70a8369e189c852c3a77693c1c",
+          "ready_to_complete_ms": 1355.8875999879092,
+          "plan_to_complete_ms": 1356.1672000214458,
+          "request_ms": 25.898799998685718
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8ab1330ef8ee911c31acee99aa04e4d8",
+          "ready_to_complete_ms": 1365.5274000484496,
+          "plan_to_complete_ms": 1365.8070000819862,
+          "request_ms": 17.944599967449903
+        },
+        {
+          "status": "ok",
+          "receipt_id": "45d2fb36337b380f3a43764ea7dce123",
+          "ready_to_complete_ms": 1387.277300003916,
+          "plan_to_complete_ms": 1387.5569000374526,
+          "request_ms": 31.382099958136678
+        },
+        {
+          "status": "ok",
+          "receipt_id": "b66de7e78e5070c31958ce3cfcce899e",
+          "ready_to_complete_ms": 1372.0841999165714,
+          "plan_to_complete_ms": 1372.363799950108,
+          "request_ms": 13.831199845299125
+        },
+        {
+          "status": "ok",
+          "receipt_id": "01da3e4c8e3a6808e92d897c00133246",
+          "ready_to_complete_ms": 1410.0667999591678,
+          "plan_to_complete_ms": 1410.3463999927044,
+          "request_ms": 48.33710007369518
+        },
+        {
+          "status": "ok",
+          "receipt_id": "41e34b2edd12c55d191b630558d4055c",
+          "ready_to_complete_ms": 1378.7463998887688,
+          "plan_to_complete_ms": 1379.0259999223053,
+          "request_ms": 13.208899879828095
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0ed39c8130424d3cdc9da98a330b9e26",
+          "ready_to_complete_ms": 1396.453999914229,
+          "plan_to_complete_ms": 1396.7335999477655,
+          "request_ms": 24.361599935218692
+        },
+        {
+          "status": "ok",
+          "receipt_id": "e67bad4a394e2c87999ef44d86f0b26c",
+          "ready_to_complete_ms": 1390.7369999215007,
+          "plan_to_complete_ms": 1391.0165999550372,
+          "request_ms": 11.982099851593375
+        },
+        {
+          "status": "ok",
+          "receipt_id": "857e4cd2603c1ab06761006ca4a8207b",
+          "ready_to_complete_ms": 1440.1757998857647,
+          "plan_to_complete_ms": 1440.4553999193013,
+          "request_ms": 52.88329999893904
+        },
+        {
+          "status": "ok",
+          "receipt_id": "897dbeba804ca56284af20e6e30205be",
+          "ready_to_complete_ms": 1416.886999970302,
+          "plan_to_complete_ms": 1417.1666000038385,
+          "request_ms": 26.12509997561574
+        },
+        {
+          "status": "ok",
+          "receipt_id": "b1d790ebc061757d9b7d0b4612949407",
+          "ready_to_complete_ms": 1443.77509993501,
+          "plan_to_complete_ms": 1444.0546999685466,
+          "request_ms": 47.31339984573424
+        },
+        {
+          "status": "ok",
+          "receipt_id": "43ff845233f1603ae36b51e0d63593d7",
+          "ready_to_complete_ms": 1421.905699884519,
+          "plan_to_complete_ms": 1422.1852999180555,
+          "request_ms": 11.826899833977222
+        },
+        {
+          "status": "ok",
+          "receipt_id": "b9c8c2d6917dfc83d0f19be1d62ce036",
+          "ready_to_complete_ms": 1454.3457999825478,
+          "plan_to_complete_ms": 1454.6254000160843,
+          "request_ms": 37.44930005632341
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1ff6ed10e3e55e8ee7987f63e77114c7",
+          "ready_to_complete_ms": 1450.661800103262,
+          "plan_to_complete_ms": 1450.9414001367986,
+          "request_ms": 28.746700147166848
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a3e1cbf92f7aa912e43b2cc29c3423f4",
+          "ready_to_complete_ms": 1470.5364000983536,
+          "plan_to_complete_ms": 1470.8160001318902,
+          "request_ms": 30.345800099894404
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d8505c55e7e9a227b1fdd21c050ad44d",
+          "ready_to_complete_ms": 1532.771399943158,
+          "plan_to_complete_ms": 1533.0509999766946,
+          "request_ms": 88.98349991068244
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a28a41718174f20656cea2d62fbf000e",
+          "ready_to_complete_ms": 1501.675199950114,
+          "plan_to_complete_ms": 1501.9547999836504,
+          "request_ms": 51.00549990311265
+        },
+        {
+          "status": "ok",
+          "receipt_id": "91eda187d5b81a56940251a540c65685",
+          "ready_to_complete_ms": 1491.179500008002,
+          "plan_to_complete_ms": 1491.4591000415385,
+          "request_ms": 36.82389995083213
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ac7c1fb56227da3215ac0270624f61ea",
+          "ready_to_complete_ms": 1548.7510999664664,
+          "plan_to_complete_ms": 1549.030700000003,
+          "request_ms": 78.20170000195503
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0f0363914115e0adf59a7ea842d17eeb",
+          "ready_to_complete_ms": 1520.9407999645919,
+          "plan_to_complete_ms": 1521.2203999981284,
+          "request_ms": 29.752899892628193
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0b1c8d9674c189f1ff8b0f64fe6e0463",
+          "ready_to_complete_ms": 1509.0187001042068,
+          "plan_to_complete_ms": 1509.2983001377434,
+          "request_ms": 7.331600179895759
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f5b11de74705651ea141a85e9c2b5807",
+          "ready_to_complete_ms": 1517.067899927497,
+          "plan_to_complete_ms": 1517.3474999610335,
+          "request_ms": 8.04049987345934
+        },
+        {
+          "status": "ok",
+          "receipt_id": "501df200e99ebda0072503e50d7c4279",
+          "ready_to_complete_ms": 1536.2084999214858,
+          "plan_to_complete_ms": 1536.4880999550223,
+          "request_ms": 19.13199992850423
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0465a6897ddf69b6800bed46ab9ed0cb",
+          "ready_to_complete_ms": 1563.623100053519,
+          "plan_to_complete_ms": 1563.9027000870556,
+          "request_ms": 42.67540015280247
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d6097b07c82cde18bbe8cb82f37aa799",
+          "ready_to_complete_ms": 1558.5246998816729,
+          "plan_to_complete_ms": 1558.8042999152094,
+          "request_ms": 25.741799967363477
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a4bed5cbb7ccd94638e7caaf0521e42d",
+          "ready_to_complete_ms": 1544.1705998964608,
+          "plan_to_complete_ms": 1544.4501999299973,
+          "request_ms": 7.95309990644455
+        },
+        {
+          "status": "ok",
+          "receipt_id": "141b5988c4e9130ff013c3cd98c5c89c",
+          "ready_to_complete_ms": 1552.4180000647902,
+          "plan_to_complete_ms": 1552.6976000983268,
+          "request_ms": 8.238699985668063
+        },
+        {
+          "status": "ok",
+          "receipt_id": "12a083e5fd925eb05f53b018b812e712",
+          "ready_to_complete_ms": 1570.7646999508142,
+          "plan_to_complete_ms": 1571.0442999843508,
+          "request_ms": 22.002300014719367
+        },
+        {
+          "status": "ok",
+          "receipt_id": "b8934bc2680be905f682606b960519c5",
+          "ready_to_complete_ms": 1582.565600052476,
+          "plan_to_complete_ms": 1582.8452000860125,
+          "request_ms": 30.138800153508782
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a276ef0a34a8bb90b8938c633c3df88c",
+          "ready_to_complete_ms": 1594.6738000493497,
+          "plan_to_complete_ms": 1594.9534000828862,
+          "request_ms": 36.14150010980666
+        },
+        {
+          "status": "ok",
+          "receipt_id": "017b80ab03339c0d47fbb78b80890e29",
+          "ready_to_complete_ms": 1574.676400050521,
+          "plan_to_complete_ms": 1574.9560000840575,
+          "request_ms": 11.038900120183825
+        },
+        {
+          "status": "ok",
+          "receipt_id": "89f3da2c35d2eb768f8611f36aa25c5e",
+          "ready_to_complete_ms": 1578.919499879703,
+          "plan_to_complete_ms": 1579.1990999132395,
+          "request_ms": 8.144699968397617
+        },
+        {
+          "status": "ok",
+          "receipt_id": "4ac9f997104e71d97de3fae151cb5cb4",
+          "ready_to_complete_ms": 1624.4677000213414,
+          "plan_to_complete_ms": 1624.747300054878,
+          "request_ms": 49.78429991751909
+        },
+        {
+          "status": "ok",
+          "receipt_id": "93216696939d9b02bcae06eb8c9630fb",
+          "ready_to_complete_ms": 1599.6079999022186,
+          "plan_to_complete_ms": 1599.8875999357551,
+          "request_ms": 20.681099966168404
+        },
+        {
+          "status": "ok",
+          "receipt_id": "32024d95fa03905bd649ec9c399aad8f",
+          "ready_to_complete_ms": 1617.846000008285,
+          "plan_to_complete_ms": 1618.1256000418216,
+          "request_ms": 35.26980010792613
+        },
+        {
+          "status": "ok",
+          "receipt_id": "29e6c945d5374099a08cb78d99205249",
+          "ready_to_complete_ms": 1642.0563000719994,
+          "plan_to_complete_ms": 1642.335900105536,
+          "request_ms": 47.37120005302131
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0935833a2a6eb99e7a8921092025f524",
+          "ready_to_complete_ms": 1613.272000104189,
+          "plan_to_complete_ms": 1613.5516001377255,
+          "request_ms": 13.656900031492114
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1235fa130da9e5cf8680fe24881fc0ea",
+          "ready_to_complete_ms": 1654.211699962616,
+          "plan_to_complete_ms": 1654.4912999961525,
+          "request_ms": 40.93099990859628
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8894b140150e6040efc7f432e65d90b2",
+          "ready_to_complete_ms": 1675.154299940914,
+          "plan_to_complete_ms": 1675.4338999744505,
+          "request_ms": 57.300399988889694
+        },
+        {
+          "status": "ok",
+          "receipt_id": "6e8e443104fc4d9572a95065ca967759",
+          "ready_to_complete_ms": 1645.2244999818504,
+          "plan_to_complete_ms": 1645.504100015387,
+          "request_ms": 20.74519987218082
+        },
+        {
+          "status": "ok",
+          "receipt_id": "e10fd22cf73083956f3a10ca3da3cfac",
+          "ready_to_complete_ms": 1685.701600043103,
+          "plan_to_complete_ms": 1685.9812000766397,
+          "request_ms": 43.61520009115338
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8b275b527f837919db05835ca20b08d6",
+          "ready_to_complete_ms": 1677.7814999222755,
+          "plan_to_complete_ms": 1678.061099955812,
+          "request_ms": 32.54929999820888
+        },
+        {
+          "status": "ok",
+          "receipt_id": "958dcdb21527a5b6ec41c0bc2b47364e",
+          "ready_to_complete_ms": 1701.5599000733346,
+          "plan_to_complete_ms": 1701.8395001068711,
+          "request_ms": 47.3338000010699
+        },
+        {
+          "status": "ok",
+          "receipt_id": "3d3894235935ac7e87777181598a5709",
+          "ready_to_complete_ms": 1682.5365999247879,
+          "plan_to_complete_ms": 1682.8161999583244,
+          "request_ms": 7.368599995970726
+        },
+        {
+          "status": "ok",
+          "receipt_id": "5c78cd94a049b981165e42adce7a8705",
+          "ready_to_complete_ms": 1705.54169989191,
+          "plan_to_complete_ms": 1705.8212999254465,
+          "request_ms": 27.749300003051758
+        },
+        {
+          "status": "ok",
+          "receipt_id": "38cf1d4efa7ea40dbf66bd329c777028",
+          "ready_to_complete_ms": 1710.8050999231637,
+          "plan_to_complete_ms": 1711.0846999567002,
+          "request_ms": 28.26099982485175
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a25193f3236ce853b548f05ca27a4a80",
+          "ready_to_complete_ms": 1717.7844000980258,
+          "plan_to_complete_ms": 1718.0640001315624,
+          "request_ms": 32.07230009138584
+        },
+        {
+          "status": "ok",
+          "receipt_id": "70f78c29e2e5aea1571d7f3c2b3d1040",
+          "ready_to_complete_ms": 1736.5766998846084,
+          "plan_to_complete_ms": 1736.856299918145,
+          "request_ms": 35.006599966436625
+        },
+        {
+          "status": "ok",
+          "receipt_id": "61d03f72976326caeee7d797ac7dd910",
+          "ready_to_complete_ms": 1741.8267000466585,
+          "plan_to_complete_ms": 1742.106300080195,
+          "request_ms": 36.27529996447265
+        },
+        {
+          "status": "ok",
+          "receipt_id": "e8e8a4fb5845ab475c3659ca23f31eee",
+          "ready_to_complete_ms": 1746.7600998934358,
+          "plan_to_complete_ms": 1747.0396999269724,
+          "request_ms": 35.944399889558554
+        },
+        {
+          "status": "ok",
+          "receipt_id": "157326eda969c86cef37690fbac78690",
+          "ready_to_complete_ms": 1762.8184999339283,
+          "plan_to_complete_ms": 1763.0980999674648,
+          "request_ms": 45.021799858659506
+        },
+        {
+          "status": "ok",
+          "receipt_id": "5bbfd46c1fca08a785aa683dd2128fb7",
+          "ready_to_complete_ms": 1778.7194000557065,
+          "plan_to_complete_ms": 1778.999000089243,
+          "request_ms": 42.110800044611096
+        },
+        {
+          "status": "ok",
+          "receipt_id": "7307803f3adc0881d631ababe9a2e0b3",
+          "ready_to_complete_ms": 1766.4260999299586,
+          "plan_to_complete_ms": 1766.7056999634951,
+          "request_ms": 24.586699903011322
+        },
+        {
+          "status": "ok",
+          "receipt_id": "cb84129dba9a72974dc7d2018bf9272b",
+          "ready_to_complete_ms": 1754.432300105691,
+          "plan_to_complete_ms": 1754.7119001392275,
+          "request_ms": 7.657400099560618
+        },
+        {
+          "status": "ok",
+          "receipt_id": "3e98d7c44277be7018d4af60969eb6fa",
+          "ready_to_complete_ms": 1792.6429999060929,
+          "plan_to_complete_ms": 1792.9225999396294,
+          "request_ms": 38.202499970793724
+        },
+        {
+          "status": "ok",
+          "receipt_id": "6c9184fe73e4d6c43ee38d257dfae825",
+          "ready_to_complete_ms": 1782.7010999899358,
+          "plan_to_complete_ms": 1782.9807000234723,
+          "request_ms": 19.871999975293875
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f73c43e23594422e6d4e2396ead4e35c",
+          "ready_to_complete_ms": 1872.1215000841767,
+          "plan_to_complete_ms": 1872.4011001177132,
+          "request_ms": 105.68829998373985
+        },
+        {
+          "status": "ok",
+          "receipt_id": "919a5ec10e8db12ba92b835022abeed3",
+          "ready_to_complete_ms": 1799.2040999233723,
+          "plan_to_complete_ms": 1799.4836999569088,
+          "request_ms": 20.472999894991517
+        },
+        {
+          "status": "ok",
+          "receipt_id": "60ed7d7bb3b691fd78fe8a0c0011d320",
+          "ready_to_complete_ms": 1815.9674999769777,
+          "plan_to_complete_ms": 1816.2471000105143,
+          "request_ms": 33.256700029596686
+        },
+        {
+          "status": "ok",
+          "receipt_id": "21d333ff61f8c0adbd61274079d0f0ec",
+          "ready_to_complete_ms": 1807.8562999144197,
+          "plan_to_complete_ms": 1808.1358999479562,
+          "request_ms": 15.20140003412962
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ae870d63bc7dc9a5bd0eb1ef1b0be85a",
+          "ready_to_complete_ms": 1843.7109000515193,
+          "plan_to_complete_ms": 1843.9905000850558,
+          "request_ms": 44.49809994548559
+        },
+        {
+          "status": "ok",
+          "receipt_id": "b03c6c6d9c1a5837d2f4ab244c965b5c",
+          "ready_to_complete_ms": 1824.650000082329,
+          "plan_to_complete_ms": 1824.9296001158655,
+          "request_ms": 16.78550010547042
+        },
+        {
+          "status": "ok",
+          "receipt_id": "6d2fa32bf7cd793f4899c56892a6315a",
+          "ready_to_complete_ms": 1888.0517999641597,
+          "plan_to_complete_ms": 1888.3313999976963,
+          "request_ms": 72.07660004496574
+        },
+        {
+          "status": "ok",
+          "receipt_id": "4f54782d6b4e47c72eee1925f6c18202",
+          "ready_to_complete_ms": 1856.5307999961078,
+          "plan_to_complete_ms": 1856.8104000296444,
+          "request_ms": 31.873299973085523
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a8b8cbaa654db5e7fce1bc510880f902",
+          "ready_to_complete_ms": 1860.2930000051856,
+          "plan_to_complete_ms": 1860.5726000387222,
+          "request_ms": 16.574300127103925
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f567a82c4056ba5204fd9f9b0eade5c3",
+          "ready_to_complete_ms": 1892.251699930057,
+          "plan_to_complete_ms": 1892.5312999635935,
+          "request_ms": 35.70999996736646
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0dacf9b5a2418136804e62272e6992af",
+          "ready_to_complete_ms": 1908.3245999645442,
+          "plan_to_complete_ms": 1908.6041999980807,
+          "request_ms": 48.019699985161424
+        },
+        {
+          "status": "ok",
+          "receipt_id": "657c0b0be26c0c135a6c3ff3d86c274b",
+          "ready_to_complete_ms": 1879.9467000644654,
+          "plan_to_complete_ms": 1880.226300098002,
+          "request_ms": 7.812099996954203
+        },
+        {
+          "status": "ok",
+          "receipt_id": "14f0e1bc68bda8ddab72445197cc6bbf",
+          "ready_to_complete_ms": 1915.7342999242246,
+          "plan_to_complete_ms": 1916.0138999577612,
+          "request_ms": 35.780000034719706
+        },
+        {
+          "status": "ok",
+          "receipt_id": "862cf01baa872c686ad3c71f50fca593",
+          "ready_to_complete_ms": 1937.3168000020087,
+          "plan_to_complete_ms": 1937.5964000355452,
+          "request_ms": 49.25419995561242
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d47f768251b144c10045a5cc41df3aa5",
+          "ready_to_complete_ms": 1919.4247999694198,
+          "plan_to_complete_ms": 1919.7044000029564,
+          "request_ms": 27.16209995560348
+        },
+        {
+          "status": "ok",
+          "receipt_id": "df717d3e10433e2c48eeafe30016ea36",
+          "ready_to_complete_ms": 1945.0083998963237,
+          "plan_to_complete_ms": 1945.2879999298602,
+          "request_ms": 36.671599838882685
+        },
+        {
+          "status": "ok",
+          "receipt_id": "50f4c3e7456fe1f66f319a9e9a269829",
+          "ready_to_complete_ms": 1968.1080000009388,
+          "plan_to_complete_ms": 1968.3876000344753,
+          "request_ms": 52.36109998077154
+        },
+        {
+          "status": "ok",
+          "receipt_id": "3026d4582783086c94e20840a52d9a0d",
+          "ready_to_complete_ms": 1951.2704000808299,
+          "plan_to_complete_ms": 1951.5500001143664,
+          "request_ms": 31.83660004287958
+        },
+        {
+          "status": "ok",
+          "receipt_id": "53e22a3b74f6ce4a9ee2d6a5d61e4432",
+          "ready_to_complete_ms": 1947.9563999921083,
+          "plan_to_complete_ms": 1948.236000025645,
+          "request_ms": 10.62480011023581
+        },
+        {
+          "status": "ok",
+          "receipt_id": "832c7b822269ad2c108d6e18270be04e",
+          "ready_to_complete_ms": 1972.4457999691367,
+          "plan_to_complete_ms": 1972.7254000026733,
+          "request_ms": 27.4273999966681
+        },
+        {
+          "status": "ok",
+          "receipt_id": "33014e35cd9228afeeb9d58b6332826e",
+          "ready_to_complete_ms": 1980.7458000723273,
+          "plan_to_complete_ms": 1981.0254001058638,
+          "request_ms": 32.78210014104843
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ee6c5cd39cfe9be4eec1d4b16963b1dc",
+          "ready_to_complete_ms": 2015.642900019884,
+          "plan_to_complete_ms": 2015.9225000534207,
+          "request_ms": 64.36430010944605
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2f92ee15275b68aaf7b408622251c619",
+          "ready_to_complete_ms": 1997.8672000579536,
+          "plan_to_complete_ms": 1998.1468000914901,
+          "request_ms": 29.74810008890927
+        },
+        {
+          "status": "ok",
+          "receipt_id": "466a19e7bb5310f3b9911398b25ca355",
+          "ready_to_complete_ms": 1988.100599963218,
+          "plan_to_complete_ms": 1988.3801999967545,
+          "request_ms": 15.643900027498603
+        },
+        {
+          "status": "ok",
+          "receipt_id": "992159a3f62284bc9816769180f3466b",
+          "ready_to_complete_ms": 1990.9043998923153,
+          "plan_to_complete_ms": 1991.1839999258518,
+          "request_ms": 10.143399937078357
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "name": "ready-quarter",
+        "books": 64,
+        "size": 4,
+        "consume": 1,
+        "planning_ms": 0
+      },
+      "mode": "cpu-books",
+      "cpu_signing_workers": 4,
+      "clients": 4,
+      "slo_ms": 1000,
+      "attempted_accesses": 64,
+      "completed": 64,
+      "on_time": 64,
+      "late": 0,
+      "failed": 0,
+      "unused_planned_accesses": 192,
+      "elapsed_seconds": 1.770627100020647,
+      "delivery_seconds": 0.48771759984083474,
+      "preparation_wait_after_ready_ms": 19.859400112181902,
+      "cleanup_ms": 1282.9095001798123,
+      "process_cpu_seconds": 0.34375,
+      "process_peak_rss_bytes_cumulative": 48066560,
+      "host_cpu_busy_percent": 13.036303630363033,
+      "completed_per_second": 36.14538600434485,
+      "on_time_per_second": 36.14538600434485,
+      "first_access_ready_ms": 30.963300028815866,
+      "p95_ready_ms": 454.17500007897615,
+      "p99_ready_ms": 487.0639001019299,
+      "p99_request_ms": 73.98939994163811,
+      "signatures": 64,
+      "signing_batches": [
+        64
+      ],
+      "publisher_verifications": 64,
+      "http": {
+        "requests": 193,
+        "request_body_bytes": 102891,
+        "response_body_bytes": 207169,
+        "dropped_responses": 0
+      },
+      "service_timings": {
+        "buyer.access_rpc": {
+          "count": 64,
+          "total_ms": 1793.3378003071994,
+          "p50_ms": 25.75469994917512,
+          "p95_ms": 51.59420007839799,
+          "max_ms": 73.9728999324143
+        },
+        "db.begin": {
+          "count": 130,
+          "total_ms": 311.57110165804625,
+          "p50_ms": 0.00790017656981945,
+          "p95_ms": 15.633799834176898,
+          "max_ms": 44.25560007803142
+        },
+        "db.body": {
+          "count": 130,
+          "total_ms": 27.775999391451478,
+          "p50_ms": 0.10890001431107521,
+          "p95_ms": 1.0247998870909214,
+          "max_ms": 2.5696998927742243
+        },
+        "db.close": {
+          "count": 130,
+          "total_ms": 195.2855964191258,
+          "p50_ms": 2.2048999089747667,
+          "p95_ms": 2.8946998063474894,
+          "max_ms": 5.5096999276429415
+        },
+        "db.commit": {
+          "count": 130,
+          "total_ms": 420.2121994458139,
+          "p50_ms": 4.074799828231335,
+          "p95_ms": 5.200000014156103,
+          "max_ms": 5.75889996252954
+        },
+        "db.open": {
+          "count": 130,
+          "total_ms": 519.3427009508014,
+          "p50_ms": 1.801100093871355,
+          "p95_ms": 13.359100092202425,
+          "max_ms": 29.712000163272023
+        },
+        "issue.sign": {
+          "count": 1,
+          "total_ms": 3.6736999172717333,
+          "p50_ms": 3.6736999172717333,
+          "p95_ms": 3.6736999172717333,
+          "max_ms": 3.6736999172717333
+        },
+        "publisher.spend_rpc": {
+          "count": 64,
+          "total_ms": 1286.5298006217927,
+          "p50_ms": 17.301700077950954,
+          "p95_ms": 47.73470014333725,
+          "max_ms": 55.37790013477206
+        },
+        "publisher.verify": {
+          "count": 64,
+          "total_ms": 13.1029998883605,
+          "p50_ms": 0.1550000160932541,
+          "p95_ms": 0.4050000570714474,
+          "max_ms": 0.6075999699532986
+        }
+      },
+      "audit_before": {
+        "accounts": [
+          {
+            "buyer": "buyer",
+            "initial": 1000000000,
+            "available": 999999000,
+            "reserved": 0,
+            "spent": 1000
+          },
+          {
+            "buyer": "other",
+            "initial": 1000000000,
+            "available": 1000000000,
+            "reserved": 0,
+            "spent": 0
+          }
+        ],
+        "receipts": 1,
+        "publisher_accrued": 1000,
+        "books": 1
+      },
+      "audit_after": {
+        "accounts": [
+          {
+            "buyer": "buyer",
+            "initial": 1000000000,
+            "available": 999935000,
+            "reserved": 0,
+            "spent": 65000
+          },
+          {
+            "buyer": "other",
+            "initial": 1000000000,
+            "available": 1000000000,
+            "reserved": 0,
+            "spent": 0
+          }
+        ],
+        "receipts": 65,
+        "publisher_accrued": 65000,
+        "books": 65
+      },
+      "reconciled": true,
+      "error": null,
+      "server_errors": [],
+      "cleanup_errors": [],
+      "cost_usd": null,
+      "cost_per_million_on_time": null,
+      "records": [
+        {
+          "status": "ok",
+          "receipt_id": "12a1f1b5c0e2fe1477c7860e7bafc5ba",
+          "ready_to_complete_ms": 30.963300028815866,
+          "plan_to_complete_ms": 31.37409989722073,
+          "request_ms": 10.956000071018934
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ee62bc3d14cb96baed9145654cd9cdaa",
+          "ready_to_complete_ms": 54.21740002930164,
+          "plan_to_complete_ms": 54.62819989770651,
+          "request_ms": 33.951699966564775
+        },
+        {
+          "status": "ok",
+          "receipt_id": "71d97a8aaa8f3af2d298cbeba01c5a68",
+          "ready_to_complete_ms": 36.932900082319975,
+          "plan_to_complete_ms": 37.34369995072484,
+          "request_ms": 16.279600095003843
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0473646bdef730a3d9c879a134fbc2ca",
+          "ready_to_complete_ms": 33.6236001458019,
+          "plan_to_complete_ms": 34.03440001420677,
+          "request_ms": 12.209300184622407
+        },
+        {
+          "status": "ok",
+          "receipt_id": "28d070e622830df0e49b9ae45b125de7",
+          "ready_to_complete_ms": 86.1055999994278,
+          "plan_to_complete_ms": 86.51639986783266,
+          "request_ms": 55.1314998883754
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d59da7d45310b0b2715d7590d6f7e866",
+          "ready_to_complete_ms": 59.128900058567524,
+          "plan_to_complete_ms": 59.53969992697239,
+          "request_ms": 25.49850009381771
+        },
+        {
+          "status": "ok",
+          "receipt_id": "acdf056f1833da2dec65ed0a040ccc3f",
+          "ready_to_complete_ms": 67.80020007863641,
+          "plan_to_complete_ms": 68.21099994704127,
+          "request_ms": 30.86189995519817
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0ac38f28a6ea33773634c6db77256a3e",
+          "ready_to_complete_ms": 77.98200007528067,
+          "plan_to_complete_ms": 78.39279994368553,
+          "request_ms": 23.75350007787347
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ceb5766f25fbfa6ea075f93a6982e978",
+          "ready_to_complete_ms": 133.1257000565529,
+          "plan_to_complete_ms": 133.53649992495775,
+          "request_ms": 73.98939994163811
+        },
+        {
+          "status": "ok",
+          "receipt_id": "1766d9e3718b414f42189c344fca15a5",
+          "ready_to_complete_ms": 90.36370017565787,
+          "plan_to_complete_ms": 90.77450004406273,
+          "request_ms": 22.5575000513345
+        },
+        {
+          "status": "ok",
+          "receipt_id": "cea018c2173d79cbea842c180b293e28",
+          "ready_to_complete_ms": 116.48320010863245,
+          "plan_to_complete_ms": 116.89399997703731,
+          "request_ms": 38.49239996634424
+        },
+        {
+          "status": "ok",
+          "receipt_id": "a393330d0f4f121041c0970c582b30d7",
+          "ready_to_complete_ms": 99.97480013407767,
+          "plan_to_complete_ms": 100.38560000248253,
+          "request_ms": 13.856800040230155
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8984c740ec7cb29ea6319dfbc82ace8a",
+          "ready_to_complete_ms": 104.16610003449023,
+          "plan_to_complete_ms": 104.5768999028951,
+          "request_ms": 13.794099912047386
+        },
+        {
+          "status": "ok",
+          "receipt_id": "06b6c50463420b6326a4ec9ec28093b8",
+          "ready_to_complete_ms": 120.26720005087554,
+          "plan_to_complete_ms": 120.67799991928041,
+          "request_ms": 20.285499980673194
+        },
+        {
+          "status": "ok",
+          "receipt_id": "5a272b5058a7841cc3f39ac0ff2f944e",
+          "ready_to_complete_ms": 139.6372001618147,
+          "plan_to_complete_ms": 140.04800003021955,
+          "request_ms": 35.46380018815398
+        },
+        {
+          "status": "ok",
+          "receipt_id": "b8375d2de56206caade44c72f6bcd0a9",
+          "ready_to_complete_ms": 147.2086999565363,
+          "plan_to_complete_ms": 147.61949982494116,
+          "request_ms": 30.718199908733368
+        },
+        {
+          "status": "ok",
+          "receipt_id": "0b48dd48eb63edc94e945e18ef4f79ca",
+          "ready_to_complete_ms": 128.09570017270744,
+          "plan_to_complete_ms": 128.5065000411123,
+          "request_ms": 7.821200182661414
+        },
+        {
+          "status": "ok",
+          "receipt_id": "143ce53c67a507b58d3617017f12d003",
+          "ready_to_complete_ms": 151.6944000031799,
+          "plan_to_complete_ms": 152.10519987158477,
+          "request_ms": 23.59119988977909
+        },
+        {
+          "status": "ok",
+          "receipt_id": "d2ec7072d1155f9612c53df846dab0c4",
+          "ready_to_complete_ms": 158.90919999219477,
+          "plan_to_complete_ms": 159.31999986059964,
+          "request_ms": 25.773599976673722
+        },
+        {
+          "status": "ok",
+          "receipt_id": "dad952f502262dd7b4f98d50b577b050",
+          "ready_to_complete_ms": 176.7627999652177,
+          "plan_to_complete_ms": 177.17359983362257,
+          "request_ms": 37.11259993724525
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2d2bd9b8feb3fb653bc01ca201ed1f75",
+          "ready_to_complete_ms": 170.09850009344518,
+          "plan_to_complete_ms": 170.50929996185005,
+          "request_ms": 22.875000024214387
+        },
+        {
+          "status": "ok",
+          "receipt_id": "9a02f51fb4d0837d13e5f8875a4a4396",
+          "ready_to_complete_ms": 166.5487999562174,
+          "plan_to_complete_ms": 166.95959982462227,
+          "request_ms": 14.84099985100329
+        },
+        {
+          "status": "ok",
+          "receipt_id": "95e51d3cbbfe2b98cbd0b74ad873f677",
+          "ready_to_complete_ms": 208.22360017336905,
+          "plan_to_complete_ms": 208.63440004177392,
+          "request_ms": 49.30180008523166
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f3a366024e11a47ae10c6226cc92400e",
+          "ready_to_complete_ms": 173.78950002603233,
+          "plan_to_complete_ms": 174.2002998944372,
+          "request_ms": 7.232799893245101
+        },
+        {
+          "status": "ok",
+          "receipt_id": "eab8aa38d78600209a65ff6aaa0aea70",
+          "ready_to_complete_ms": 196.89240003935993,
+          "plan_to_complete_ms": 197.3031999077648,
+          "request_ms": 26.786099886521697
+        },
+        {
+          "status": "ok",
+          "receipt_id": "6e664cb13379e3358f7060aba7762d09",
+          "ready_to_complete_ms": 192.40569998510182,
+          "plan_to_complete_ms": 192.81649985350668,
+          "request_ms": 18.606900004670024
+        },
+        {
+          "status": "ok",
+          "receipt_id": "97eca6aa885ee23b706297a49d5290bb",
+          "ready_to_complete_ms": 182.22189997322857,
+          "plan_to_complete_ms": 182.63269984163344,
+          "request_ms": 5.447099916636944
+        },
+        {
+          "status": "ok",
+          "receipt_id": "cda28c16e896b3b145f4c6218783b3d4",
+          "ready_to_complete_ms": 189.8393000010401,
+          "plan_to_complete_ms": 190.25009986944497,
+          "request_ms": 7.608699845150113
+        },
+        {
+          "status": "ok",
+          "receipt_id": "2eaef62380bead1bf0bd708ce6d8e5fd",
+          "ready_to_complete_ms": 213.16260006278753,
+          "plan_to_complete_ms": 213.5733999311924,
+          "request_ms": 23.3173999004066
+        },
+        {
+          "status": "ok",
+          "receipt_id": "c9ed52851343d20820d99fe518b5c04e",
+          "ready_to_complete_ms": 225.38359998725355,
+          "plan_to_complete_ms": 225.7943998556584,
+          "request_ms": 32.97019982710481
+        },
+        {
+          "status": "ok",
+          "receipt_id": "67179df193987088f8fdb1c50a2ba91f",
+          "ready_to_complete_ms": 240.2838000562042,
+          "plan_to_complete_ms": 240.69459992460907,
+          "request_ms": 43.38379995897412
+        },
+        {
+          "status": "ok",
+          "receipt_id": "dd79430e3a1923cfe48b01e015d0cd46",
+          "ready_to_complete_ms": 232.97570017166436,
+          "plan_to_complete_ms": 233.38650004006922,
+          "request_ms": 24.739500135183334
+        },
+        {
+          "status": "ok",
+          "receipt_id": "5a570fc928bd1d8ada44e09f6543fa06",
+          "ready_to_complete_ms": 259.8312001209706,
+          "plan_to_complete_ms": 260.2419999893755,
+          "request_ms": 46.655300073325634
+        },
+        {
+          "status": "ok",
+          "receipt_id": "4cb13c97b8639229efd19ef5055906fa",
+          "ready_to_complete_ms": 250.52940007299185,
+          "plan_to_complete_ms": 250.9401999413967,
+          "request_ms": 25.133300106972456
+        },
+        {
+          "status": "ok",
+          "receipt_id": "af2420686d5f8d2fe5bab8618079a65f",
+          "ready_to_complete_ms": 270.51120018586516,
+          "plan_to_complete_ms": 270.92200005427003,
+          "request_ms": 37.52580005675554
+        },
+        {
+          "status": "ok",
+          "receipt_id": "94362776a9b7f61144720b20d62625f2",
+          "ready_to_complete_ms": 285.81070015206933,
+          "plan_to_complete_ms": 286.2215000204742,
+          "request_ms": 45.51450000144541
+        },
+        {
+          "status": "ok",
+          "receipt_id": "54608027de7edacb4739ccbcb454d51e",
+          "ready_to_complete_ms": 275.0005000270903,
+          "plan_to_complete_ms": 275.4112998954952,
+          "request_ms": 24.462400004267693
+        },
+        {
+          "status": "ok",
+          "receipt_id": "88fe5063480fde0ab9d1bc2fee3e12f0",
+          "ready_to_complete_ms": 316.34910008870065,
+          "plan_to_complete_ms": 316.7598999571055,
+          "request_ms": 56.5049999859184
+        },
+        {
+          "status": "ok",
+          "receipt_id": "420c8640a514caaadeafd76d9aa8f0d1",
+          "ready_to_complete_ms": 279.27090018056333,
+          "plan_to_complete_ms": 279.6817000489682,
+          "request_ms": 8.746400009840727
+        },
+        {
+          "status": "ok",
+          "receipt_id": "e64de06693f8ba5b5f1922a4bcf89c13",
+          "ready_to_complete_ms": 300.95520010218024,
+          "plan_to_complete_ms": 301.3659999705851,
+          "request_ms": 25.945100001990795
+        },
+        {
+          "status": "ok",
+          "receipt_id": "45ebe24f6a9e474b808121af0755ff03",
+          "ready_to_complete_ms": 306.0574000701308,
+          "plan_to_complete_ms": 306.4681999385357,
+          "request_ms": 26.777199935168028
+        },
+        {
+          "status": "ok",
+          "receipt_id": "148e1d6ed16b8dac10568396ba3e313c",
+          "ready_to_complete_ms": 293.22460014373064,
+          "plan_to_complete_ms": 293.6354000121355,
+          "request_ms": 7.401300128549337
+        },
+        {
+          "status": "ok",
+          "receipt_id": "656fd018015ca664e432f5d026f59ecb",
+          "ready_to_complete_ms": 336.5488999988884,
+          "plan_to_complete_ms": 336.95969986729324,
+          "request_ms": 43.316799914464355
+        },
+        {
+          "status": "ok",
+          "receipt_id": "7a35d1ec70426edcfc5af0e6a159d187",
+          "ready_to_complete_ms": 323.63350014202297,
+          "plan_to_complete_ms": 324.04430001042783,
+          "request_ms": 22.66880008392036
+        },
+        {
+          "status": "ok",
+          "receipt_id": "60e7cd2c1272b164dd94579ca154808b",
+          "ready_to_complete_ms": 340.6768999993801,
+          "plan_to_complete_ms": 341.087699867785,
+          "request_ms": 34.6127999946475
+        },
+        {
+          "status": "ok",
+          "receipt_id": "7493c0d08dc854e447f3f067bc3cc55a",
+          "ready_to_complete_ms": 347.6486001163721,
+          "plan_to_complete_ms": 348.059399984777,
+          "request_ms": 31.28829994238913
+        },
+        {
+          "status": "ok",
+          "receipt_id": "978537c5fcf97592ccbcf03b5f35e8c2",
+          "ready_to_complete_ms": 354.5844000764191,
+          "plan_to_complete_ms": 354.995199944824,
+          "request_ms": 30.942799989134073
+        },
+        {
+          "status": "ok",
+          "receipt_id": "89364524d72e7e27af34a6e3acf6901b",
+          "ready_to_complete_ms": 369.3576001096517,
+          "plan_to_complete_ms": 369.76839997805655,
+          "request_ms": 32.7957000117749
+        },
+        {
+          "status": "ok",
+          "receipt_id": "fd2842ab01955e316aa6a0aa28723dee",
+          "ready_to_complete_ms": 378.63670010119677,
+          "plan_to_complete_ms": 379.04749996960163,
+          "request_ms": 37.948100129142404
+        },
+        {
+          "status": "ok",
+          "receipt_id": "b3c67a475ce2df0999b10346e068a383",
+          "ready_to_complete_ms": 393.88720015995204,
+          "plan_to_complete_ms": 394.2980000283569,
+          "request_ms": 46.22220015153289
+        },
+        {
+          "status": "ok",
+          "receipt_id": "55979f6f218848cfeafea090d74b693e",
+          "ready_to_complete_ms": 396.8045001383871,
+          "plan_to_complete_ms": 397.21530000679195,
+          "request_ms": 42.20749996602535
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ff9677337f1cfd4102a0700c1b99af56",
+          "ready_to_complete_ms": 405.5098001845181,
+          "plan_to_complete_ms": 405.92060005292296,
+          "request_ms": 36.14110010676086
+        },
+        {
+          "status": "ok",
+          "receipt_id": "79048b0ae0604927a56210c80f8c43bf",
+          "ready_to_complete_ms": 388.632700080052,
+          "plan_to_complete_ms": 389.0434999484569,
+          "request_ms": 9.983600117266178
+        },
+        {
+          "status": "ok",
+          "receipt_id": "5817d051d7f25097a29da5e58a860a15",
+          "ready_to_complete_ms": 440.2555001433939,
+          "plan_to_complete_ms": 440.66630001179874,
+          "request_ms": 51.61470011807978
+        },
+        {
+          "status": "ok",
+          "receipt_id": "f84dd03aa5b86f7130eb1ec562156ff0",
+          "ready_to_complete_ms": 414.31930009275675,
+          "plan_to_complete_ms": 414.7300999611616,
+          "request_ms": 20.421199966222048
+        },
+        {
+          "status": "ok",
+          "receipt_id": "8d19c4b427aae4d74ac08d948008d451",
+          "ready_to_complete_ms": 427.91600013151765,
+          "plan_to_complete_ms": 428.3267999999225,
+          "request_ms": 31.098300125449896
+        },
+        {
+          "status": "ok",
+          "receipt_id": "327010a3a05df9e18e35cf327dbaeb8a",
+          "ready_to_complete_ms": 454.17500007897615,
+          "plan_to_complete_ms": 454.585799947381,
+          "request_ms": 48.65269991569221
+        },
+        {
+          "status": "ok",
+          "receipt_id": "18f9d9f9d291a96a2aca58099c308da8",
+          "ready_to_complete_ms": 421.875,
+          "plan_to_complete_ms": 422.28579986840487,
+          "request_ms": 7.548399968072772
+        },
+        {
+          "status": "ok",
+          "receipt_id": "7980edbcf5e7a1dc5ff280d1df06e731",
+          "ready_to_complete_ms": 447.61830009520054,
+          "plan_to_complete_ms": 448.0290999636054,
+          "request_ms": 25.736700044944882
+        },
+        {
+          "status": "ok",
+          "receipt_id": "9ab59e9b72b6b5da346c0f1c3211ba35",
+          "ready_to_complete_ms": 435.4688001330942,
+          "plan_to_complete_ms": 435.87960000149906,
+          "request_ms": 7.545799948275089
+        },
+        {
+          "status": "ok",
+          "receipt_id": "3da3eecad060c618f437b6d954d58803",
+          "ready_to_complete_ms": 443.5917001683265,
+          "plan_to_complete_ms": 444.00250003673136,
+          "request_ms": 8.114100201055408
+        },
+        {
+          "status": "ok",
+          "receipt_id": "ea5ff6865dd2e4f0feca3a3f15f6729b",
+          "ready_to_complete_ms": 461.7473999969661,
+          "plan_to_complete_ms": 462.158199865371,
+          "request_ms": 21.479699993506074
+        },
+        {
+          "status": "ok",
+          "receipt_id": "32a4e8eb129f52d70393022933126048",
+          "ready_to_complete_ms": 474.6797999832779,
+          "plan_to_complete_ms": 475.0905998516828,
+          "request_ms": 31.081199878826737
+        },
+        {
+          "status": "ok",
+          "receipt_id": "6314ee1b0403a0ecc3ae6c1fe7a5339e",
+          "ready_to_complete_ms": 487.0639001019299,
+          "plan_to_complete_ms": 487.47469997033477,
+          "request_ms": 39.436599938198924
+        }
+      ]
+    }
+  ]
+}
