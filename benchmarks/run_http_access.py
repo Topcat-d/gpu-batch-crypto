@@ -110,13 +110,14 @@ def host_cpu_ticks():
 def measure(scenario, mode, workers, args):
     with tempfile.TemporaryDirectory(prefix="http-bench-") as directory:
         with Fixture(directory, mode="gpu" if mode == "gpu-books" else "cpu", workers=workers,
-                     library=args.library, device=args.device) as app:
+                     library=args.library, device=args.device, profile=getattr(args, "profile", False)) as app:
             # Excluded warm-up exercises the selected signer, HTTP and ledger.
             warm = app.issue([["r31"]], request_id="warm")[0] if mode != "direct" else None
             app.access("r31", "warm-access", warm)
             before = app.ledger.audit()
             app.keys.signatures, app.keys.batches, app.consumer.verifications = 0, [], 0
             app.counts = dict.fromkeys(app.counts, 0)
+            app.timings.reset()
             groups = [[f"r{j}" for j in range(scenario["size"])] for _ in range(scenario["books"])]
             jobs = [(i, resource) for i, group in enumerate(groups) for resource in group[:scenario["consume"]]]
             records = []
@@ -167,6 +168,7 @@ def measure(scenario, mode, workers, args):
             cpu_seconds = time.process_time() - cpu_start
             host_end = host_cpu_ticks()
             elapsed = end - start
+            timings = app.timings.snapshot()
             audit = app.ledger.audit()
             okay = [r for r in records if r["status"] == "ok"]
             on_time = sum(r["ready_to_complete_ms"] <= args.slo_ms for r in okay)
@@ -198,6 +200,7 @@ def measure(scenario, mode, workers, args):
                     "p99_request_ms": percentile([r["request_ms"] for r in okay], .99),
                     "signatures": app.keys.signatures, "signing_batches": app.keys.batches,
                     "publisher_verifications": app.consumer.verifications, "http": app.counts,
+                    "service_timings": timings,
                     "audit_before": before, "audit_after": audit, "reconciled": reconciliation,
                     "error": error, "server_errors": app.errors, "cleanup_errors": cleanup_errors,
                     "cost_usd": cost, "cost_per_million_on_time": cost * 1e6 / on_time if cost is not None and on_time else None,

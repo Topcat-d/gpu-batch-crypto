@@ -18,6 +18,7 @@ import time
 
 from .ledger import Denied, Ledger, canonical, digest
 from .signing import Consumer, Keys
+from .timings import Timings
 
 MAX_BODY = 1024 * 1024
 
@@ -73,13 +74,14 @@ class Fixture(AbstractContextManager):
     """
 
     def __init__(self, directory, *, mode="cpu", workers=4, library=None, device=0,
-                 clock=time.time, balance=10**9):
+                 clock=time.time, balance=10**9, profile=False):
+        self.timings = Timings(profile)
         self.keys = Keys(mode, workers=workers, library=library, device=device)
         self.consumer = Consumer(self.keys.pins)
         self.data = {f"r{i}": (f"Synthetic licensed document {i}. " * 40) for i in range(32)}
         self.catalog = {r: {"content": digest(body), "terms": digest("local simulated terms v1"), "units": 1000}
                         for r, body in self.data.items()}
-        self.ledger = Ledger(Path(directory) / "reference.sqlite", self.keys, self.catalog, clock=clock)
+        self.ledger = Ledger(Path(directory) / "reference.sqlite", self.keys, self.catalog, clock=clock, timings=self.timings)
         self.ledger.seed("buyer", balance)
         self.ledger.seed("other", balance)
         self.buyer_secret, self.other_secret, self.publisher_secret = [secrets.token_hex(32) for _ in range(3)]
@@ -185,8 +187,10 @@ class Fixture(AbstractContextManager):
             if ("book" in payload) != ("token" in payload):
                 raise Denied("incomplete credential")
             if "book" in payload:
-                self.consumer.verify(payload["token"], buyer=identity, book=payload["book"])
-            receipt = rpc(self.issuer_port, "/spend", {**payload, "buyer": identity}, self.publisher_secret)
+                with self.timings.phase("publisher.verify"):
+                    self.consumer.verify(payload["token"], buyer=identity, book=payload["book"])
+            with self.timings.phase("publisher.spend_rpc"):
+                receipt = rpc(self.issuer_port, "/spend", {**payload, "buyer": identity}, self.publisher_secret)
             body = self.data[receipt["resource"]]
             if digest(body) != receipt["content"]:
                 raise RuntimeError("entitled content version unavailable")
@@ -206,7 +210,8 @@ class Fixture(AbstractContextManager):
 
     def access(self, resource, request_id, book=None):
         payload = self.access_payload(resource, request_id, book)
-        result = rpc(self.publisher_port, "/access", payload, self.buyer_secret)
+        with self.timings.phase("buyer.access_rpc"):
+            result = rpc(self.publisher_port, "/access", payload, self.buyer_secret)
         if hashlib.sha256(result["body"].encode()).hexdigest() != payload["content"]:
             raise RuntimeError("buyer content check failed")
         receipt = result["receipt"]

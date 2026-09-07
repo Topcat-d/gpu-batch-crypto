@@ -12,6 +12,8 @@ import secrets
 import sqlite3
 import time
 
+from .timings import Timings
+
 
 class Denied(ValueError):
     pass
@@ -63,8 +65,9 @@ INSERT OR IGNORE INTO publisher VALUES('publisher',0);
 
 
 class Ledger:
-    def __init__(self, path, keys, catalog, *, clock=time.time):
+    def __init__(self, path, keys, catalog, *, clock=time.time, timings=None):
         self.path, self.keys, self.catalog, self.clock = str(path), keys, catalog, clock
+        self.timings = timings or Timings()
         db = sqlite3.connect(self.path, isolation_level=None)
         try:
             db.execute("PRAGMA journal_mode=WAL")
@@ -74,21 +77,26 @@ class Ledger:
 
     @contextmanager
     def connection(self, *, write=False):
-        db = sqlite3.connect(self.path, timeout=10, isolation_level=None)
-        db.row_factory = sqlite3.Row
-        db.execute("PRAGMA foreign_keys=ON")
-        db.execute("PRAGMA synchronous=FULL")
+        with self.timings.phase("db.open"):
+            db = sqlite3.connect(self.path, timeout=10, isolation_level=None)
+            db.row_factory = sqlite3.Row
+            db.execute("PRAGMA foreign_keys=ON")
+            db.execute("PRAGMA synchronous=FULL")
         try:
-            db.execute("BEGIN IMMEDIATE" if write else "BEGIN")
-            yield db
+            with self.timings.phase("db.begin"):
+                db.execute("BEGIN IMMEDIATE" if write else "BEGIN")
+            with self.timings.phase("db.body"):
+                yield db
             if db.in_transaction:
-                db.execute("COMMIT")
+                with self.timings.phase("db.commit"):
+                    db.execute("COMMIT")
         except BaseException:
             if db.in_transaction:
                 db.execute("ROLLBACK")
             raise
         finally:
-            db.close()
+            with self.timings.phase("db.close"):
+                db.close()
 
     def seed(self, buyer, units):
         identifier(buyer)
@@ -148,7 +156,8 @@ class Ledger:
                   for bid, m in zip(ids, manifests)]
         # No database write lock is held while signing. Failed signatures reserve
         # nothing; commit rechecks key revocation, time and available funds.
-        kid, tokens = self.keys.sign(claims)
+        with self.timings.phase("issue.sign"):
+            kid, tokens = self.keys.sign(claims)
         response = [{"book": bid, "token": token, "manifest": manifest}
                     for bid, token, manifest in zip(ids, tokens, manifests)]
         with self.connection(write=True) as db:
