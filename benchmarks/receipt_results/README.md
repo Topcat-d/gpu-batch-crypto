@@ -1,5 +1,17 @@
 # Record-export capture
 
+The newer [`manifest-api-v1.json`](manifest-api-v1.json) measures the actual
+public signed-manifest API against public Merkle receipts and individual
+signatures. It contains **96 cells and 39,786 accepted record checks**, plus
+separate warm-ups and 100 ms background CPU samples. Measured source commit:
+`f09f4708941f16a3fa577a5fd1877b514d84924e`. See its
+[predeclared campaign](../MANIFEST_API_CAMPAIGN.md) and
+[interpretation](../../docs/MANIFEST_API_RESULTS.md). Validate with
+`python benchmarks/report_manifest_api.py --check`.
+
+The older capture below remains unchanged; its hash-list consumer was a
+benchmark prototype and has a different profile and validation cost.
+
 [`cpu-record-exports-v1.json`](cpu-record-exports-v1.json) is the complete CPU
 campaign at source commit `94503be0da1c7ae8c4f689d7237dcf31818e3fd7`:
 234 cells, 46,656 accepted record checks, changed-record rejection in every

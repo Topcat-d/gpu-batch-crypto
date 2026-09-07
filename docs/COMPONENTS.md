@@ -37,7 +37,7 @@ flowchart TD
     APP --> JWT["PyJWT + SQLite"]
     RECEIPT["Offline record receipts"] --> JWS
     MANIFEST["Signed export hash lists"] --> JWS
-    MANIFEST --> RECEIPT
+    MANIFEST -->|JSON and base64 helpers| RECEIPT
     JWS --> CORE["Python core / CPU"]
     JWS -. "optional callback" .-> GUARD["VerifiedSigner"]
     GUARD --> CORE

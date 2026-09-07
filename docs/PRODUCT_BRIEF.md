@@ -97,24 +97,27 @@ into a one-signature export, or for declaring commercial demand proven. The
 next product evidence is a real adopter's export/recipient pattern and integration
 time, using these controls rather than requiring the surrounding access system.
 
-## Next increment: make the simpler alternative adoptable
+## Implemented increment: make the simpler alternative adoptable
 
-The prior comparison's hash-list alternative was benchmark-only. Promote a
-separate experimental `batchcrypto.manifests` profile for a recipient receiving
+The prior comparison's hash-list alternative was benchmark-only. A new
+experimental `batchcrypto.manifests` profile now serves a recipient receiving
 many records: `seal_manifest` signs the complete ordered list; `open_manifest`
 checks the configured key/context once and returns an immutable local handle.
 Its `verify_record` checks a caller-specified index; `verify_all` additionally
 requires the exact count and ordering of the complete export.
 
-Keep selection explicit. The new opener rejects Merkle receipts, and the old
+Selection remains explicit. The new opener rejects Merkle receipts, and the old
 receipt verifier rejects hash lists. Existing receipt vectors and wire bounds
 must remain unchanged. Hash-list manifests have a separate 256 KiB bound and
 at most 4096 SHA-256 digests; the handle retains only digests/scope, never records
 or keys. Invalid wire input returns no handle; bad trusted configuration raises.
 The handle is a local object, not a serializable proof or authorization token.
 
-Acceptance: independent JWS verification, immutable handles, strict bounds and
-profile separation, complete-export rejection tests, frozen vectors, both
-formats through the detached-file examples and an installed wheel. Remeasure
-the actual public API against Merkle and individual-signature controls before
-claiming it inherits the benchmark prototype's performance.
+Validation covers independent JWS verification, immutable handles, strict bounds
+and profile separation, complete-export rejection, frozen vectors, both detached
+formats and an installed wheel. The [actual API comparison](MANIFEST_API_RESULTS.md)
+has 96 measured cells and 39,786 accepted record checks. At 1,024/full/shared,
+manifest median total time was 9.543 ms versus Merkle 32.670 ms, with 76,306 versus
+493,811 metadata bytes. At full/fresh consumption, validating a complete hash
+list separately for every recipient was much slower. These outcomes support
+explicit format choices, with no automatic routing or GPU-economics claim.
