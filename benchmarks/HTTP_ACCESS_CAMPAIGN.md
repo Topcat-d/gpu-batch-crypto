@@ -41,6 +41,12 @@ cells. Never replace a failed GPU batch with CPU signatures silently.
 Keep source commit/hashes, binary SHA-256, driver/device telemetry and shared
 host CPU load. Sample all GPUs every 500 ms, requiring three <=5% utilization
 samples on the selected UUID before each GPU cell. The other GPU is untouched.
+The first capture stopped at a GPU preflight after 47 cells; preserve it as
+`rtx3060-http-v1-interrupted.json`. Version 2 changes only preflight waiting:
+up to ten seconds for three consecutive idle samples, 500 ms apart, recording
+all observed samples. Failure still stops the campaign. The measured workloads,
+timing boundaries, run order, repeats and gates are unchanged. The complete
+48-cell matrix is rerun rather than mixing resumed and original measurements.
 Very short kernels may fall between telemetry samples: this cannot establish
 energy per operation. Process CPU time includes all roles; memory is process
 lifetime peak, not a per-cell allocation delta. Library and CUDA build provenance

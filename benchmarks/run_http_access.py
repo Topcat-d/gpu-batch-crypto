@@ -53,6 +53,26 @@ def gpu_snapshot():
         return []
 
 
+def idle_preflight(uuid):
+    """Bounded idle observation; never stop or modify another GPU workload."""
+    history, consecutive = [], []
+    deadline = time.monotonic() + 10
+    while time.monotonic() < deadline:
+        snapshot = gpu_snapshot()
+        history.append(snapshot)
+        selected = next((d for d in snapshot if d["uuid"] == uuid), None)
+        if not selected:
+            return None, history
+        if float(selected["utilization_percent"]) <= 5:
+            consecutive.append(snapshot)
+            if len(consecutive) == 3:
+                return consecutive, history
+        else:
+            consecutive = []
+        time.sleep(.5)
+    return None, history
+
+
 def peak_rss():
     if os.name == "nt":
         import ctypes
@@ -250,14 +270,15 @@ def main():
     random.Random(20260906).shuffle(schedule)
     for repeat, scenario, mode, w in schedule:
         preflight = []
+        idle_history = []
         if mode == "gpu-books":
-            for _ in range(3):
-                snapshot = gpu_snapshot()
-                selected = next((d for d in snapshot if d["uuid"] == args.gpu_uuid), None)
-                if not selected or float(selected["utilization_percent"]) > 5:
-                    raise RuntimeError("selected GPU is busy; stop without interrupting other work")
-                preflight.append(snapshot)
-                time.sleep(.1)
+            preflight, idle_history = idle_preflight(args.gpu_uuid)
+            if preflight is None:
+                result["interruption"] = {"reason": "selected GPU not idle within bounded wait",
+                                          "scenario": scenario, "mode": mode, "repeat": repeat,
+                                          "idle_history": idle_history}
+                args.output.write_text(json.dumps(result, indent=2) + "\n")
+                raise RuntimeError("selected GPU is busy; stop without interrupting other work")
         telemetry, stop = [], threading.Event()
         def sample():
             while not stop.is_set():
@@ -270,7 +291,7 @@ def main():
         finally:
             stop.set()
             monitor.join(timeout=6)
-        cell.update({"repeat": repeat, "preflight": preflight, "gpu_telemetry": telemetry})
+        cell.update({"repeat": repeat, "preflight": preflight, "idle_history": idle_history, "gpu_telemetry": telemetry})
         result["cells"].append(cell)
         args.output.write_text(json.dumps(result, indent=2) + "\n")
         print(f"{scenario['name']} {mode}/{w}: {cell['completed']}/{cell['attempted_accesses']} completed, "

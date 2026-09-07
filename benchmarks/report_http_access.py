@@ -2,21 +2,34 @@
 
 import argparse
 from collections import defaultdict
+import hashlib
 import json
 import math
 from pathlib import Path
+import re
 import statistics
+import subprocess
 
 from run_http_access import SCENARIOS, percentile
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_INPUT = ROOT / "benchmarks/http_results/rtx3060-http-v1.json"
+DEFAULT_INPUT = ROOT / "benchmarks/http_results/rtx3060-http-v2.json"
 DEFAULT_OUTPUT = ROOT / "docs/HTTP_RESULTS.md"
 
 
 def validate(data):
     if data["schema"] != 1 or not data["complete"] or data["smoke"] or data["dirty"]:
         raise ValueError("capture must be complete, committed and nonsmoke")
+    if not re.fullmatch("[0-9a-f]{40}", data["commit"]):
+        raise ValueError("invalid source commit")
+    for path, expected in data["sources"].items():
+        if Path(path).is_absolute() or ".." in Path(path).parts:
+            raise ValueError("invalid source path")
+        blob = subprocess.check_output(["git", "show", f"{data['commit']}:{path}"], cwd=ROOT)
+        # Windows checkout CRLF conversion changes bytes, not source identity.
+        candidates = [blob, blob.replace(b"\r\n", b"\n").replace(b"\n", b"\r\n")]
+        if expected not in [hashlib.sha256(value).hexdigest() for value in candidates]:
+            raise ValueError(f"source fingerprint mismatch: {path}")
     seen = set()
     for c in data["cells"]:
         key = (c["scenario"]["name"], c["mode"], c["cpu_signing_workers"], c["repeat"])
@@ -121,6 +134,11 @@ def render(data, source_name=DEFAULT_INPUT.name):
     lines += ["", "CPU books use cached OpenSSL keys with both 1 and 4 signing workers. Direct",
               "account purchases require no signatures. GPU books include VerifiedSigner's",
               "CPU output check **and** the publisher's independent signature admission.", "",
+              "The [earlier interrupted capture](../benchmarks/http_results/rtx3060-http-v1-interrupted.json)",
+              "is retained: 47 cells completed before the GPU idle preflight stopped the",
+              "final cell. It is excluded from this complete campaign. The second campaign",
+              "adds a bounded wait for three consecutive idle samples; measured work and",
+              "the shuffled schedule are unchanged. No unfavorable cell was discarded.", "",
               "## GPU economics gate", "",
               "For each workload, choose the CPU-book worker setting with the highest median",
               "on-time goodput. The conservative ratio is minimum GPU repeat divided by",
