@@ -37,6 +37,7 @@ def main():
     ):
         from batchcrypto import Cpu, Record, generate_p256_key, public_key, verify_p256
         from batchcrypto.jws import sign_es256
+        from batchcrypto.receipts import ReceiptVerifier, seal_records
         import batchcrypto
 
         installed = Path(distribution.locate_file("batchcrypto/__init__.py")).resolve()
@@ -57,12 +58,26 @@ def main():
         )
         if len(tokens) != 1 or len(tokens[0].split(".")) != 3:
             raise RuntimeError("JWS construction failed")
+        records = [b"installed export record", b"second record"]
+        batch = seal_records(
+            records,
+            context="install-check",
+            key_id="consumer-1",
+            sign_digests=lambda hs: cpu.sign(key, hs),
+        )
+        consumer = ReceiptVerifier(
+            public_key(key), key_id="consumer-1", context="install-check"
+        )
+        if not consumer.verify(
+            records[1], batch.receipt(1), expected_index=1
+        ) or consumer.verify(b"changed", batch.receipt(1), expected_index=1):
+            raise RuntimeError("installed record receipt check failed")
         aes_key = secrets.token_bytes(32)
         sealed = cpu.seal(aes_key, [Record(bytes(12), b"local fixture")])[0]
         if cpu.open(aes_key, [Record(bytes(12), sealed)]) != [b"local fixture"]:
             raise RuntimeError("AES check failed")
     print(
-        "PASS: installed CPU/JWS package; no CUDA load, PyJWT or application dependency"
+        "PASS: installed CPU/JWS/receipts package; no CUDA load, PyJWT or application dependency"
     )
 
 

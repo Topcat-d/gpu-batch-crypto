@@ -34,6 +34,8 @@ jobs:
       - run: python benchmarks/report_batching.py --check
       - run: python examples/content_grant.py
       - run: python examples/cpu_only.py
+      - run: python examples/record_receipts.py --output dist/receipt-demo
+      - run: python examples/verify_record_receipt.py --record dist/receipt-demo/record.bin --receipt dist/receipt-demo/receipt.json --public-key dist/receipt-demo/public-key.hex --key-id demo-key-1 --context demo-export-2026-09-07 --index 17
       - run: python examples/jws_grant.py
       - run: python examples/access_book_demo.py
       - run: python examples/http_access_demo.py

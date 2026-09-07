@@ -1,0 +1,81 @@
+# Product experiment: verifiable data exports
+
+The next capability to evaluate is **a record that a recipient can verify after
+it leaves the original service**. The initial engineering persona is a data API
+or agent-tool developer shipping immutable export batches, with recipients who
+retrieve subsets. This is a product hypothesis inferred from the engine and the
+access experiments, not evidence of customer demand.
+
+## Why this experiment
+
+The HTTP measurements found transport/storage work dominating fresh signing;
+they did not establish a GPU business advantage. Offline exports remove batch
+fill from the critical request path and permit a stronger optimization: sign
+one commitment instead of signing every record. A returned record carries a
+small inclusion proof. CPU-only adoption can be useful even if GPU use never
+becomes justified. This also fits content snapshots, dataset samples and agent
+tool-result exports, without requiring a payment system.
+
+Alternatives determine the experiment. Individual signatures are simple and
+fit unrelated or urgent records. One signed list of all hashes uses one
+signature too and may be simpler/faster when everyone gets the whole list.
+Merkle receipts should earn their place through subset delivery and bounded
+proof size. This is established cryptographic design, not a new invention.
+[RFC 9162](https://www.rfc-editor.org/rfc/rfc9162.html#section-2.1) defines the
+tree/inclusion construction. The envelope here is our experimental profile;
+it is not Certificate Transparency. For software-release authenticity,
+[Sigstore/Cosign](https://docs.sigstore.dev/quickstart/quickstart-cosign/) already
+provides artifact signing, verification and transparency integration; we do
+not propose replacing that ecosystem.
+
+## Capability and implementation contract
+
+- **Promise:** verify exact bytes at an expected index in a batch committed by
+  a trusted P-256 key, without the other records or a live issuer.
+- **Surfaces:** installed Python `batchcrypto.receipts`, detached JSON receipt,
+  a source demo and a separate-process verifier; CPU-only base install.
+- **Inputs:** ordered byte records, trusted key id and unique export context;
+  a signing callback that owns the key. Consumer independently pins public
+  key, key id, context and expected index.
+- **Outputs:** immutable signed manifest and per-record proofs. A verifier
+  returns a boolean and never returns partly verified data.
+- **Lifecycle:** ready immutable records -> sealed batch -> detached receipt
+  -> accepted/rejected inclusion. Changing records requires a new signed root.
+- **Bounds:** 1..4096 records, 1 MiB each, core 64 MiB aggregate input budget,
+  receipt <=4096 bytes, manifest <=2048 bytes, <=12 proof nodes. Decoder rejects
+  duplicate keys, extra fields, wrong algorithms and noncanonical base64url.
+- **Trust/cache:** at most eight checked manifests in a verifier bound to one
+  trusted key/context. Every record's hash/path/index is always checked.
+- **Ownership:** caller retains exact bytes and receipt, establishes key trust,
+  chooses unique contexts, manages rotation/revocation, persistence and retries.
+  Persist and resend the original receipt for exact retry identity. Randomized
+  signer callbacks can produce different valid signatures on repeated sealing.
+- **Failure:** issuer input/callback failures raise; untrusted receipt failures
+  return false. No I/O, key generation, automatic GPU loading or fallback in
+  this module. GPU callbacks must use the existing output-verifying guard.
+- **Maturity:** experimental receipt profile within the preview Python package;
+  core/native interfaces and publisher examples remain independently usable.
+
+An inclusion result does not prove factual correctness, a real-world identity,
+creation time, payment, permission, non-replay, availability, completeness of a
+query, or an append-only history. The signer could issue conflicting roots.
+Identical records can legitimately appear at multiple indices; include a
+record identifier in the bytes when distinct application identities matter.
+Hashes/proofs are not encryption or a confidentiality guarantee; low-entropy
+undisclosed records may be guessable. A caller must not treat a receipt as an
+access token. Production key custody and independent review remain open.
+
+## Acceptance and next decision
+
+Ship an independently runnable consumer and meaningful format/crypto tests.
+Measure producer + serialization + consumer cost, record all proof bytes, and
+compare fresh recipients with a recipient reusing a verified manifest. Include
+individual signatures and the signed-hash-list control. Keep losing cases.
+No GPU win is needed to accept this CPU capability.
+
+Commercial go/no-go remains unknown: does a developer need portable subset
+verification, will this save integration work over existing libraries, and
+does the recipient accept the trust/profile contract? The next external signal
+is one engineer integrating a real export and independently checking a record.
+Do not claim sales, standards interoperability beyond the stated primitives,
+or total operating savings from a local CPU measurement.

@@ -2,7 +2,10 @@
 
 An Apache-2.0 technical preview with CPU cryptography, explicit bindings to a
 separately built CUDA library, and ES256 message construction. Adopt the Python
-core without a publisher application or GPU.
+core without a publisher application or GPU. The experimental
+`batchcrypto.receipts` module adds signed batch roots and offline record
+inclusion verification with the same base dependencies. See the
+[receipt quick start](https://github.com/Topcat-d/gpu-batch-crypto/blob/main/docs/RECORD_RECEIPTS.md).
 
 ## Install and use CPU only
 

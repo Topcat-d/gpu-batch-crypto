@@ -24,6 +24,7 @@ Python wheel.
 | **Use CPU only** | `batchcrypto.Cpu` and key/verification helpers | [CPU quick start](docs/GETTING_STARTED.md#use-cpu-only) |
 | **Add GPU signing** | `batchcrypto.verified.VerifiedSigner` + native library | [Guarded GPU quick start](docs/GETTING_STARTED.md#add-gpu-signing) |
 | **Generate ES256 tokens** | `batchcrypto.jws.sign_es256` + your CPU/GPU signer | [Token quick start](docs/GETTING_STARTED.md#generate-es256-tokens) |
+| **Verify a record from a signed export** | `batchcrypto.receipts` — CPU-only experimental profile | [Offline receipt quick start](docs/RECORD_RECEIPTS.md) |
 | **Evaluate access books** | Separate `Authority` / `Offer` / `Clearing` example | [Accounting quick start](docs/GETTING_STARTED.md#evaluate-access-books) |
 | **Run a complete HTTP access transaction** | Synthetic buyer, issuer and publisher; recoverable delivery | [HTTP reference and one-command demo](docs/HTTP_REFERENCE.md) |
 | Use C/C++ without Python | Installed `batchcrypto::batchcrypto` target and C header | [Native consumer](docs/GETTING_STARTED.md#use-the-installed-c-abi) |
@@ -43,6 +44,13 @@ for profiling, CPU/GPU routing, memory transfers and verification costs, with
 explicit measurement and acceptance criteria.
 
 ## Application and business context
+
+The [verifiable-export experiment](docs/PRODUCT_BRIEF.md) offers another
+adoption path: sign one batch commitment, then verify individual data or tool
+records offline with inclusion proofs. It works on CPU and needs no accounting
+service. Its [API and detached-file demo](docs/RECORD_RECEIPTS.md) and
+[comparison with individual signatures and a signed hash list](docs/RECEIPT_RESULTS.md)
+test when reducing signature work is more useful than accelerating it.
 
 Publishers, CDNs and other infrastructure teams can evaluate the same engine. [Machine-authorized content](docs/MACHINE_AUTHORIZED_CONTENT.md) is one application: signed grants can bind a publisher's content and access terms to a recipient. Payment, identity and enforcement belong to the application.
 
