@@ -140,14 +140,18 @@ def measure(scenario, mode, workers, args):
                 def access(job):
                     i, resource = job
                     submitted = time.perf_counter()
+                    error_detail = None
                     try:
                         result = app.access(resource, f"read-{i}-{resource}", books[i] if books else None)
                         status = "ok"
                         receipt_id = result["receipt"]["id"]
                     except Exception as exc:
                         status, receipt_id = type(exc).__name__, None
+                        error_detail = {"errno": getattr(exc, "errno", None), "winerror": getattr(exc, "winerror", None),
+                                        "http_status": getattr(exc, "status", None)}
                     end = time.perf_counter()
                     return {"status": status, "receipt_id": receipt_id,
+                            "error_detail": error_detail,
                             "ready_to_complete_ms": (end - ready) * 1000,
                             "plan_to_complete_ms": (end - start) * 1000,
                             "request_ms": (end - submitted) * 1000}

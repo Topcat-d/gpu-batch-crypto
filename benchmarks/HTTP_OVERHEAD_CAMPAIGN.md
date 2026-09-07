@@ -76,3 +76,23 @@ Commands: `python benchmarks/run_http_overhead.py --stage comparison --output di
 and the same command with `--stage confirmation` and a new output file. To
 include GPU, add `--library PATH --gpu-uuid UUID --library-source-commit COMMIT
 --library-build-note "compiler; CUDA; architecture"`. No cloud spend is needed.
+
+## Stop and confirmation decision
+
+The comparison stopped after 56 cells on one failed client `OSError` before
+publisher admission, with balanced accounting. The capture remains incomplete
+and includes the failed observation. It retained only the exception class, so
+the OS cause is unknown; a post-run dynamic-port query is not proof of port
+exhaustion. Subsequent captures retain errno/winerror/HTTP status too. Transport
+and retry policy are unchanged. No failed observation is converted to success.
+
+The pool is **rejected for promotion**: available full-use comparisons were
+slower, with larger SQLite begin/lock-wait tails. The incomplete campaign is
+diagnostic evidence, not a completed performance acceptance test. Batched
+cleanup reduced cleanup work within the same pool configuration, so confirmation
+now isolates that existing change with original per-operation connections:
+`--stage confirmation --candidate batch`. No new optimization is introduced.
+The held-out workload, two clients, three repeats, deadline, checkpoint cost
+and seed remain as declared. Baseline and batch-only full/urgent paths execute
+the same operations; their observed variation must not be described as a
+full-use acceleration. Keep this decision recorded before confirmation.

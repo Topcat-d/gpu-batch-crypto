@@ -154,28 +154,6 @@ class HTTPAccessTests(unittest.TestCase):
                 self.assertEqual(app.ledger.audit()["receipts"], 65)
 
 
-class PooledHTTPAccessTests(HTTPAccessTests):
-    """Run the complete existing recovery/security contract on pooled storage."""
-    ledger_pool_size = 4
-
-    def test_pool_exclusive_leases_rollback_and_close(self):
-        ledger = self.app.ledger
-        with ledger.connection(write=True) as db:
-            self.assertEqual(db.execute("PRAGMA synchronous").fetchone()[0], 2)
-            self.assertEqual(db.execute("PRAGMA journal_mode").fetchone()[0], "wal")
-            self.assertEqual(db.execute("PRAGMA foreign_keys").fetchone()[0], 1)
-            with self.assertRaises(RuntimeError):
-                ledger.close()
-        with self.assertRaises(RuntimeError):
-            with ledger.connection(write=True) as db:
-                db.execute("UPDATE accounts SET initial=initial+1,available=available+1 WHERE buyer='buyer'")
-                raise RuntimeError("abort this borrower")
-        self.assertEqual(ledger.audit()["accounts"][0]["initial"], 100000)
-        self.assertEqual(ledger._active, 0)
-        self.assertEqual(len(ledger._available), 4)
-        self.assertTrue(all(not db.in_transaction for db in ledger._available))
-        self.assertEqual(ledger.checkpoint()["busy"], 0)
-
     def test_atomic_batch_cancel_recovery_conflict_and_scope(self):
         books = self.app.issue([["r0", "r1"], ["r2", "r3"]])
         self.app.access("r0", "consume", books[0])
@@ -225,6 +203,29 @@ class PooledHTTPAccessTests(HTTPAccessTests):
         audit = self.app.ledger.audit()
         self.assertEqual(audit["accounts"][0]["reserved"], 0)
         self.assertEqual(audit["publisher_accrued"], spent)
+
+
+class PooledHTTPAccessTests(HTTPAccessTests):
+    """Run the same recovery/security/cleanup contract on experimental pooling."""
+    ledger_pool_size = 4
+
+    def test_pool_exclusive_leases_rollback_and_close(self):
+        ledger = self.app.ledger
+        with ledger.connection(write=True) as db:
+            self.assertEqual(db.execute("PRAGMA synchronous").fetchone()[0], 2)
+            self.assertEqual(db.execute("PRAGMA journal_mode").fetchone()[0], "wal")
+            self.assertEqual(db.execute("PRAGMA foreign_keys").fetchone()[0], 1)
+            with self.assertRaises(RuntimeError):
+                ledger.close()
+        with self.assertRaises(RuntimeError):
+            with ledger.connection(write=True) as db:
+                db.execute("UPDATE accounts SET initial=initial+1,available=available+1 WHERE buyer='buyer'")
+                raise RuntimeError("abort this borrower")
+        self.assertEqual(ledger.audit()["accounts"][0]["initial"], 100000)
+        self.assertEqual(ledger._active, 0)
+        self.assertEqual(len(ledger._available), 4)
+        self.assertTrue(all(not db.in_transaction for db in ledger._available))
+        self.assertEqual(ledger.checkpoint()["busy"], 0)
 
 
 if __name__ == "__main__":

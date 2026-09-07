@@ -17,7 +17,7 @@ from cryptography.hazmat.backends.openssl.backend import backend
 
 from run_http_access import ROOT, SCENARIOS, git, gpu_snapshot, idle_preflight, measure
 
-VARIANTS = {"baseline": (0, False), "pool": (4, False), "pool-batch": (4, True)}
+VARIANTS = {"baseline": (0, False), "pool": (4, False), "pool-batch": (4, True), "batch": (0, True)}
 HOLDOUT = [
     {"name": "holdout-full", "books": 32, "size": 8, "consume": 8, "planning_ms": 0},
     {"name": "holdout-quarter", "books": 32, "size": 8, "consume": 2, "planning_ms": 0},
@@ -25,9 +25,9 @@ HOLDOUT = [
 ]
 
 
-def schedule(stage, gpu):
+def schedule(stage, gpu, candidate="pool-batch"):
     scenarios = SCENARIOS[1:3] if stage == "comparison" else HOLDOUT
-    variants = tuple(VARIANTS) if stage == "comparison" else ("baseline", "pool-batch")
+    variants = ("baseline", "pool", "pool-batch") if stage == "comparison" else ("baseline", candidate)
     modes = [("direct", 1), ("cpu-books", 1), ("cpu-books", 4)] + ([("gpu-books", 1)] if gpu else [])
     cells = [(repeat, scenario, variant, mode, workers) for repeat in range(3)
              for scenario in scenarios for variant in variants for mode, workers in modes]
@@ -39,6 +39,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--stage", choices=("comparison", "confirmation"), default="comparison")
+    parser.add_argument("--candidate", choices=("pool-batch", "batch"), default="batch")
     parser.add_argument("--library", type=Path)
     parser.add_argument("--gpu-uuid")
     parser.add_argument("--library-source-commit")
@@ -66,6 +67,7 @@ def main():
     paths += [str(p.relative_to(ROOT)).replace("\\", "/") for p in sorted((ROOT / "examples/http_access").glob("*.py"))]
     result = {"schema": 1, "campaign": "http-overhead", "stage": args.stage, "complete": False,
               "commit": git("rev-parse", "HEAD"), "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+              "candidate": args.candidate if args.stage == "confirmation" else None,
               "sources": {p: hashlib.sha256((ROOT / p).read_bytes()).hexdigest() for p in paths},
               "environment": {"platform": platform.platform(), "cpu": platform.processor(), "logical_cpus": os.cpu_count(),
                               "python": platform.python_version(), "cryptography": cryptography.__version__,
@@ -80,7 +82,7 @@ def main():
     args.output.parent.mkdir(parents=True, exist_ok=True)
     def save():
         args.output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
-    for repeat, scenario, variant, mode, workers in schedule(args.stage, bool(args.library)):
+    for repeat, scenario, variant, mode, workers in schedule(args.stage, bool(args.library), args.candidate):
         args.ledger_pool_size, args.batch_cancel = VARIANTS[variant]
         preflight, idle_history = [], []
         if mode == "gpu-books":
