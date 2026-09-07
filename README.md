@@ -25,6 +25,7 @@ Python wheel.
 | **Add GPU signing** | `batchcrypto.verified.VerifiedSigner` + native library | [Guarded GPU quick start](docs/GETTING_STARTED.md#add-gpu-signing) |
 | **Generate ES256 tokens** | `batchcrypto.jws.sign_es256` + your CPU/GPU signer | [Token quick start](docs/GETTING_STARTED.md#generate-es256-tokens) |
 | **Verify a record from a signed export** | `batchcrypto.receipts` — CPU-only experimental profile | [Offline receipt quick start](docs/RECORD_RECEIPTS.md) |
+| **Verify a complete export** | `batchcrypto.manifests` — open a signed hash list once | [Whole-export quick start and format choices](docs/RECORD_MANIFESTS.md) |
 | **Evaluate access books** | Separate `Authority` / `Offer` / `Clearing` example | [Accounting quick start](docs/GETTING_STARTED.md#evaluate-access-books) |
 | **Run a complete HTTP access transaction** | Synthetic buyer, issuer and publisher; recoverable delivery | [HTTP reference and one-command demo](docs/HTTP_REFERENCE.md) |
 | Use C/C++ without Python | Installed `batchcrypto::batchcrypto` target and C header | [Native consumer](docs/GETTING_STARTED.md#use-the-installed-c-abi) |

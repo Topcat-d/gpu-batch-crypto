@@ -38,6 +38,7 @@ def main():
         from batchcrypto import Cpu, Record, generate_p256_key, public_key, verify_p256
         from batchcrypto.jws import sign_es256
         from batchcrypto.receipts import ReceiptVerifier, seal_records
+        from batchcrypto.manifests import open_manifest, seal_manifest
         import batchcrypto
 
         installed = Path(distribution.locate_file("batchcrypto/__init__.py")).resolve()
@@ -72,12 +73,27 @@ def main():
             records[1], batch.receipt(1), expected_index=1
         ) or consumer.verify(b"changed", batch.receipt(1), expected_index=1):
             raise RuntimeError("installed record receipt check failed")
+        token = seal_manifest(
+            records,
+            context="install-check",
+            key_id="consumer-1",
+            sign_digests=lambda hs: cpu.sign(key, hs),
+        )
+        checked = open_manifest(
+            token, public_key(key), context="install-check", key_id="consumer-1"
+        )
+        if (
+            checked is None
+            or not checked.verify_all(records)
+            or checked.verify_all(records[:-1])
+        ):
+            raise RuntimeError("installed signed manifest check failed")
         aes_key = secrets.token_bytes(32)
         sealed = cpu.seal(aes_key, [Record(bytes(12), b"local fixture")])[0]
         if cpu.open(aes_key, [Record(bytes(12), sealed)]) != [b"local fixture"]:
             raise RuntimeError("AES check failed")
     print(
-        "PASS: installed CPU/JWS/receipts package; no CUDA load, PyJWT or application dependency"
+        "PASS: installed CPU/JWS/receipts/manifests package; no CUDA load, PyJWT or application dependency"
     )
 
 

@@ -12,6 +12,7 @@ show the smallest complete examples.
 | [Guarded GPU signing](#guarded-gpu-signing) | Python wheel: `batchcrypto.verified.VerifiedSigner` | Python core + native SDK v0.3+ + GPU | Public preview guard |
 | [ES256 construction](#es256-construction) | Python wheel: `batchcrypto.jws.sign_es256` | Python core + trusted signing callback | Public preview encoder |
 | [Record receipts](RECORD_RECEIPTS.md) | Python wheel: `batchcrypto.receipts.seal_records` / `ReceiptVerifier` | Python core + trusted signing callback; CPU by default | Experimental offline inclusion profile |
+| [Signed export manifests](RECORD_MANIFESTS.md) | Python wheel: `batchcrypto.manifests.seal_manifest` / `open_manifest` | Python core + trusted signing callback; CPU by default | Experimental ordered hash-list profile |
 | [Public P-256 tables](#public-p-256-tables) | `data/p256/` binaries + metadata + hashes | Reader implementing the documented format; generator uses cryptography | Public data format v1 |
 | [Access books](#access-books) | Source example: `examples/access_book/engine.py` | Python core, PyJWT 2.13.0, SQLite | Experimental application profile |
 | [HTTP access reference](HTTP_REFERENCE.md) | Source example: `examples/http_access/`; one-command demo | Python core, PyJWT, SQLite; optional guarded GPU signer | Experimental loopback application; simulated funds |
@@ -35,6 +36,8 @@ flowchart TD
     APP["Access-book source example"] --> JWS["ES256 encoder"]
     APP --> JWT["PyJWT + SQLite"]
     RECEIPT["Offline record receipts"] --> JWS
+    MANIFEST["Signed export hash lists"] --> JWS
+    MANIFEST --> RECEIPT
     JWS --> CORE["Python core / CPU"]
     JWS -. "optional callback" .-> GUARD["VerifiedSigner"]
     GUARD --> CORE

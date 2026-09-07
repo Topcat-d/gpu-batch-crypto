@@ -8,6 +8,7 @@ import argparse
 from pathlib import Path
 
 from batchcrypto import MAX_PAYLOAD
+from batchcrypto.manifests import MAX_MANIFEST_BYTES, open_manifest
 from batchcrypto.receipts import MAX_RECEIPT_BYTES, ReceiptVerifier
 
 
@@ -27,17 +28,28 @@ def main():
     parser.add_argument("--key-id", required=True)
     parser.add_argument("--context", required=True)
     parser.add_argument("--index", type=int, required=True)
+    parser.add_argument("--format", choices=("merkle", "manifest"), default="merkle")
     args = parser.parse_args()
     try:
         public = bytes.fromhex(
             read_bounded(args.public_key, 132).decode("ascii").strip()
         )
-        verifier = ReceiptVerifier(public, key_id=args.key_id, context=args.context)
-        accepted = verifier.verify(
-            read_bounded(args.record, MAX_PAYLOAD),
-            read_bounded(args.receipt, MAX_RECEIPT_BYTES),
-            expected_index=args.index,
-        )
+        record = read_bounded(args.record, MAX_PAYLOAD)
+        if args.format == "manifest":
+            token = read_bounded(args.receipt, MAX_MANIFEST_BYTES).decode("ascii")
+            checked = open_manifest(
+                token, public, key_id=args.key_id, context=args.context
+            )
+            accepted = checked is not None and checked.verify_record(
+                record, expected_index=args.index
+            )
+        else:
+            verifier = ReceiptVerifier(public, key_id=args.key_id, context=args.context)
+            accepted = verifier.verify(
+                record,
+                read_bounded(args.receipt, MAX_RECEIPT_BYTES),
+                expected_index=args.index,
+            )
     except (OSError, ValueError):
         accepted = False
     print(

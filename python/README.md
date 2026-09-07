@@ -6,6 +6,9 @@ core without a publisher application or GPU. The experimental
 `batchcrypto.receipts` module adds signed batch roots and offline record
 inclusion verification with the same base dependencies. See the
 [receipt quick start](https://github.com/Topcat-d/gpu-batch-crypto/blob/main/docs/RECORD_RECEIPTS.md).
+For whole-export recipients, `batchcrypto.manifests` verifies a signed hash list
+once and checks individual records or the complete ordered export. See the
+[manifest quick start](https://github.com/Topcat-d/gpu-batch-crypto/blob/main/docs/RECORD_MANIFESTS.md).
 
 ## Install and use CPU only
 

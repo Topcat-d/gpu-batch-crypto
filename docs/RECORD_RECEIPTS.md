@@ -6,6 +6,10 @@ a data API, publisher or agent tool exports immutable records and recipients
 retrieve subsets. The [product brief](PRODUCT_BRIEF.md) explains the hypothesis
 and alternatives; the [comparison](RECEIPT_RESULTS.md) measures them.
 
+For one recipient reading most/all records, the [signed hash-list API](RECORD_MANIFESTS.md)
+provides the simpler alternative with complete-export count/order checks. The
+[new API measurements](MANIFEST_API_RESULTS.md) compare the shipped interfaces.
+
 **Experimental profile, CPU-only base install.** Python 3.10+ and the existing
 `cryptography` dependency are sufficient. CUDA, PyJWT, databases and the access
 applications are not required. No real identity or payment integration is implied.

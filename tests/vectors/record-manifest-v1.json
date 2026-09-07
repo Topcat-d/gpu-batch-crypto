@@ -1,0 +1,13 @@
+{
+  "notice": "PUBLIC SYNTHETIC TEST VECTOR. Scalar 1 must never be used for real signing.",
+  "synthetic_private_scalar": 1,
+  "public_key_hex": "046b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c2964fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5",
+  "context": "conformance-export-1",
+  "key_id": "test-only-generator-key",
+  "records_hex": [
+    "",
+    "616263",
+    "00ff"
+  ],
+  "manifest": "eyJhbGciOiJFUzI1NiIsImtpZCI6InRlc3Qtb25seS1nZW5lcmF0b3Ita2V5In0.eyJjb250ZXh0IjoiY29uZm9ybWFuY2UtZXhwb3J0LTEiLCJjb3VudCI6MywiaGFzaGVzIjpbIjQ3REVRcGo4SEJTYS1fVEltVy01SkNldVFlUmttNU5NcEpXWkczaFN1RlUiLCJ1bmdXdjQ4QnotcEJRVURlWGE0aUk3QURZYU9XRjNxY3RCRF9ZZklBRmEwIiwiQnV0OWFtbnVHZVg3MzNTUUdOUFNxX29FdkwwVFpkc3hMcmh0eHhhVGliZyJdLCJwcm9maWxlIjoiYmF0Y2hjcnlwdG8tcmVjb3JkLW1hbmlmZXN0LXYxIn0.MkfjFIOxtiahBlO6YjzwEWGe2khg1eIM2fAp_8D8vLs5LjvJWPfAo5OWPqqeaGr8yeTDwySuHHf7wizRfF00uA"
+}

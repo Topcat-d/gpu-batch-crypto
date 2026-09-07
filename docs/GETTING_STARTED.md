@@ -12,6 +12,7 @@ instructions do not assume a package has been published to PyPI.
 | Add independently checked GPU signatures | [Add GPU signing](#add-gpu-signing) | Yes |
 | Produce standard ES256 tokens | [Generate ES256 tokens](#generate-es256-tokens) | Optional |
 | Verify one record from an immutable export | [Offline record receipts](RECORD_RECEIPTS.md) | No |
+| Verify a complete ordered export | [Signed hash lists](RECORD_MANIFESTS.md) | No |
 | Try budgeted content permissions and accounting | [Evaluate access books](#evaluate-access-books) | No |
 | Consume the native engine from C/C++ | [Use the installed C ABI](#use-the-installed-c-abi) | Yes at runtime |
 | Reuse public tables or calculate economics | [Use data and analysis tools](#use-data-and-analysis-tools) | No |
