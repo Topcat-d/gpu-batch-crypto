@@ -13,6 +13,7 @@ show the smallest complete examples.
 | [ES256 construction](#es256-construction) | Python wheel: `batchcrypto.jws.sign_es256` | Python core + trusted signing callback | Public preview encoder |
 | [Public P-256 tables](#public-p-256-tables) | `data/p256/` binaries + metadata + hashes | Reader implementing the documented format; generator uses cryptography | Public data format v1 |
 | [Access books](#access-books) | Source example: `examples/access_book/engine.py` | Python core, PyJWT 2.13.0, SQLite | Experimental application profile |
+| [HTTP access reference](HTTP_REFERENCE.md) | Source example: `examples/http_access/`; one-command demo | Python core, PyJWT, SQLite; optional guarded GPU signer | Experimental loopback application; simulated funds |
 | [Economics and workload calculators](#economic-calculators) | Three standalone scripts in `benchmarks/` | Python standard library | Analysis tools; assumptions are inputs |
 | [Benchmark harnesses](#benchmark-harnesses) | Source executables/scripts + raw captures | Depends on campaign; see below | Evaluation harnesses, not service APIs |
 

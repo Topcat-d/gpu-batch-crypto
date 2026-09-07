@@ -34,6 +34,7 @@ jobs:
       - run: python examples/cpu_only.py
       - run: python examples/jws_grant.py
       - run: python examples/access_book_demo.py
+      - run: python examples/http_access_demo.py
   python-package:
     runs-on: ubuntu-latest
     timeout-minutes: 10
