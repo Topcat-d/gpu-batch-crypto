@@ -13,9 +13,10 @@ python -m pip install '.[interop]'
 python examples/http_access_demo.py
 ```
 
-That command starts two loopback listeners, issues a two-item book, simulates a
-lost delivery response, recovers the same receipt and body, cancels the unused
-reservation and prints the reconciled ledger. There are no real funds, external
+That command starts two loopback listeners, issues two two-item books, simulates
+a lost delivery response, recovers the same receipt and body, then cancels the
+unused reservations together. A lost cancellation response also recovers the
+same result. It prints the reconciled ledger. There are no real funds, external
 requests, accounts to create or GPU requirements. The fixture deletes its
 temporary database after the example completes.
 
@@ -24,7 +25,7 @@ temporary database after the example completes.
 | Component | Purpose and interface | Dependencies and ownership |
 |---|---|---|
 | [Keys / Consumer](../examples/http_access/signing.py) | Ready claim batches -> ES256 tokens; independently pinned publisher verification; trusted key rotation | Core encoder, cryptography, PyJWT; optional VerifiedSigner + native GPU library. Issuer owns synthetic keys/epochs; publisher owns public pins and admission cache. |
-| [Ledger](../examples/http_access/ledger.py) | Atomic reserve, spend, cancel, receipt recovery and conservation audit | SQLite WAL/FULL and immutable fixture catalog. Issuer owns prices, budgets, revocation, trusted clock and one authoritative spent set. Signing occurs outside the database write transaction. |
+| [Ledger](../examples/http_access/ledger.py) | Atomic reserve, spend, bounded batch cancellation, receipt recovery and conservation audit | SQLite WAL/FULL and immutable fixture catalog. Issuer owns prices, budgets, revocation, trusted clock and one authoritative spent set. Signing occurs outside the database write transaction. |
 | [HTTP fixture / buyer](../examples/http_access/service.py) | Authenticated local JSON RPC, bounded exact retries, publisher body delivery, buyer hash/receipt validation | Python standard library. Issuer and publisher have different credentials and endpoints. Buyer owns retry IDs and requested content/terms. |
 | [Campaign](../benchmarks/run_http_access.py) | Reproducible CPU/direct/book/GPU comparison with individual observations | Source checkout plus above; native GPU library optional. Operator supplies hardware and price assumptions. |
 
@@ -83,6 +84,15 @@ book item twice. Unused reservation cancellation is idempotent and needs the
 authenticated buyer. No autonomous expiry worker is included: callers must
 cancel unused books, or an operator must build that lifecycle service.
 
+For multiple unused books, use `Fixture.cancel_books(books, request_id=...)` or
+the buyer-authenticated `POST /cancel-many` endpoint with `books` (1–256 unique
+book IDs) and `request_id`. All books must belong to that buyer. Validation,
+release and the stored retry response commit atomically; one bad book rolls
+back the complete operation. An exact retry, including after a lost response,
+returns the original released amount. A changed set under the same ID is denied.
+Use a new retry ID for a new cancellation. The individual `/cancel` endpoint
+remains available. Every content spend still has its own durable transaction.
+
 The conservation rule is `initial = available + reserved + spent`. Receipt
 totals equal buyer spend and 100% simulated publisher accrual. No processor
 fee, payout, revenue share or money movement is implemented. Content bytes are
@@ -112,6 +122,25 @@ it does not establish how much useful preparation a real agent can hide.
 The [published results](HTTP_RESULTS.md) reconcile 6,924 delivered accesses but
 retain 3,218 late completions. No positive additional GPU cost allowance survives
 the conservative comparison in these four workloads.
+
+The [overhead follow-up](HTTP_OVERHEAD_RESULTS.md) adds a separate, complete
+72-cell confirmation with two clients and 32 eight-item books. Batching unused
+reservation cleanup reduced median total measured time by roughly 33–37% in
+quarter-use book cases. It happens after delivery and does not improve the
+serving deadline. The attempted four-connection database pool made full waves
+slower and remains disabled by default (`ledger_pool_size=0`). Its explicit
+experimental option (`ledger_pool_size=4`) is retained to reproduce that result.
+Connections have exclusive borrowers; FULL commits, rollback, bounded lease
+waits and quiescent close apply. Benchmarks include a final WAL checkpoint in
+both baseline and candidate costs, so deferred storage work is not hidden.
+
+```sh
+python benchmarks/run_http_overhead.py --stage confirmation --candidate batch --output dist/http-cleanup.json
+python benchmarks/report_http_overhead.py --check
+```
+
+The original `run_http_access.py` retains individual cleanup as its historical
+baseline; use `run_http_overhead.py` for the optimized cleanup comparison.
 
 ## Limits and security boundary
 

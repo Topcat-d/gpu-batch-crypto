@@ -30,6 +30,14 @@ additional GPU cost allowance survived the conservative comparison. Controlled
 planning overlap reduced first-access wait for both CPU and GPU. This makes the
 application hypothesis testable without treating a primitive speedup as service ROI.
 
+The [overhead follow-up](HTTP_OVERHEAD_RESULTS.md) found a concrete application
+improvement: canceling unused reservations in one atomic request reduced median
+total measured time by roughly 33–37% in the held-out quarter-use book cases.
+It retained per-access durable commits and both GPU verification boundaries.
+The 72-cell confirmation reconciled 7,704 accesses; 4,515 completed after the
+declared deadline. The cleanup benefit is separate from serving latency or GPU
+economics. A slower connection-pool candidate remains disabled by default.
+
 An original [funded-access implementation](ACCESS_BOOK_DESIGN.md) now tests the application economics directly: CPU purchases can issue, independently verify and redeem under one durable commit; prepared books can amortize admission across exact resources while keeping per-resource accounting atomic. The [28-cell comparison](ACCESS_BOOK_RESULTS.md) reconciles 35,840 simulated redemptions. A fully used 32-item book measured 1.173x conservative throughput over the optimized CPU path, with slower first-access p99; at 25% consumption the paths were essentially tied. This supports workload-based selection, not mandatory GPU use or universal batching.
 
 The [contribution model](../benchmarks/access_business_model.py) includes funding and payout costs, publisher proceeds, unused-principal liabilities, variable service costs, utilization and whole allocated hosts. It exposes price/volume conditions under which the platform can cover its costs. Those assumptions and actual buyer value require a commercial pilot; a positive throughput result alone does not establish profitability.

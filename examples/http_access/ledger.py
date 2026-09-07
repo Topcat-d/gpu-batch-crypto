@@ -202,7 +202,7 @@ class Ledger:
 
     @staticmethod
     def prior(db, table, buyer, request_id, fingerprint):
-        # table is only one of two internal literals, never HTTP input.
+        # table is a fixed internal literal, never HTTP input.
         row = db.execute(f"SELECT * FROM {table} WHERE buyer=? AND request_id=?",
                          (buyer, request_id)).fetchone()
         if row:

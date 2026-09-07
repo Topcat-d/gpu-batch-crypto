@@ -62,6 +62,13 @@ after the declared one-second deadline. These workloads established **no
 repeatable GPU cost advantage**; the raw captures preserve the CPU controls,
 late completions and an interrupted earlier run.
 
+The [service-overhead follow-up](docs/HTTP_OVERHEAD_RESULTS.md) then isolated
+unused-reservation cleanup. One atomic cancellation call reduced median total
+measured time by **33–37% in quarter-use book cases**, with **7,704 accesses
+reconciled** in a separate 72-cell confirmation. Delivery deadline misses remain;
+this is a cleanup improvement shared by CPU and GPU paths. A slower connection
+pool and a failed earlier comparison are preserved and not promoted.
+
 [Engineering note](docs/ENGINEERING.md) · [Production security](docs/PRODUCTION_READINESS.md) · [Whole-system measurements](docs/PIPELINE_RESULTS.md) · [Costs and GPU inventory](docs/ECONOMICS.md) · [Historical A100 results](docs/HISTORICAL_BENCHMARKS.md)
 
 A working [ES256 JWS integration](docs/COMPATIBILITY.md) now connects the P-256 engine to standard token consumers. The runnable example and tests verify GPU-produced tokens with PyJWT; existing Ed25519 protocols retain their own keys, format and algorithm policy.

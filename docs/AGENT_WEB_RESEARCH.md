@@ -148,6 +148,7 @@ requirement is met. [Current security limits](PRODUCTION_READINESS.md).
 | [Two-check token control](VERIFICATION_CONTROL_RESULTS.md): CPU won both tested wave sizes | Verification placement can overturn a primitive advantage | Can implementation overhead be reduced without changing the required trust boundary? |
 | [Access-book accounting](ACCESS_BOOK_RESULTS.md): 1.173x at full consumption, approximately tied at quarter consumption | Reuse/preparation has an application-level utilization tradeoff | Does that pattern help independent services with real delivery and recovery? |
 | [HTTP reference](HTTP_RESULTS.md): synthetic buyer/issuer/publisher, guarded GPU and CPU controls | Loopback delivery, retries and durable accounting can be measured together | Does an optimized deployment offer repeatable savings after transport, key isolation and real operating costs? |
+| [Atomic cleanup confirmation](HTTP_OVERHEAD_RESULTS.md): 33–37% lower median total time in quarter-use book cases | Batching accounting cleanup can reduce application cost on CPU and GPU | Can serving latency and production economics improve after the remaining transport and storage costs? |
 | [Published hashing](RESULTS.md): initial CPU baseline won all tested SHA-256 cells | There is no published hashing advantage in that matrix | What does the current wrapper do for short identifiers and native CPU baselines? |
 
 These results support a research program, rather than a fleet-wide savings claim.

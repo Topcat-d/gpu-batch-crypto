@@ -33,3 +33,23 @@ Synthetic account units are accounting fixtures, not GPU cost or actual revenue.
 Each capture contains individual content/receipt-checked completion timings,
 outcomes, counters and before/after ledger balances. Secret keys, bearer secrets
 and generated credentials are not published.
+
+## Overhead follow-up
+
+- `overhead-diagnostic-v1.json`: three instrumented diagnostic waves. Phase
+  timers overlap; their sums are not a serial wall-time breakdown.
+- `overhead-comparison-v1.json`: incomplete, stopped after 56 cells on one
+  client `OSError`, before publisher admission. All 8,383 delivered accesses
+  reconcile; the failed intended access remains in its denominator. The exact
+  OS error code was not recorded, so its underlying cause is unknown. Pool
+  performance was worse in observed full waves; it was not promoted.
+- `overhead-confirmation-v1.json`: complete 72-cell baseline/batch-cleanup
+  confirmation on 32 eight-item books, two clients, three repeats. All 7,704
+  accesses reconcile; 4,515 are late. Connection policy and per-access FULL
+  commits are identical; both variants include final checkpoint cost.
+
+[Generated report](../../docs/HTTP_OVERHEAD_RESULTS.md) and
+[decision/campaign record](../HTTP_OVERHEAD_CAMPAIGN.md) retain failures,
+rejected candidates, source hashes and interpretation limits. The confirmation
+uses the same RTX 3060 DLL hash/build above, with host load and GPU observations
+recorded per cell. No CPU/GPU dollar price is inferred.
