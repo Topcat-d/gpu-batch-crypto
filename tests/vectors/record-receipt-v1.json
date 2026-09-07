@@ -1,0 +1,45 @@
+{
+  "notice": "PUBLIC SYNTHETIC TEST VECTOR. Scalar 1 is public and must never be used for real signing.",
+  "synthetic_private_scalar": 1,
+  "public_key_hex": "046b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c2964fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5",
+  "context": "conformance-export-1",
+  "key_id": "test-only-generator-key",
+  "manifest": "eyJhbGciOiJFUzI1NiIsImtpZCI6InRlc3Qtb25seS1nZW5lcmF0b3Ita2V5In0.eyJjb250ZXh0IjoiY29uZm9ybWFuY2UtZXhwb3J0LTEiLCJjb3VudCI6MywicHJvZmlsZSI6ImJhdGNoY3J5cHRvLXJlY29yZC1yZWNlaXB0LXYxIiwicm9vdCI6Ik40akJCNWE4bVJpZHFhUFVLQVp5bExDdzhiRHhjempNMTRuZ2IwbUNXcHcifQ.CJiv5L0lVas5sx7Gh4wfh0zsNoBx3pWujEVXewRItykREFKvjXWRCmdsZR0DdnD3GZ33mjgnHnw6PaRpBoutxw",
+  "records": [
+    {
+      "record_hex": "",
+      "expected_index": 0,
+      "receipt": {
+        "index": 0,
+        "manifest": "eyJhbGciOiJFUzI1NiIsImtpZCI6InRlc3Qtb25seS1nZW5lcmF0b3Ita2V5In0.eyJjb250ZXh0IjoiY29uZm9ybWFuY2UtZXhwb3J0LTEiLCJjb3VudCI6MywicHJvZmlsZSI6ImJhdGNoY3J5cHRvLXJlY29yZC1yZWNlaXB0LXYxIiwicm9vdCI6Ik40akJCNWE4bVJpZHFhUFVLQVp5bExDdzhiRHhjempNMTRuZ2IwbUNXcHcifQ.CJiv5L0lVas5sx7Gh4wfh0zsNoBx3pWujEVXewRItykREFKvjXWRCmdsZR0DdnD3GZ33mjgnHnw6PaRpBoutxw",
+        "path": [
+          "YJ9uNtJAVYUYjVz9dh9AfHzEan0_MUyIJwRp3eMV_NE",
+          "rpdNSnTCNx2M_oQreqT2aY3oVwUm7rPbGUGwtyMR1HA"
+        ]
+      }
+    },
+    {
+      "record_hex": "616263",
+      "expected_index": 1,
+      "receipt": {
+        "index": 1,
+        "manifest": "eyJhbGciOiJFUzI1NiIsImtpZCI6InRlc3Qtb25seS1nZW5lcmF0b3Ita2V5In0.eyJjb250ZXh0IjoiY29uZm9ybWFuY2UtZXhwb3J0LTEiLCJjb3VudCI6MywicHJvZmlsZSI6ImJhdGNoY3J5cHRvLXJlY29yZC1yZWNlaXB0LXYxIiwicm9vdCI6Ik40akJCNWE4bVJpZHFhUFVLQVp5bExDdzhiRHhjempNMTRuZ2IwbUNXcHcifQ.CJiv5L0lVas5sx7Gh4wfh0zsNoBx3pWujEVXewRItykREFKvjXWRCmdsZR0DdnD3GZ33mjgnHnw6PaRpBoutxw",
+        "path": [
+          "bjQLnP-zepicpUTmu3gKLHiQHT-zNzh2hRGjBhevoB0",
+          "rpdNSnTCNx2M_oQreqT2aY3oVwUm7rPbGUGwtyMR1HA"
+        ]
+      }
+    },
+    {
+      "record_hex": "00ff",
+      "expected_index": 2,
+      "receipt": {
+        "index": 2,
+        "manifest": "eyJhbGciOiJFUzI1NiIsImtpZCI6InRlc3Qtb25seS1nZW5lcmF0b3Ita2V5In0.eyJjb250ZXh0IjoiY29uZm9ybWFuY2UtZXhwb3J0LTEiLCJjb3VudCI6MywicHJvZmlsZSI6ImJhdGNoY3J5cHRvLXJlY29yZC1yZWNlaXB0LXYxIiwicm9vdCI6Ik40akJCNWE4bVJpZHFhUFVLQVp5bExDdzhiRHhjempNMTRuZ2IwbUNXcHcifQ.CJiv5L0lVas5sx7Gh4wfh0zsNoBx3pWujEVXewRItykREFKvjXWRCmdsZR0DdnD3GZ33mjgnHnw6PaRpBoutxw",
+        "path": [
+          "h8k-7iK_3T5t_tAZrYrcijV-kLxjiNnvDC_kYeYzIE8"
+        ]
+      }
+    }
+  ]
+}

@@ -79,3 +79,20 @@ does the recipient accept the trust/profile contract? The next external signal
 is one engineer integrating a real export and independently checking a record.
 Do not claim sales, standards interoperability beyond the stated primitives,
 or total operating savings from a local CPU measurement.
+
+## Implemented decision
+
+The [installed API and separate consumer](RECORD_RECEIPTS.md) are implemented.
+The [234-cell comparison](RECEIPT_RESULTS.md) accepted 46,656 record checks.
+It supports a narrower evaluation: separate recipients taking a subset of an
+offline export. At 1,024 records/quarter consumption, Merkle receipts reduced
+median producer-through-consumer CPU wall time by 30.5% versus pre-signing each
+record. That does not establish savings versus an online issuer signing only
+requested records. Shared full consumption favored the simpler signed hash list;
+full consumption by separate recipients favored individual signatures.
+
+Go for an engineering evaluation of portable subset verification. No-go for
+positioning Merkle receipts as universally cheaper, for introducing GPU cost
+into a one-signature export, or for declaring commercial demand proven. The
+next product evidence is a real adopter's export/recipient pattern and integration
+time, using these controls rather than requiring the surrounding access system.

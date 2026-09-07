@@ -29,6 +29,7 @@ jobs:
       - run: python benchmarks/report_access_book.py --check
       - run: python benchmarks/report_http_access.py --check
       - run: python benchmarks/report_http_overhead.py --check
+      - run: python benchmarks/report_receipts.py --check
       - run: python benchmarks/report_p256.py --check
       - run: python benchmarks/verify_history.py
       - run: python benchmarks/report_batching.py --check

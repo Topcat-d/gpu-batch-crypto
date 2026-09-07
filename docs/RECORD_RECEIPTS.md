@@ -113,3 +113,8 @@ Tests cover all positions in uneven/power-of-two trees, an independent stack
 root oracle, PyJWT verification, tamper/scope rejection, bounds, duplicate
 fields, cache eviction/concurrency and shared manifests. The installed-wheel
 check runs with CUDA loading blocked and no PyJWT installed.
+
+A [frozen conformance vector](../tests/vectors/record-receipt-v1.json) supplies
+three records (including empty and binary bytes), one uneven tree, its manifest,
+public key and receipts for implementing another-language consumer. Its scalar
+1 is deliberately public test material and must never be used for real signing.

@@ -5,6 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import itertools
 import json
+from pathlib import Path
 import unittest
 from unittest.mock import Mock
 
@@ -99,6 +100,39 @@ class ReceiptTests(unittest.TestCase):
                 "root": b64(oracle_root([b"one", b"two", b"three"])),
             },
         )
+
+    def test_frozen_cross_language_vector(self):
+        fixture = json.loads(
+            (Path(__file__).parent / "vectors/record-receipt-v1.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        records = [bytes.fromhex(item["record_hex"]) for item in fixture["records"]]
+        # Deliberately public scalar 1, never an operational signing key.
+        key = fixture["synthetic_private_scalar"].to_bytes(32, "big")
+        batch = seal_records(
+            records,
+            context=fixture["context"],
+            key_id=fixture["key_id"],
+            sign_digests=lambda hs: Cpu().sign(key, hs),
+        )
+        self.assertEqual(batch.manifest, fixture["manifest"])
+        verifier = ReceiptVerifier(
+            bytes.fromhex(fixture["public_key_hex"]),
+            key_id=fixture["key_id"],
+            context=fixture["context"],
+        )
+        for item, record in zip(fixture["records"], records):
+            self.assertEqual(
+                json.loads(batch.receipt(item["expected_index"])), item["receipt"]
+            )
+            self.assertTrue(
+                verifier.verify(
+                    record,
+                    encode(item["receipt"]),
+                    expected_index=item["expected_index"],
+                )
+            )
 
     def test_bytes_position_proof_and_trust_are_all_required(self):
         records = [b"same", b"same", b"three", b"four", b"five"]
