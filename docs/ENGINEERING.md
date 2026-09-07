@@ -22,6 +22,14 @@ Version 0.3 adds [atomic epoch binding and independently verified signing](PRODU
 
 ## The opportunity and the decision
 
+The [HTTP reference](HTTP_REFERENCE.md) now connects a synthetic buyer, issuer
+and publisher through complete access and recovery flows. Its
+[48-cell campaign](HTTP_RESULTS.md) reconciled **6,924 delivered accesses**;
+**3,218 missed the one-second ready-to-delivery deadline**. No positive
+additional GPU cost allowance survived the conservative comparison. Controlled
+planning overlap reduced first-access wait for both CPU and GPU. This makes the
+application hypothesis testable without treating a primitive speedup as service ROI.
+
 An original [funded-access implementation](ACCESS_BOOK_DESIGN.md) now tests the application economics directly: CPU purchases can issue, independently verify and redeem under one durable commit; prepared books can amortize admission across exact resources while keeping per-resource accounting atomic. The [28-cell comparison](ACCESS_BOOK_RESULTS.md) reconciles 35,840 simulated redemptions. A fully used 32-item book measured 1.173x conservative throughput over the optimized CPU path, with slower first-access p99; at 25% consumption the paths were essentially tied. This supports workload-based selection, not mandatory GPU use or universal batching.
 
 The [contribution model](../benchmarks/access_business_model.py) includes funding and payout costs, publisher proceeds, unused-principal liabilities, variable service costs, utilization and whole allocated hosts. It exposes price/volume conditions under which the platform can cover its costs. Those assumptions and actual buyer value require a commercial pilot; a positive throughput result alone does not establish profitability.

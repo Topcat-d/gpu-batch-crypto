@@ -106,6 +106,19 @@ def render(data, source_name=DEFAULT_INPUT.name):
     for c in cells:
         groups[(c["scenario"]["name"], c["mode"], c["cpu_signing_workers"])].append(c)
     med = lambda rows, field: statistics.median(r[field] for r in rows)
+    comparisons = {}
+    for scenario in SCENARIOS:
+        name = scenario["name"]
+        gpu = groups.get((name, "gpu-books", 1))
+        if gpu:
+            cpu_key = max((k for k in groups if k[0] == name and k[1] == "cpu-books"), key=lambda k: med(groups[k], "on_time_per_second"))
+            cpu = groups[cpu_key]
+            denominator = med(cpu, "on_time_per_second")
+            ratio = med(gpu, "on_time_per_second") / denominator if denominator else 0
+            conservative_denominator = max(r["on_time_per_second"] for r in cpu)
+            conservative = min(r["on_time_per_second"] for r in gpu) / conservative_denominator if conservative_denominator else 0
+            comparisons[name] = cpu_key[2], ratio, conservative
+    no_ceiling = bool(comparisons) and all(row[2] <= 1 for row in comparisons.values())
     lines = ["# Local HTTP reference results", "",
              "A complete synthetic access path was measured: issuer preparation, publisher",
              "admission, online durable spending, content delivery, buyer checks and unused",
@@ -117,6 +130,9 @@ def render(data, source_name=DEFAULT_INPUT.name):
              f"**{len(cells)} cells; {sum(c['completed'] for c in cells):,} delivered accesses reconciled; "
              f"{sum(c['failed'] for c in cells)} failures; {sum(c['late'] for c in cells):,} completions after the deadline.** "
              "Warmup transactions are excluded from these totals.", "",
+             ("The conservative GPU/CPU comparison establishes **no positive additional GPU "
+              "cost allowance in any tested workload**." if no_ceiling else
+              "Inspect the conservative comparison below before inferring a GPU cost allowance."), "",
              "## Observed service behavior", "",
              "Median of three repeats. Goodput counts ready-to-complete deadline successes;",
              "its denominator includes the entire measured wave, planning and cleanup. The",
@@ -149,16 +165,10 @@ def render(data, source_name=DEFAULT_INPUT.name):
               "|---|---:|---:|---:|---:|"]
     for scenario in SCENARIOS:
         name = scenario["name"]
-        gpu = groups.get((name, "gpu-books", 1))
-        if not gpu:
+        if name not in comparisons:
             continue
-        cpu_key = max((k for k in groups if k[0] == name and k[1] == "cpu-books"), key=lambda k: med(groups[k], "on_time_per_second"))
-        cpu = groups[cpu_key]
-        denominator = med(cpu, "on_time_per_second")
-        ratio = med(gpu, "on_time_per_second") / denominator if denominator else 0
-        ceiling_denominator = max(r["on_time_per_second"] for r in cpu)
-        conservative = min(r["on_time_per_second"] for r in gpu) / ceiling_denominator if ceiling_denominator else 0
-        lines.append(f"| {name} | {cpu_key[2]} | {ratio:.3f} | {conservative:.3f} | "
+        workers, ratio, conservative = comparisons[name]
+        lines.append(f"| {name} | {workers} | {ratio:.3f} | {conservative:.3f} | "
                      f"{f'{(conservative - 1) * 100:.1f}%' if conservative > 1 else 'None established'} |")
     lines += ["", "No cloud invoice or GPU rental price was inferred. Raw captures retain optional",
               "whole-host/additional-GPU prices and dollars per million on-time completions;",
@@ -179,7 +189,9 @@ def render(data, source_name=DEFAULT_INPUT.name):
               "  saturation-sized native batches or a cross-tenant routing experiment.",
               "- Process CPU time includes all roles; peak memory is cumulative for the",
               "  process. Per-cell host CPU load and all-GPU telemetry disclose shared load.",
-              "  Sampled GPU power cannot resolve short kernels or establish energy savings.", "",
+              "  Sampled GPU power cannot resolve short kernels or establish energy savings.",
+              "  Windows CPU-time resolution can report zero for a short urgent cell;",
+              "  that does not mean the request used no CPU.", "",
               "A follow-up should first measure how much persistent connections, a durable",
               "database connection pool and admission/spend RPC grouping reduce service",
               "overhead. Preserve the same authorization and recovery contracts.", "",
@@ -202,7 +214,7 @@ def main():
     args = parser.parse_args()
     result = render(json.loads(args.input.read_text()), args.input.name)
     if args.check:
-        if args.output.read_text() != result:
+        if args.output.read_text(encoding="utf-8") != result:
             raise SystemExit("HTTP report differs from capture")
         print("HTTP capture and report verified")
     else:

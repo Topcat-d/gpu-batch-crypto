@@ -207,13 +207,20 @@ and quality criteria. None of those measurements demonstrates paid content
 demand, settlement throughput or publisher revenue. Key residency and
 secret-dependent GPU execution also remain [security constraints](PRODUCTION_READINESS.md).
 
-The next experiment should be a separate, bounded application harness around
-the library, keeping the reusable public engine generic:
+The [HTTP reference](HTTP_REFERENCE.md) now provides that separate application
+harness while keeping the reusable public engine generic. Its
+[local measurements](HTTP_RESULTS.md) include real loopback requests,
+simulated balances, scoped issuance, redemption, retry, delivery and
+reconciliation, with CPU-first controls and optional guarded GPU signing.
+It uses an experimental ES256 profile and trusted fixture identities.
 
-1. **Protocol and accounting:** use synthetic content and simulated balances
-   to exercise quote, issuance, redemption, retry, delivery and reconciliation.
-   Record the exact supported algorithm and trust inputs. Establish correctness
-   on CPU before timing an optional GPU path.
+The remaining evaluation steps are:
+
+1. **Protocol and accounting:** agree an actual consumer protocol and move from
+   a local authoritative ledger to the intended deployment topology. Preserve
+   the tested authorization, recovery and accounting contracts. Add persistent
+   key management and content retention, transport security and actual identity
+   integration before using sensitive data or funds.
 2. **Buyer and publisher value:** with the necessary rights and participant
    approval, compare a defined licensed corpus with the free-only alternative.
    Agree success criteria before collecting results. Simulated credit cannot
@@ -223,7 +230,7 @@ the library, keeping the reusable public engine generic:
    CPU and hybrid implementations, including compatible batch sizes, deadlines,
    all required checks and full allocated costs. Retain negative results.
 
-These are planned evaluations, not shipped capabilities. A credible adoption
+These deployment and commercial evaluations remain open. A credible adoption
 decision needs a buyer who benefits, a publisher who gets paid, accountable
 access and acceptable security. GPU acceleration earns its place only if it
 improves that measured system.

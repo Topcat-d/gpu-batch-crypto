@@ -109,6 +109,9 @@ finite ready-wave workloads, three repeats and a one-second ready-to-delivery
 deadline. It counts preparation, queueing, delivery, verification, signing,
 unused work and cleanup. The 50 ms overlap interval models independent work;
 it does not establish how much useful preparation a real agent can hide.
+The [published results](HTTP_RESULTS.md) reconcile 6,924 delivered accesses but
+retain 3,218 late completions. No positive additional GPU cost allowance survives
+the conservative comparison in these four workloads.
 
 ## Limits and security boundary
 

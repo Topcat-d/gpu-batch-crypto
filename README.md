@@ -52,6 +52,16 @@ The new [funded-access engineering example](docs/ACCESS_BOOK_DESIGN.md) implemen
 
 The proposed [agent access design](docs/AGENT_ACCESS_DESIGN.md) prepares required proofs or grants as upcoming calls become ready, uses CPU for small or urgent signing work, and evaluates GPU batches for larger compatible groups. It distinguishes key reuse, concurrent tool calls, issuer authorization and planning overlap from the measurements already published.
 
+The [HTTP reference](docs/HTTP_REFERENCE.md) connects a synthetic buyer, issuer
+and publisher with actual loopback requests, simulated funds and recoverable
+content delivery. Its [complete access measurements](docs/HTTP_RESULTS.md)
+compare unsigned direct purchases, CPU-signed books and guarded GPU books,
+including queueing, a controlled planning interval and unused-reservation cleanup.
+Across 48 measured cells, **6,924 delivered accesses reconciled**, with 3,218
+after the declared one-second deadline. These workloads established **no
+repeatable GPU cost advantage**; the raw captures preserve the CPU controls,
+late completions and an interrupted earlier run.
+
 [Engineering note](docs/ENGINEERING.md) · [Production security](docs/PRODUCTION_READINESS.md) · [Whole-system measurements](docs/PIPELINE_RESULTS.md) · [Costs and GPU inventory](docs/ECONOMICS.md) · [Historical A100 results](docs/HISTORICAL_BENCHMARKS.md)
 
 A working [ES256 JWS integration](docs/COMPATIBILITY.md) now connects the P-256 engine to standard token consumers. The runnable example and tests verify GPU-produced tokens with PyJWT; existing Ed25519 protocols retain their own keys, format and algorithm policy.

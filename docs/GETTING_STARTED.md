@@ -217,6 +217,21 @@ The first command is hypothetical unit arithmetic; the second evaluates
 editable assumptions using a measured local rate. Neither accesses accounts,
 rents GPUs or transfers money. [Cost boundaries](ECONOMICS.md).
 
+## Run an HTTP access transaction
+
+The separate loopback reference connects a synthetic buyer, issuer and
+publisher, including a lost delivery response and recovery of the same receipt:
+
+```sh
+python -m pip install '.[interop]'
+python examples/http_access_demo.py
+```
+
+It requires no GPU, external account or real funds. The [HTTP reference](HTTP_REFERENCE.md)
+defines endpoints, key/accounting ownership, limits and optional GPU use. The
+[measured campaign](HTTP_RESULTS.md) compares direct CPU purchases, CPU books
+and guarded GPU books with complete delivery and cleanup costs.
+
 ## Verify your chosen integration
 
 CPU tests run by default; GPU checks require `BC_LIBRARY` and `BC_DEVICE` as

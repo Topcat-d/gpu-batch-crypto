@@ -233,6 +233,13 @@ state, key release and payment settlement remain outside this engine.
 
 ## What would establish the benefit
 
+The [local HTTP reference](HTTP_REFERENCE.md) now implements synthetic buyer,
+issuer and publisher interactions, independent signature admission, durable
+spending, delivery recovery and cancellation. Its [HTTP campaign](HTTP_RESULTS.md)
+includes an explicit 50 ms independent-work interval with equal CPU/GPU
+preparation opportunity. This measures controlled overlap on one local host;
+it does not measure a real model's planning time or Internet deployment.
+
 The subsequent [ready-wave experiment](READY_WAVE_RESULTS.md) measured the
 already-ready signing portion of this design: standard ES256/EdDSA objects,
 native workers, wire encoding and CPU verification. The one-check ES256 case

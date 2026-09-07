@@ -147,6 +147,7 @@ requirement is met. [Current security limits](PRODUCTION_READINESS.md).
 | [P-256 output-copy comparison](DISPATCH_RESULTS.md): 1.82 million/s on 4070 Ti and 1.36 million/s on RTX 3060 at batch 4,096 | A wrapper bottleneck mattered substantially for one primitive path | Does the complete guarded workload benefit after preparation, queues and verification? |
 | [Two-check token control](VERIFICATION_CONTROL_RESULTS.md): CPU won both tested wave sizes | Verification placement can overturn a primitive advantage | Can implementation overhead be reduced without changing the required trust boundary? |
 | [Access-book accounting](ACCESS_BOOK_RESULTS.md): 1.173x at full consumption, approximately tied at quarter consumption | Reuse/preparation has an application-level utilization tradeoff | Does that pattern help independent services with real delivery and recovery? |
+| [HTTP reference](HTTP_RESULTS.md): synthetic buyer/issuer/publisher, guarded GPU and CPU controls | Loopback delivery, retries and durable accounting can be measured together | Does an optimized deployment offer repeatable savings after transport, key isolation and real operating costs? |
 | [Published hashing](RESULTS.md): initial CPU baseline won all tested SHA-256 cells | There is no published hashing advantage in that matrix | What does the current wrapper do for short identifiers and native CPU baselines? |
 
 These results support a research program, rather than a fleet-wide savings claim.
